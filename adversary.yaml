@@ -1,5 +1,5 @@
 name: nextjs
-version: 0.0.2
+version: 0.0.3
 description: Reviews Next.js configuration for unsafe remote content, exposed source maps, and permissive origins.
 
 triggers:
