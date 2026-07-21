@@ -16,3 +16,7 @@ npm test
 adversary validate .
 adversary pack --check .
 ```
+
+## Automatic detection
+
+`adversary auto` selects the nextjs adversary when changes include `next.config.js` or `next.config.mjs`, plus the other domain-specific patterns declared in `adversary.yaml`. Unrelated changes do not select it.
