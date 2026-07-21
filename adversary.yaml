@@ -12,6 +12,15 @@ triggers:
     - "**/next.config.mjs"
     - "**/next.config.ts"
 
+detection:
+  files:
+    - "next.config.js"
+    - "next.config.mjs"
+    - "next.config.ts"
+    - "**/next.config.js"
+    - "**/next.config.mjs"
+    - "**/next.config.ts"
+
 runtime:
   name: node
   version: "22"
