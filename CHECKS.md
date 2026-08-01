@@ -1,6 +1,6 @@
 # Checks — what nextjs detects
 
-This file is the **public audit list** of detectors for the **nextjs** adversary. High-confidence Next.js configuration and framework-boundary defects with file:line evidence. Component-level React issues are owned by `react`; this adversary covers what only the framework layer can see: `next.config.*`, middleware, Server Actions, and the client/server env boundary.
+This file is the **public audit list** of detectors for the **web/nextjs** adversary. High-confidence Next.js configuration and framework-boundary defects with file:line evidence. Component-level React issues are owned by `web/react`; this adversary covers what only the framework layer can see: `next.config.*`, middleware, Server Actions, and the client/server env boundary.
 
 Runtime source of truth: [`src/spec.ts`](src/spec.ts) / [`src/rules.ts`](src/rules.ts).
 

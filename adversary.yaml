@@ -1,5 +1,5 @@
-name: lang/nextjs
-version: 0.0.4
+name: web/nextjs
+version: 0.0.5
 description: Reviews Next.js configuration for unsafe remote content, exposed source maps, and permissive origins.
 
 triggers:
