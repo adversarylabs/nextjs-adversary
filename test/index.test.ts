@@ -5,7 +5,14 @@ import { createApp } from "../src/index.ts";
 
 const fixture = (name: string) => new URL(`../fixtures/${name}`, import.meta.url).pathname;
 const review = (name: string, raw = false) => createApp().run({ input: { source: { path: fixture(name) } }, includeRawObservations: raw });
-const ruleCases = [{"key":"wildcard-images","id":"nextjs.wildcard-images"},{"key":"production-sourcemaps","id":"nextjs.production-sourcemaps"},{"key":"wildcard-origin","id":"nextjs.wildcard-origin"}];
+const ruleCases = [
+  { key: "middleware-auth-bypass", id: "nextjs.middleware-auth-bypass" },
+  { key: "public-env-secret", id: "nextjs.public-env-secret" },
+  { key: "wildcard-origin", id: "nextjs.wildcard-origin" },
+  { key: "wildcard-images", id: "nextjs.wildcard-images" },
+  { key: "production-sourcemaps", id: "nextjs.production-sourcemaps" },
+  { key: "build-errors-ignored", id: "nextjs.build-errors-ignored" },
+];
 
 test("every initial rule has focused vulnerable and clean coverage", async () => {
   for (const rule of ruleCases) {
@@ -30,5 +37,5 @@ test("output ordering and protocol envelope are deterministic", async () => {
   assert.deepEqual(second, first);
   const envelope = JSON.parse(JSON.stringify(createAdversaryRunEnvelope(first)));
   assert.equal(envelope.protocolVersion, 1);
-  assert.equal(envelope.result.adversary.name, "nextjs");
+  assert.equal(envelope.result.adversary.name, "lang/nextjs");
 });

@@ -3,7 +3,7 @@ import { Adversary } from "@adversarylabs/sdk";
 import { analyzeRepository } from "./analyze.js";
 import { registerRules } from "./rules.js";
 export function createApp() {
-    const app = new Adversary({ name: "nextjs", version: "0.0.0", review: { maximumFindings: 8 } });
+    const app = new Adversary({ name: "lang/nextjs", version: "0.0.4", review: { maximumFindings: 12 } });
     registerRules(app);
     app.rule("nextjs.review", async (ctx) => analyzeRepository(ctx));
     return app;

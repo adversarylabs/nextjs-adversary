@@ -1,5 +1,5 @@
-name: nextjs
-version: 0.0.3
+name: lang/nextjs
+version: 0.0.4
 description: Reviews Next.js configuration for unsafe remote content, exposed source maps, and permissive origins.
 
 triggers:
@@ -11,6 +11,13 @@ triggers:
     - "**/next.config.js"
     - "**/next.config.mjs"
     - "**/next.config.ts"
+    - "middleware.ts"
+    - "middleware.js"
+    - "**/middleware.ts"
+    - "**/middleware.js"
+    - "package.json"
+    - "**/*.tsx"
+    - "**/*.ts"
 
 detection:
   files:
@@ -20,6 +27,10 @@ detection:
     - "**/next.config.js"
     - "**/next.config.mjs"
     - "**/next.config.ts"
+    - "middleware.ts"
+    - "middleware.js"
+    - "**/middleware.ts"
+    - "**/middleware.js"
 
 runtime:
   name: node

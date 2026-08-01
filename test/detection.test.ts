@@ -13,8 +13,11 @@ test("declares deterministic automatic detection", async () => {
     "next.config.ts",
     "**/next.config.js",
     "**/next.config.mjs",
-    "**/next.config.ts"
+    "**/next.config.ts",
+    "middleware.ts",
+    "middleware.js",
+    "**/middleware.ts",
+    "**/middleware.js",
   ]);
   assert.equal(manifest.detection?.entrypoint, undefined);
 });
-
