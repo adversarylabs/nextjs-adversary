@@ -40,19 +40,6 @@ Public grounding: [CVE-2025-29927](https://nvd.nist.gov/vuln/detail/CVE-2025-299
 | **Public examples** | Next.js env docs state the inlining behavior; leaked service-role-key incidents from client bundles |
 | **Remediation** | Drop the `NEXT_PUBLIC_` prefix and move the call into a Route Handler / Server Action / server component |
 
-### `nextjs.wildcard-origin`
-
-| | |
-| --- | --- |
-| **What** | Server Actions origin allowlist wildcarded |
-| **Why** | `experimental.serverActions.allowedOrigins: ['*']` (or equivalently broad entries) disables the origin check that protects Server Actions — mutation endpoints — from cross-origin forgery |
-| **Looks for** | `allowedOrigins` containing `*` or scheme-less broad wildcards in `next.config.*` |
-| **Stays quiet when** | Explicit trusted host list; setting absent (secure default: same-origin) |
-| **Public examples** | Next.js Server Actions security docs |
-| **Remediation** | List only trusted origins (the proxy/host domains that legitimately front the app) |
-
----
-
 ## Medium
 
 ### `nextjs.server-action-unauthenticated`

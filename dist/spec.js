@@ -25,7 +25,7 @@ const SOURCE_FILES = [
 export const spec = {
     "id": "nextjs",
     "displayName": "Next.js",
-    "description": "Reviews Next.js configuration for unsafe remote content, exposed source maps, and permissive origins.",
+    "description": "Reviews Next.js configuration for unsafe remote content, exposed source maps, and framework boundary risks.",
     "files": [...CONFIG_FILES, ...MIDDLEWARE_FILES, ...SOURCE_FILES],
     "rules": [
         {
@@ -69,25 +69,6 @@ export const spec = {
                     "pattern": "(?:process\\.env\\.)?NEXT_PUBLIC_[A-Z0-9_]*?(?:SECRET|TOKEN|PRIVATE|PASSWORD|API_KEY|SERVICE_ROLE)[A-Z0-9_]*",
                     "flags": "i"
                 },
-                "requires": []
-            }
-        },
-        {
-            "id": "nextjs.wildcard-origin",
-            "title": "Server Actions accepts wildcard origins",
-            "summary": "Server Actions accepts wildcard origins",
-            "category": "security",
-            "severity": "high",
-            "confidence": "high",
-            "whyItMatters": "allowedOrigins: ['*'] disables origin checks that protect Server Actions from CSRF-style abuse.",
-            "impact": "Cross-origin callers can invoke Server Actions as the user.",
-            "recommendation": "List only trusted origins (proxy/host domains that legitimately front the app).",
-            "complexity": "small",
-            "tags": ["security", "wildcard-origin"],
-            "match": {
-                "kind": "content",
-                "files": [...CONFIG_FILES],
-                "pattern": { "pattern": "allowedOrigins:\\s*\\[[^\\]]*[\"']\\*[\"']", "flags": "i" },
                 "requires": []
             }
         },

@@ -44,7 +44,7 @@ export interface AdversarySpec {
 export declare const spec: {
     readonly id: "nextjs";
     readonly displayName: "Next.js";
-    readonly description: "Reviews Next.js configuration for unsafe remote content, exposed source maps, and permissive origins.";
+    readonly description: "Reviews Next.js configuration for unsafe remote content, exposed source maps, and framework boundary risks.";
     readonly files: ["next.config.js", "next.config.mjs", "next.config.ts", "**/next.config.js", "**/next.config.mjs", "**/next.config.ts", "middleware.js", "middleware.ts", "**/middleware.js", "**/middleware.ts", "src/middleware.js", "src/middleware.ts", "**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "package.json", "**/package.json"];
     readonly rules: [{
         readonly id: "nextjs.middleware-auth-bypass";
@@ -84,27 +84,6 @@ export declare const spec: {
             readonly files: ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"];
             readonly pattern: {
                 readonly pattern: "(?:process\\.env\\.)?NEXT_PUBLIC_[A-Z0-9_]*?(?:SECRET|TOKEN|PRIVATE|PASSWORD|API_KEY|SERVICE_ROLE)[A-Z0-9_]*";
-                readonly flags: "i";
-            };
-            readonly requires: [];
-        };
-    }, {
-        readonly id: "nextjs.wildcard-origin";
-        readonly title: "Server Actions accepts wildcard origins";
-        readonly summary: "Server Actions accepts wildcard origins";
-        readonly category: "security";
-        readonly severity: "high";
-        readonly confidence: "high";
-        readonly whyItMatters: "allowedOrigins: ['*'] disables origin checks that protect Server Actions from CSRF-style abuse.";
-        readonly impact: "Cross-origin callers can invoke Server Actions as the user.";
-        readonly recommendation: "List only trusted origins (proxy/host domains that legitimately front the app).";
-        readonly complexity: "small";
-        readonly tags: ["security", "wildcard-origin"];
-        readonly match: {
-            readonly kind: "content";
-            readonly files: ["next.config.js", "next.config.mjs", "next.config.ts", "**/next.config.js", "**/next.config.mjs", "**/next.config.ts"];
-            readonly pattern: {
-                readonly pattern: "allowedOrigins:\\s*\\[[^\\]]*[\"']\\*[\"']";
                 readonly flags: "i";
             };
             readonly requires: [];

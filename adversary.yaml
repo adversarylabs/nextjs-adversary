@@ -1,6 +1,6 @@
 name: web/nextjs
 version: 0.0.9
-description: Reviews Next.js configuration for unsafe remote content, exposed source maps, and permissive origins.
+description: Reviews Next.js configuration for unsafe remote content, exposed source maps, and framework boundary risks.
 
 triggers:
   manual: true
