@@ -8,7 +8,6 @@ const review = (name: string, raw = false) => createApp().run({ input: { source:
 const ruleCases = [
   { key: "middleware-auth-bypass", id: "nextjs.middleware-auth-bypass" },
   { key: "public-env-secret", id: "nextjs.public-env-secret" },
-  { key: "wildcard-origin", id: "nextjs.wildcard-origin" },
   { key: "wildcard-images", id: "nextjs.wildcard-images" },
   { key: "production-sourcemaps", id: "nextjs.production-sourcemaps" },
   { key: "build-errors-ignored", id: "nextjs.build-errors-ignored" },
@@ -29,6 +28,12 @@ test("accepts a repository without applicable configuration", async () => {
   assert.deepEqual(output.findings, []);
   assert.equal(output.assessment?.risk, "none");
   assert.equal(output.opinion?.ship, true);
+});
+
+test("accepted Server Actions origin patterns do not become CSRF findings", async () => {
+  const output = await review("regressions/origin-wildcards-clean");
+  assert.equal(output.findings.some((finding) => finding.ruleId === "nextjs.wildcard-origin"), false);
+  assert.deepEqual(output.findings, []);
 });
 
 test("output ordering and protocol envelope are deterministic", async () => {

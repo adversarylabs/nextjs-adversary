@@ -8,7 +8,7 @@ Source of truth for what this adversary is *for*.
 
 ## Mission
 
-Review Next.js configuration for unsafe remote content, exposed source maps, and permissive origins.
+Review Next.js configuration for unsafe remote content, exposed source maps, and framework boundary risks.
 
 ## In scope (fair miss if humans raised it and we did not)
 
