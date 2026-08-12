@@ -1,7 +1,7 @@
 import { type Confidence, type Severity } from "@adversarylabs/sdk";
 
 export interface MatchExpression { pattern: string; flags: string }
-interface ContentMatch { kind: "content"; files: string[]; pattern: MatchExpression; requires: MatchExpression[] }
+interface ContentMatch { kind: "content"; files: string[]; pattern: MatchExpression; anchors?: MatchExpression[]; requires: MatchExpression[] }
 interface MissingContentMatch { kind: "missing-content"; files: string[]; trigger: MatchExpression; required: MatchExpression }
 interface MissingFileMatch { kind: "missing-file"; triggerFiles: string[]; requiredFiles: string[] }
 interface FrameworkControlFlowMatch { kind: "framework-control-flow-caught"; files: string[] }
@@ -122,6 +122,10 @@ export const spec = {
         "kind": "content",
         "files": [...CONFIG_FILES],
         "pattern": { "pattern": "remotePatterns[\\s\\S]{0,260}hostname:\\s*[\"']\\*\\*?[\"']", "flags": "i" },
+        "anchors": [
+          { "pattern": "remotePatterns", "flags": "i" },
+          { "pattern": "hostname:\\s*[\"']\\*\\*?[\"']", "flags": "i" }
+        ],
         "requires": []
       }
     },

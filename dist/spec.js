@@ -105,6 +105,10 @@ export const spec = {
                 "kind": "content",
                 "files": [...CONFIG_FILES],
                 "pattern": { "pattern": "remotePatterns[\\s\\S]{0,260}hostname:\\s*[\"']\\*\\*?[\"']", "flags": "i" },
+                "anchors": [
+                    { "pattern": "remotePatterns", "flags": "i" },
+                    { "pattern": "hostname:\\s*[\"']\\*\\*?[\"']", "flags": "i" }
+                ],
                 "requires": []
             }
         },

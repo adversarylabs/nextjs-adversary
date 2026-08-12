@@ -7,6 +7,7 @@ interface ContentMatch {
     kind: "content";
     files: string[];
     pattern: MatchExpression;
+    anchors?: MatchExpression[];
     requires: MatchExpression[];
 }
 interface MissingContentMatch {
@@ -127,6 +128,13 @@ export declare const spec: {
                 readonly pattern: "remotePatterns[\\s\\S]{0,260}hostname:\\s*[\"']\\*\\*?[\"']";
                 readonly flags: "i";
             };
+            readonly anchors: [{
+                readonly pattern: "remotePatterns";
+                readonly flags: "i";
+            }, {
+                readonly pattern: "hostname:\\s*[\"']\\*\\*?[\"']";
+                readonly flags: "i";
+            }];
             readonly requires: [];
         };
     }, {
