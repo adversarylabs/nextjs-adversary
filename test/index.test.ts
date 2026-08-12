@@ -8,6 +8,7 @@ const review = (name: string, raw = false) => createApp().run({ input: { source:
 const ruleCases = [
   { key: "middleware-auth-bypass", id: "nextjs.middleware-auth-bypass" },
   { key: "public-env-secret", id: "nextjs.public-env-secret" },
+  { key: "framework-control-flow-caught", id: "nextjs.framework-control-flow-caught" },
   { key: "wildcard-images", id: "nextjs.wildcard-images" },
   { key: "production-sourcemaps", id: "nextjs.production-sourcemaps" },
   { key: "build-errors-ignored", id: "nextjs.build-errors-ignored" },
@@ -21,6 +22,17 @@ test("every initial rule has focused vulnerable and clean coverage", async () =>
     const clean = await review(`rules/${rule.key}/clean`);
     assert.equal(clean.findings.some((finding) => finding.ruleId === rule.id), false, `${rule.id} flagged its clean fixture`);
   }
+});
+
+test("framework control-flow findings resolve aliases and namespace imports", async () => {
+  const output = await review("rules/framework-control-flow-caught/vulnerable", true);
+  const observations = output.rawObservations?.filter((item) => item.ruleId === "nextjs.framework-control-flow-caught") ?? [];
+  assert.deepEqual(observations.map((item) => item.evidence?.api).sort(), ["notFound", "permanentRedirect", "redirect"]);
+  assert.deepEqual(observations.map((item) => item.location?.snippet).sort(), [
+    "goTo(\"/posts\");",
+    "if (!post) navigation.notFound();",
+    "permanentRedirect(\"/profile/new-name\");",
+  ]);
 });
 
 test("accepts a repository without applicable configuration", async () => {

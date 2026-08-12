@@ -29,6 +29,17 @@ Public grounding: [CVE-2025-29927](https://nvd.nist.gov/vuln/detail/CVE-2025-299
 
 ## High
 
+### `nextjs.framework-control-flow-caught`
+
+| | |
+| --- | --- |
+| **What** | A broad catch can consume a framework-owned signal from `redirect`, `permanentRedirect`, or `notFound` |
+| **Why** | These APIs throw control-flow errors that Next.js must receive to complete navigation or render the not-found boundary |
+| **Looks for** | A helper imported from `next/navigation` and called directly inside a try whose catch neither starts with `unstable_rethrow(error)` nor rethrows that error |
+| **Stays quiet when** | The call is outside the try; the catch preserves the error; the helper is unrelated/local; or the call belongs to a nested function that executes outside the try's control flow |
+| **Public examples** | [Next.js upstream rule review](https://github.com/vercel/next.js/pull/68108); [redirect guidance](https://nextjs.org/docs/app/guides/redirecting); [framework-error rethrow guidance](https://nextjs.org/docs/15/app/api-reference/functions/unstable_rethrow) |
+| **Remediation** | Move the call outside the try, or call `unstable_rethrow(error)` first in the catch before handling application errors |
+
 ### `nextjs.public-env-secret`
 
 | | |

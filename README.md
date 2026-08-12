@@ -6,6 +6,7 @@ Reviews Next.js configuration for unsafe remote content, exposed source maps, an
 
 - **Image configuration permits arbitrary remote hosts:** Allow only explicit trusted image hosts.
 - **Production browser source maps are public:** Disable public source maps or upload them privately.
+- **Framework navigation is swallowed by a catch:** Keep redirects/not-found outside broad try blocks or preserve Next.js errors first.
 
 ## Development
 
