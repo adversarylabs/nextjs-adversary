@@ -15,6 +15,7 @@ Review Next.js configuration for unsafe remote content, exposed source maps, and
 - Unsafe remote patterns
 - Exposed source maps in prod config
 - Over-permissive CORS/origins in Next config
+- Redirect and not-found control-flow signals swallowed by application error handling
 
 ## Out of scope (not a miss for this adversary)
 

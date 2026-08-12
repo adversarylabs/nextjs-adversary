@@ -73,6 +73,23 @@ export const spec = {
             }
         },
         {
+            "id": "nextjs.framework-control-flow-caught",
+            "title": "Next.js control-flow signal is caught",
+            "summary": "Next.js control-flow signal is caught",
+            "category": "framework-correctness",
+            "severity": "high",
+            "confidence": "high",
+            "whyItMatters": "redirect, permanentRedirect, and notFound throw framework-owned signals that Next.js must handle.",
+            "impact": "A successful redirect or not-found transition is consumed as an application error instead.",
+            "recommendation": "Move the control-flow call outside the try block, or preserve framework errors with unstable_rethrow at the start of the catch.",
+            "complexity": "trivial",
+            "tags": ["correctness", "app-router", "control-flow"],
+            "match": {
+                "kind": "framework-control-flow-caught",
+                "files": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
+            }
+        },
+        {
             "id": "nextjs.wildcard-images",
             "title": "Image configuration permits arbitrary remote hosts",
             "summary": "Image configuration permits arbitrary remote hosts",

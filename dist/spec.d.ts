@@ -20,6 +20,10 @@ interface MissingFileMatch {
     triggerFiles: string[];
     requiredFiles: string[];
 }
+interface FrameworkControlFlowMatch {
+    kind: "framework-control-flow-caught";
+    files: string[];
+}
 export interface RuleSpec {
     id: string;
     title: string;
@@ -32,7 +36,7 @@ export interface RuleSpec {
     recommendation: string;
     complexity: "trivial" | "small" | "medium" | "large";
     tags: string[];
-    match: ContentMatch | MissingContentMatch | MissingFileMatch;
+    match: ContentMatch | MissingContentMatch | MissingFileMatch | FrameworkControlFlowMatch;
 }
 export interface AdversarySpec {
     id: string;
@@ -87,6 +91,22 @@ export declare const spec: {
                 readonly flags: "i";
             };
             readonly requires: [];
+        };
+    }, {
+        readonly id: "nextjs.framework-control-flow-caught";
+        readonly title: "Next.js control-flow signal is caught";
+        readonly summary: "Next.js control-flow signal is caught";
+        readonly category: "framework-correctness";
+        readonly severity: "high";
+        readonly confidence: "high";
+        readonly whyItMatters: "redirect, permanentRedirect, and notFound throw framework-owned signals that Next.js must handle.";
+        readonly impact: "A successful redirect or not-found transition is consumed as an application error instead.";
+        readonly recommendation: "Move the control-flow call outside the try block, or preserve framework errors with unstable_rethrow at the start of the catch.";
+        readonly complexity: "trivial";
+        readonly tags: ["correctness", "app-router", "control-flow"];
+        readonly match: {
+            readonly kind: "framework-control-flow-caught";
+            readonly files: ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"];
         };
     }, {
         readonly id: "nextjs.wildcard-images";

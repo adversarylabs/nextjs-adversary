@@ -4,10 +4,11 @@ export interface MatchExpression { pattern: string; flags: string }
 interface ContentMatch { kind: "content"; files: string[]; pattern: MatchExpression; requires: MatchExpression[] }
 interface MissingContentMatch { kind: "missing-content"; files: string[]; trigger: MatchExpression; required: MatchExpression }
 interface MissingFileMatch { kind: "missing-file"; triggerFiles: string[]; requiredFiles: string[] }
+interface FrameworkControlFlowMatch { kind: "framework-control-flow-caught"; files: string[] }
 export interface RuleSpec {
   id: string; title: string; summary: string; category: string; severity: Severity; confidence: Confidence;
   whyItMatters: string; impact: string; recommendation: string; complexity: "trivial" | "small" | "medium" | "large"; tags: string[];
-  match: ContentMatch | MissingContentMatch | MissingFileMatch;
+  match: ContentMatch | MissingContentMatch | MissingFileMatch | FrameworkControlFlowMatch;
 }
 export interface AdversarySpec { id: string; displayName: string; description: string; files: string[]; rules: RuleSpec[] }
 
@@ -86,6 +87,23 @@ export const spec = {
           "flags": "i"
         },
         "requires": []
+      }
+    },
+    {
+      "id": "nextjs.framework-control-flow-caught",
+      "title": "Next.js control-flow signal is caught",
+      "summary": "Next.js control-flow signal is caught",
+      "category": "framework-correctness",
+      "severity": "high",
+      "confidence": "high",
+      "whyItMatters": "redirect, permanentRedirect, and notFound throw framework-owned signals that Next.js must handle.",
+      "impact": "A successful redirect or not-found transition is consumed as an application error instead.",
+      "recommendation": "Move the control-flow call outside the try block, or preserve framework errors with unstable_rethrow at the start of the catch.",
+      "complexity": "trivial",
+      "tags": ["correctness", "app-router", "control-flow"],
+      "match": {
+        "kind": "framework-control-flow-caught",
+        "files": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
       }
     },
     {
