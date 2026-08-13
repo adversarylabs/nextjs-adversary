@@ -12,15 +12,21 @@ test("the published runtime executes without node_modules and reports its releas
   const repository = await mkdtemp(join(tmpdir(), "nextjs-target-"));
   const entrypoint = join(artifact, "dist", "index.js");
   const schema = join(artifact, "schemas", "adversary.review.v1.schema.json");
+  const licenses = join(artifact, "THIRD_PARTY_LICENSES.txt");
 
   await mkdir(dirname(entrypoint), { recursive: true });
   await mkdir(dirname(schema), { recursive: true });
   await copyFile(join(projectRoot, "dist", "index.js"), entrypoint);
   await copyFile(join(projectRoot, "schemas", "adversary.review.v1.schema.json"), schema);
+  await copyFile(join(projectRoot, "THIRD_PARTY_LICENSES.txt"), licenses);
   await writeFile(join(artifact, "package.json"), '{"type":"module"}\n');
 
   const bundle = await readFile(entrypoint, "utf8");
   assert.doesNotMatch(bundle, /from\s+["']@adversarylabs\/sdk["']/);
+  const bundledLicenses = await readFile(licenses, "utf8");
+  assert.match(bundledLicenses, /Package: @adversarylabs\/sdk@/);
+  assert.match(bundledLicenses, /Package: typescript@/);
+  assert.match(bundledLicenses, /--- ThirdPartyNoticeText\.txt ---/);
 
   const runtime = await import(pathToFileURL(entrypoint).href) as {
     createApp(): {
