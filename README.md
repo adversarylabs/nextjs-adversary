@@ -2,21 +2,20 @@
 
 Reviews Next.js configuration for unsafe remote content, exposed source maps, and framework boundary risks.
 
-## Checks
+## Goals
 
-- **Image configuration permits arbitrary remote hosts:** Allow only explicit trusted image hosts.
-- **Production browser source maps are public:** Disable public source maps or upload them privately.
-- **Framework navigation is swallowed by a catch:** Keep redirects/not-found outside broad try blocks or preserve Next.js errors first.
+The adversary is designed to produce a small number of high-confidence,
+actionable findings grounded in concrete repository evidence. Its review should
+be deterministic where possible, explicit about impact, and quiet when the
+available evidence does not justify a finding.
 
-## Development
+## Scope
 
-```sh
-npm ci
-npm test
-adversary validate .
-adversary pack --check .
-```
+It evaluates Next.js configuration and source boundaries for build suppression, remote content, public secrets, middleware bypasses, server-action authorization, and framework control flow.
 
-## Automatic detection
+The complete detector or review inventory is maintained in
+[CHECKS.md](CHECKS.md).
 
-`adversary auto` selects the nextjs adversary when changes include `next.config.js` or `next.config.mjs`, plus the other domain-specific patterns declared in `adversary.yaml`. Unrelated changes do not select it.
+## Boundaries
+
+It owns framework- or language-specific review in this domain. Infrastructure, CI, dependency-manager, and unrelated application concerns remain with specialist adversaries.
