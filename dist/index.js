@@ -228782,7 +228782,7 @@ function matchesGlob(path, glob) {
 
 // src/index.ts
 function createApp() {
-  const app = new Adversary({ name: "web/nextjs", version: "0.0.15", review: { maximumFindings: 12 } });
+  const app = new Adversary({ name: "web/nextjs", version: "0.0.16", review: { maximumFindings: 12 } });
   registerRules(app);
   app.rule("nextjs.review", async (ctx) => analyzeRepository(ctx));
   return app;
