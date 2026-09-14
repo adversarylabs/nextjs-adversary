@@ -4344,7 +4344,7 @@ var require_core = __commonJS({
       errorsText(errors = this.errors, { separator = ", ", dataVar = "data" } = {}) {
         if (!errors || errors.length === 0)
           return "No errors";
-        return errors.map((e) => `${dataVar}${e.instancePath} ${e.message}`).reduce((text, msg) => text + separator + msg);
+        return errors.map((e) => `${dataVar}${e.instancePath} ${e.message}`).reduce((text2, msg) => text2 + separator + msg);
       }
       $dataMetaSchema(metaSchema, keywordsJsonPointers) {
         const rules = this.RULES.all;
@@ -8141,14 +8141,14 @@ var require_foldFlowLines = __commonJS({
     var FOLD_FLOW = "flow";
     var FOLD_BLOCK = "block";
     var FOLD_QUOTED = "quoted";
-    function foldFlowLines(text, indent, mode = "flow", { indentAtStart, lineWidth = 80, minContentWidth = 20, onFold, onOverflow } = {}) {
+    function foldFlowLines(text2, indent, mode = "flow", { indentAtStart, lineWidth = 80, minContentWidth = 20, onFold, onOverflow } = {}) {
       if (!lineWidth || lineWidth < 0)
-        return text;
+        return text2;
       if (lineWidth < minContentWidth)
         minContentWidth = 0;
       const endStep = Math.max(1 + minContentWidth, 1 + lineWidth - indent.length);
-      if (text.length <= endStep)
-        return text;
+      if (text2.length <= endStep)
+        return text2;
       const folds = [];
       const escapedFolds = {};
       let end = lineWidth - indent.length;
@@ -8165,14 +8165,14 @@ var require_foldFlowLines = __commonJS({
       let escStart = -1;
       let escEnd = -1;
       if (mode === FOLD_BLOCK) {
-        i = consumeMoreIndentedLines(text, i, indent.length);
+        i = consumeMoreIndentedLines(text2, i, indent.length);
         if (i !== -1)
           end = i + endStep;
       }
-      for (let ch; ch = text[i += 1]; ) {
+      for (let ch; ch = text2[i += 1]; ) {
         if (mode === FOLD_QUOTED && ch === "\\") {
           escStart = i;
-          switch (text[i + 1]) {
+          switch (text2[i + 1]) {
             case "x":
               i += 3;
               break;
@@ -8189,12 +8189,12 @@ var require_foldFlowLines = __commonJS({
         }
         if (ch === "\n") {
           if (mode === FOLD_BLOCK)
-            i = consumeMoreIndentedLines(text, i, indent.length);
+            i = consumeMoreIndentedLines(text2, i, indent.length);
           end = i + indent.length + endStep;
           split = void 0;
         } else {
           if (ch === " " && prev && prev !== " " && prev !== "\n" && prev !== "	") {
-            const next = text[i + 1];
+            const next = text2[i + 1];
             if (next && next !== " " && next !== "\n" && next !== "	")
               split = i;
           }
@@ -8206,12 +8206,12 @@ var require_foldFlowLines = __commonJS({
             } else if (mode === FOLD_QUOTED) {
               while (prev === " " || prev === "	") {
                 prev = ch;
-                ch = text[i += 1];
+                ch = text2[i += 1];
                 overflow = true;
               }
               const j = i > escEnd + 1 ? i - 2 : escStart - 1;
               if (escapedFolds[j])
-                return text;
+                return text2;
               folds.push(j);
               escapedFolds[j] = true;
               end = j + endStep;
@@ -8226,39 +8226,39 @@ var require_foldFlowLines = __commonJS({
       if (overflow && onOverflow)
         onOverflow();
       if (folds.length === 0)
-        return text;
+        return text2;
       if (onFold)
         onFold();
-      let res = text.slice(0, folds[0]);
+      let res = text2.slice(0, folds[0]);
       for (let i2 = 0; i2 < folds.length; ++i2) {
         const fold = folds[i2];
-        const end2 = folds[i2 + 1] || text.length;
+        const end2 = folds[i2 + 1] || text2.length;
         if (fold === 0)
           res = `
-${indent}${text.slice(0, end2)}`;
+${indent}${text2.slice(0, end2)}`;
         else {
           if (mode === FOLD_QUOTED && escapedFolds[fold])
-            res += `${text[fold]}\\`;
+            res += `${text2[fold]}\\`;
           res += `
-${indent}${text.slice(fold + 1, end2)}`;
+${indent}${text2.slice(fold + 1, end2)}`;
         }
       }
       return res;
     }
-    function consumeMoreIndentedLines(text, i, indent) {
+    function consumeMoreIndentedLines(text2, i, indent) {
       let end = i;
       let start = i + 1;
-      let ch = text[start];
+      let ch = text2[start];
       while (ch === " " || ch === "	") {
         if (i < start + indent) {
-          ch = text[++i];
+          ch = text2[++i];
         } else {
           do {
-            ch = text[++i];
+            ch = text2[++i];
           } while (ch && ch !== "\n");
           end = i;
           start = i + 1;
-          ch = text[start];
+          ch = text2[start];
         }
       }
       return end;
@@ -16396,7 +16396,7 @@ var require_typescript = __commonJS({
         nodeStartsNewLexicalEnvironment: () => nodeStartsNewLexicalEnvironment,
         noop: () => noop,
         noopFileWatcher: () => noopFileWatcher,
-        normalizePath: () => normalizePath3,
+        normalizePath: () => normalizePath4,
         normalizeSlashes: () => normalizeSlashes,
         normalizeSpans: () => normalizeSpans,
         not: () => not,
@@ -16918,9 +16918,9 @@ var require_typescript = __commonJS({
         }
         return false;
       }
-      function indexOfAnyCharCode(text, charCodes, start) {
-        for (let i = start ?? 0; i < text.length; i++) {
-          if (contains(charCodes, text.charCodeAt(i))) {
+      function indexOfAnyCharCode(text2, charCodes, start) {
+        for (let i = start ?? 0; i < text2.length; i++) {
+          if (contains(charCodes, text2.charCodeAt(i))) {
             return i;
           }
         }
@@ -17832,8 +17832,8 @@ var require_typescript = __commonJS({
       function toArray(value) {
         return isArray(value) ? value : [value];
       }
-      function isString(text) {
-        return typeof text === "string";
+      function isString(text2) {
+        return typeof text2 === "string";
       }
       function isNumber(x) {
         return typeof x === "number";
@@ -18493,8 +18493,8 @@ Node ${formatSyntaxKind(node.kind)} was unexpected.`,
           } else if (hasProperty(func, "name")) {
             return func.name;
           } else {
-            const text = Function.prototype.toString.call(func);
-            const match = /^function\s+([\w$]+)\s*\(/.exec(text);
+            const text2 = Function.prototype.toString.call(func);
+            const match = /^function\s+([\w$]+)\s*\(/.exec(text2);
             return match ? match[1] : "";
           }
         }
@@ -18816,12 +18816,12 @@ Node ${formatSyntaxKind(node.kind)} was unexpected.`,
             },
             __debugTypeToString: {
               value() {
-                let text = weakTypeTextMap.get(this);
-                if (text === void 0) {
-                  text = this.checker.typeToString(this);
-                  weakTypeTextMap.set(this, text);
+                let text2 = weakTypeTextMap.get(this);
+                if (text2 === void 0) {
+                  text2 = this.checker.typeToString(this);
+                  weakTypeTextMap.set(this, text2);
                 }
-                return text;
+                return text2;
               }
             }
           });
@@ -18887,14 +18887,14 @@ Node ${formatSyntaxKind(node.kind)} was unexpected.`,
                 __debugGetText: {
                   value(includeTrivia) {
                     if (nodeIsSynthesized(this)) return "";
-                    let text = weakNodeTextMap.get(this);
-                    if (text === void 0) {
+                    let text2 = weakNodeTextMap.get(this);
+                    if (text2 === void 0) {
                       const parseNode = getParseTreeNode(this);
                       const sourceFile = parseNode && getSourceFileOfNode(parseNode);
-                      text = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
-                      weakNodeTextMap.set(this, text);
+                      text2 = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
+                      weakNodeTextMap.set(this, text2);
                     }
-                    return text;
+                    return text2;
                   }
                 }
               });
@@ -19150,9 +19150,9 @@ m2: ${this.mapper2.__debugToString().split("\n").join("\n    ")}`;
             );
           }
           function renderFlowNode(flowNode2, circular) {
-            let text = getHeader2(flowNode2.flags);
+            let text2 = getHeader2(flowNode2.flags);
             if (circular) {
-              text = `${text}#${getDebugFlowNodeId(flowNode2)}`;
+              text2 = `${text2}#${getDebugFlowNodeId(flowNode2)}`;
             }
             if (isFlowSwitchClause(flowNode2)) {
               const clauses = [];
@@ -19165,13 +19165,13 @@ m2: ${this.mapper2.__debugToString().split("\n").join("\n    ")}`;
                   clauses.push(getNodeText(clause.expression));
                 }
               }
-              text += ` (${clauses.join(", ")})`;
+              text2 += ` (${clauses.join(", ")})`;
             } else if (hasNode(flowNode2)) {
               if (flowNode2.node) {
-                text += ` (${getNodeText(flowNode2.node)})`;
+                text2 += ` (${getNodeText(flowNode2.node)})`;
               }
             }
-            return circular === "circularity" ? `Circular(${text})` : text;
+            return circular === "circularity" ? `Circular(${text2})` : text2;
           }
           function renderGraph() {
             const columnCount = columnWidths.length;
@@ -19237,8 +19237,8 @@ m2: ${this.mapper2.__debugToString().split("\n").join("\n    ")}`;
             return `
 ${lanes.join("\n")}
 `;
-            function writeLane(lane, text) {
-              lanes[lane] += text;
+            function writeLane(lane, text2) {
+              lanes[lane] += text2;
             }
           }
           function getBoxCharacter(connector) {
@@ -19316,8 +19316,8 @@ ${lanes.join("\n")}
           this.prerelease = prereleaseArray;
           this.build = buildArray;
         }
-        static tryParse(text) {
-          const result = tryParseComponents(text);
+        static tryParse(text2) {
+          const result = tryParseComponents(text2);
           if (!result) return void 0;
           const { major, minor, patch, prerelease, build: build2 } = result;
           return new _Version2(major, minor, patch, prerelease, build2);
@@ -19358,8 +19358,8 @@ ${lanes.join("\n")}
       };
       _Version.zero = new _Version(0, 0, 0, ["0"]);
       var Version = _Version;
-      function tryParseComponents(text) {
-        const match = versionRegExp.exec(text);
+      function tryParseComponents(text2) {
+        const match = versionRegExp.exec(text2);
         if (!match) return void 0;
         const [, major, minor = "0", patch = "0", prerelease = "", build2 = ""] = match;
         if (prerelease && !prereleaseRegExp.test(prerelease)) return void 0;
@@ -19398,8 +19398,8 @@ ${lanes.join("\n")}
         constructor(spec2) {
           this._alternatives = spec2 ? Debug.checkDefined(parseRange(spec2), "Invalid range spec.") : emptyArray;
         }
-        static tryParse(text) {
-          const sets = parseRange(text);
+        static tryParse(text2) {
+          const sets = parseRange(text2);
           if (sets) {
             const range = new _VersionRange("");
             range._alternatives = sets;
@@ -19424,9 +19424,9 @@ ${lanes.join("\n")}
       var partialRegExp = /^([x*0]|[1-9]\d*)(?:\.([x*0]|[1-9]\d*)(?:\.([x*0]|[1-9]\d*)(?:-([a-z0-9-.]+))?(?:\+([a-z0-9-.]+))?)?)?$/i;
       var hyphenRegExp = /^\s*([a-z0-9-+.*]+)\s+-\s+([a-z0-9-+.*]+)\s*$/i;
       var rangeRegExp = /^([~^<>=]|<=|>=)?\s*([a-z0-9-+.*]+)$/i;
-      function parseRange(text) {
+      function parseRange(text2) {
         const alternatives = [];
-        for (let range of text.trim().split(logicalOrRegExp)) {
+        for (let range of text2.trim().split(logicalOrRegExp)) {
           if (!range) continue;
           const comparators = [];
           range = range.trim();
@@ -19443,8 +19443,8 @@ ${lanes.join("\n")}
         }
         return alternatives;
       }
-      function parsePartial(text) {
-        const match = partialRegExp.exec(text);
+      function parsePartial(text2) {
+        const match = partialRegExp.exec(text2);
         if (!match) return void 0;
         const [, major, minor = "*", patch = "*", prerelease, build2] = match;
         const version2 = new Version(
@@ -19471,8 +19471,8 @@ ${lanes.join("\n")}
         }
         return true;
       }
-      function parseComparator(operator, text, comparators) {
-        const result = parsePartial(text);
+      function parseComparator(operator, text2, comparators) {
+        const result = parsePartial(text2);
         if (!result) return false;
         const { version: version2, major, minor, patch } = result;
         if (!isWildcard(major)) {
@@ -22606,7 +22606,7 @@ ${lanes.join("\n")}
         function updateChildWatches(parentDir, parentDirPath, options) {
           const parentWatcher = cache.get(parentDirPath);
           if (!parentWatcher) return false;
-          const target = normalizePath3(realpath2(parentDir));
+          const target = normalizePath4(realpath2(parentDir));
           let hasChanges;
           let newChildWatches;
           if (filePathComparer(target, parentDir) === 0) {
@@ -22617,7 +22617,7 @@ ${lanes.join("\n")}
                 /* Directory */
               ) ? mapDefined(getAccessibleSortedChildDirectories(parentDir), (child) => {
                 const childFullName = getNormalizedAbsolutePath(child, parentDir);
-                return !isIgnoredPath(childFullName, options) && filePathComparer(childFullName, normalizePath3(realpath2(childFullName))) === 0 ? childFullName : void 0;
+                return !isIgnoredPath(childFullName, options) && filePathComparer(childFullName, normalizePath4(realpath2(childFullName))) === 0 ? childFullName : void 0;
               }) : emptyArray,
               parentWatcher.childWatches,
               (child, childWatcher) => filePathComparer(child, childWatcher.dirName),
@@ -22683,7 +22683,7 @@ ${lanes.join("\n")}
       function createFsWatchCallbackForDirectoryWatcherCallback(directoryName, callback, options, useCaseSensitiveFileNames2, getCurrentDirectory) {
         return (eventName, relativeFileName) => {
           if (eventName === "rename") {
-            const fileName = !relativeFileName ? directoryName : normalizePath3(combinePaths(directoryName, relativeFileName));
+            const fileName = !relativeFileName ? directoryName : normalizePath4(combinePaths(directoryName, relativeFileName));
             if (!relativeFileName || !isIgnoredByWatchOptions(fileName, options, useCaseSensitiveFileNames2, getCurrentDirectory)) {
               callback(fileName);
             }
@@ -23101,7 +23101,7 @@ ${lanes.join("\n")}
             writeOutputIsTTY() {
               return process.stdout.isTTY;
             },
-            readFile: readFile4,
+            readFile: readFile6,
             writeFile: writeFile22,
             watchFile: watchFile2,
             watchDirectory,
@@ -23307,7 +23307,7 @@ ${lanes.join("\n")}
               callback
             );
           }
-          function readFile4(fileName, _encoding) {
+          function readFile6(fileName, _encoding) {
             let buffer;
             try {
               buffer = _fs.readFileSync(fileName);
@@ -23669,7 +23669,7 @@ ${lanes.join("\n")}
         return path;
       }
       function resolvePath(path, ...paths) {
-        return normalizePath3(some(paths) ? combinePaths(path, ...paths) : normalizeSlashes(path));
+        return normalizePath4(some(paths) ? combinePaths(path, ...paths) : normalizeSlashes(path));
       }
       function getNormalizedPathComponents(path, currentDirectory) {
         return reducePathComponents(getPathComponents(path, currentDirectory));
@@ -23749,7 +23749,7 @@ ${lanes.join("\n")}
         }
         return normalized ?? (length2 > rootLength ? removeTrailingDirectorySeparator(path) : path);
       }
-      function normalizePath3(path) {
+      function normalizePath4(path) {
         path = normalizeSlashes(path);
         let normalized = simpleNormalizePath(path);
         if (normalized !== void 0) {
@@ -23782,7 +23782,7 @@ ${lanes.join("\n")}
         return getPathWithoutRoot(getNormalizedPathComponents(fileName, currentDirectory));
       }
       function toPath(fileName, basePath, getCanonicalFileName) {
-        const nonCanonicalizedPath = isRootedDiskPath(fileName) ? normalizePath3(fileName) : getNormalizedAbsolutePath(fileName, basePath);
+        const nonCanonicalizedPath = isRootedDiskPath(fileName) ? normalizePath4(fileName) : getNormalizedAbsolutePath(fileName, basePath);
         return getCanonicalFileName(nonCanonicalizedPath);
       }
       function removeTrailingDirectorySeparator(path) {
@@ -26472,16 +26472,16 @@ ${lanes.join("\n")}
       function characterCodeToRegularExpressionFlag(ch) {
         return charCodeToRegExpFlag.get(ch);
       }
-      function computeLineStarts(text) {
+      function computeLineStarts(text2) {
         const result = [];
         let pos = 0;
         let lineStart = 0;
-        while (pos < text.length) {
-          const ch = text.charCodeAt(pos);
+        while (pos < text2.length) {
+          const ch = text2.charCodeAt(pos);
           pos++;
           switch (ch) {
             case 13:
-              if (text.charCodeAt(pos) === 10) {
+              if (text2.charCodeAt(pos) === 10) {
                 pos++;
               }
             // falls through
@@ -26577,8 +26577,8 @@ ${lanes.join("\n")}
       function isOctalDigit(ch) {
         return ch >= 48 && ch <= 55;
       }
-      function couldStartTrivia(text, pos) {
-        const ch = text.charCodeAt(pos);
+      function couldStartTrivia(text2, pos) {
+        const ch = text2.charCodeAt(pos);
         switch (ch) {
           case 13:
           case 10:
@@ -26600,16 +26600,16 @@ ${lanes.join("\n")}
             return ch > 127;
         }
       }
-      function skipTrivia(text, pos, stopAfterLineBreak, stopAtComments, inJSDoc) {
+      function skipTrivia(text2, pos, stopAfterLineBreak, stopAtComments, inJSDoc) {
         if (positionIsSynthesized(pos)) {
           return pos;
         }
         let canConsumeStar = false;
         while (true) {
-          const ch = text.charCodeAt(pos);
+          const ch = text2.charCodeAt(pos);
           switch (ch) {
             case 13:
-              if (text.charCodeAt(pos + 1) === 10) {
+              if (text2.charCodeAt(pos + 1) === 10) {
                 pos++;
               }
             // falls through
@@ -26630,10 +26630,10 @@ ${lanes.join("\n")}
               if (stopAtComments) {
                 break;
               }
-              if (text.charCodeAt(pos + 1) === 47) {
+              if (text2.charCodeAt(pos + 1) === 47) {
                 pos += 2;
-                while (pos < text.length) {
-                  if (isLineBreak(text.charCodeAt(pos))) {
+                while (pos < text2.length) {
+                  if (isLineBreak(text2.charCodeAt(pos))) {
                     break;
                   }
                   pos++;
@@ -26641,10 +26641,10 @@ ${lanes.join("\n")}
                 canConsumeStar = false;
                 continue;
               }
-              if (text.charCodeAt(pos + 1) === 42) {
+              if (text2.charCodeAt(pos + 1) === 42) {
                 pos += 2;
-                while (pos < text.length) {
-                  if (text.charCodeAt(pos) === 42 && text.charCodeAt(pos + 1) === 47) {
+                while (pos < text2.length) {
+                  if (text2.charCodeAt(pos) === 42 && text2.charCodeAt(pos + 1) === 47) {
                     pos += 2;
                     break;
                   }
@@ -26658,15 +26658,15 @@ ${lanes.join("\n")}
             case 124:
             case 61:
             case 62:
-              if (isConflictMarkerTrivia(text, pos)) {
-                pos = scanConflictMarkerTrivia(text, pos);
+              if (isConflictMarkerTrivia(text2, pos)) {
+                pos = scanConflictMarkerTrivia(text2, pos);
                 canConsumeStar = false;
                 continue;
               }
               break;
             case 35:
-              if (pos === 0 && isShebangTrivia(text, pos)) {
-                pos = scanShebangTrivia(text, pos);
+              if (pos === 0 && isShebangTrivia(text2, pos)) {
+                pos = scanShebangTrivia(text2, pos);
                 canConsumeStar = false;
                 continue;
               }
@@ -26689,29 +26689,29 @@ ${lanes.join("\n")}
         }
       }
       var mergeConflictMarkerLength = "<<<<<<<".length;
-      function isConflictMarkerTrivia(text, pos) {
+      function isConflictMarkerTrivia(text2, pos) {
         Debug.assert(pos >= 0);
-        if (pos === 0 || isLineBreak(text.charCodeAt(pos - 1))) {
-          const ch = text.charCodeAt(pos);
-          if (pos + mergeConflictMarkerLength < text.length) {
+        if (pos === 0 || isLineBreak(text2.charCodeAt(pos - 1))) {
+          const ch = text2.charCodeAt(pos);
+          if (pos + mergeConflictMarkerLength < text2.length) {
             for (let i = 0; i < mergeConflictMarkerLength; i++) {
-              if (text.charCodeAt(pos + i) !== ch) {
+              if (text2.charCodeAt(pos + i) !== ch) {
                 return false;
               }
             }
-            return ch === 61 || text.charCodeAt(pos + mergeConflictMarkerLength) === 32;
+            return ch === 61 || text2.charCodeAt(pos + mergeConflictMarkerLength) === 32;
           }
         }
         return false;
       }
-      function scanConflictMarkerTrivia(text, pos, error2) {
+      function scanConflictMarkerTrivia(text2, pos, error2) {
         if (error2) {
           error2(Diagnostics.Merge_conflict_marker_encountered, pos, mergeConflictMarkerLength);
         }
-        const ch = text.charCodeAt(pos);
-        const len = text.length;
+        const ch = text2.charCodeAt(pos);
+        const len = text2.length;
         if (ch === 60 || ch === 62) {
-          while (pos < len && !isLineBreak(text.charCodeAt(pos))) {
+          while (pos < len && !isLineBreak(text2.charCodeAt(pos))) {
             pos++;
           }
         } else {
@@ -26720,8 +26720,8 @@ ${lanes.join("\n")}
             /* equals */
           );
           while (pos < len) {
-            const currentChar = text.charCodeAt(pos);
-            if ((currentChar === 61 || currentChar === 62) && currentChar !== ch && isConflictMarkerTrivia(text, pos)) {
+            const currentChar = text2.charCodeAt(pos);
+            if ((currentChar === 61 || currentChar === 62) && currentChar !== ch && isConflictMarkerTrivia(text2, pos)) {
               break;
             }
             pos++;
@@ -26730,16 +26730,16 @@ ${lanes.join("\n")}
         return pos;
       }
       var shebangTriviaRegex = /^#!.*/;
-      function isShebangTrivia(text, pos) {
+      function isShebangTrivia(text2, pos) {
         Debug.assert(pos === 0);
-        return shebangTriviaRegex.test(text);
+        return shebangTriviaRegex.test(text2);
       }
-      function scanShebangTrivia(text, pos) {
-        const shebang = shebangTriviaRegex.exec(text)[0];
+      function scanShebangTrivia(text2, pos) {
+        const shebang = shebangTriviaRegex.exec(text2)[0];
         pos = pos + shebang.length;
         return pos;
       }
-      function iterateCommentRanges(reduce, text, pos, trailing, cb, state, initial) {
+      function iterateCommentRanges(reduce, text2, pos, trailing, cb, state, initial) {
         let pendingPos;
         let pendingEnd;
         let pendingKind;
@@ -26749,17 +26749,17 @@ ${lanes.join("\n")}
         let accumulator = initial;
         if (pos === 0) {
           collecting = true;
-          const shebang = getShebang(text);
+          const shebang = getShebang(text2);
           if (shebang) {
             pos = shebang.length;
           }
         }
         scan:
-          while (pos >= 0 && pos < text.length) {
-            const ch = text.charCodeAt(pos);
+          while (pos >= 0 && pos < text2.length) {
+            const ch = text2.charCodeAt(pos);
             switch (ch) {
               case 13:
-                if (text.charCodeAt(pos + 1) === 10) {
+                if (text2.charCodeAt(pos + 1) === 10) {
                   pos++;
                 }
               // falls through
@@ -26780,23 +26780,23 @@ ${lanes.join("\n")}
                 pos++;
                 continue;
               case 47:
-                const nextChar = text.charCodeAt(pos + 1);
+                const nextChar = text2.charCodeAt(pos + 1);
                 let hasTrailingNewLine = false;
                 if (nextChar === 47 || nextChar === 42) {
                   const kind = nextChar === 47 ? 2 : 3;
                   const startPos = pos;
                   pos += 2;
                   if (nextChar === 47) {
-                    while (pos < text.length) {
-                      if (isLineBreak(text.charCodeAt(pos))) {
+                    while (pos < text2.length) {
+                      if (isLineBreak(text2.charCodeAt(pos))) {
                         hasTrailingNewLine = true;
                         break;
                       }
                       pos++;
                     }
                   } else {
-                    while (pos < text.length) {
-                      if (text.charCodeAt(pos) === 42 && text.charCodeAt(pos + 1) === 47) {
+                    while (pos < text2.length) {
+                      if (text2.charCodeAt(pos) === 42 && text2.charCodeAt(pos + 1) === 47) {
                         pos += 2;
                         break;
                       }
@@ -26835,11 +26835,11 @@ ${lanes.join("\n")}
         }
         return accumulator;
       }
-      function forEachLeadingCommentRange(text, pos, cb, state) {
+      function forEachLeadingCommentRange(text2, pos, cb, state) {
         return iterateCommentRanges(
           /*reduce*/
           false,
-          text,
+          text2,
           pos,
           /*trailing*/
           false,
@@ -26847,11 +26847,11 @@ ${lanes.join("\n")}
           state
         );
       }
-      function forEachTrailingCommentRange(text, pos, cb, state) {
+      function forEachTrailingCommentRange(text2, pos, cb, state) {
         return iterateCommentRanges(
           /*reduce*/
           false,
-          text,
+          text2,
           pos,
           /*trailing*/
           true,
@@ -26859,11 +26859,11 @@ ${lanes.join("\n")}
           state
         );
       }
-      function reduceEachLeadingCommentRange(text, pos, cb, state, initial) {
+      function reduceEachLeadingCommentRange(text2, pos, cb, state, initial) {
         return iterateCommentRanges(
           /*reduce*/
           true,
-          text,
+          text2,
           pos,
           /*trailing*/
           false,
@@ -26872,11 +26872,11 @@ ${lanes.join("\n")}
           initial
         );
       }
-      function reduceEachTrailingCommentRange(text, pos, cb, state, initial) {
+      function reduceEachTrailingCommentRange(text2, pos, cb, state, initial) {
         return iterateCommentRanges(
           /*reduce*/
           true,
-          text,
+          text2,
           pos,
           /*trailing*/
           true,
@@ -26889,9 +26889,9 @@ ${lanes.join("\n")}
         comments.push({ kind, pos, end, hasTrailingNewLine });
         return comments;
       }
-      function getLeadingCommentRanges(text, pos) {
+      function getLeadingCommentRanges(text2, pos) {
         return reduceEachLeadingCommentRange(
-          text,
+          text2,
           pos,
           appendCommentRange,
           /*state*/
@@ -26900,9 +26900,9 @@ ${lanes.join("\n")}
           void 0
         );
       }
-      function getTrailingCommentRanges(text, pos) {
+      function getTrailingCommentRanges(text2, pos) {
         return reduceEachTrailingCommentRange(
-          text,
+          text2,
           pos,
           appendCommentRange,
           /*state*/
@@ -26911,8 +26911,8 @@ ${lanes.join("\n")}
           void 0
         );
       }
-      function getShebang(text) {
-        const match = shebangTriviaRegex.exec(text);
+      function getShebang(text2) {
+        const match = shebangTriviaRegex.exec(text2);
         if (match) {
           return match[0];
         }
@@ -26937,7 +26937,7 @@ ${lanes.join("\n")}
         return true;
       }
       function createScanner(languageVersion, skipTrivia2, languageVariant = 0, textInitial, onError, start, length2) {
-        var text = textInitial;
+        var text2 = textInitial;
         var pos;
         var end;
         var fullStartPos;
@@ -26949,7 +26949,7 @@ ${lanes.join("\n")}
         var skipJsDocLeadingAsterisks = 0;
         var scriptKind = 0;
         var jsDocParsingMode = 0;
-        setText(text, start, length2);
+        setText(text2, start, length2);
         var scanner2 = {
           getTokenFullStart: () => fullStartPos,
           getStartPos: () => fullStartPos,
@@ -26958,7 +26958,7 @@ ${lanes.join("\n")}
           getToken: () => token,
           getTokenStart: () => tokenStart,
           getTokenPos: () => tokenStart,
-          getTokenText: () => text.substring(tokenStart, pos),
+          getTokenText: () => text2.substring(tokenStart, pos),
           getTokenValue: () => tokenValue,
           hasUnicodeEscape: () => (tokenFlags & 1024) !== 0,
           hasExtendedUnicodeEscape: () => (tokenFlags & 8) !== 0,
@@ -27006,20 +27006,20 @@ ${lanes.join("\n")}
         if (Debug.isDebugging) {
           Object.defineProperty(scanner2, "__debugShowCurrentPositionInText", {
             get: () => {
-              const text2 = scanner2.getText();
-              return text2.slice(0, scanner2.getTokenFullStart()) + "\u2551" + text2.slice(scanner2.getTokenFullStart());
+              const text22 = scanner2.getText();
+              return text22.slice(0, scanner2.getTokenFullStart()) + "\u2551" + text22.slice(scanner2.getTokenFullStart());
             }
           });
         }
         return scanner2;
         function codePointUnchecked(pos2) {
-          return codePointAt(text, pos2);
+          return codePointAt(text2, pos2);
         }
         function codePointChecked(pos2) {
           return pos2 >= 0 && pos2 < end ? codePointUnchecked(pos2) : -1;
         }
         function charCodeUnchecked(pos2) {
-          return text.charCodeAt(pos2);
+          return text2.charCodeAt(pos2);
         }
         function charCodeChecked(pos2) {
           return pos2 >= 0 && pos2 < end ? charCodeUnchecked(pos2) : -1;
@@ -27044,7 +27044,7 @@ ${lanes.join("\n")}
               if (allowSeparator) {
                 allowSeparator = false;
                 isPreviousTokenSeparator = true;
-                result += text.substring(start2, pos);
+                result += text2.substring(start2, pos);
               } else {
                 tokenFlags |= 16384;
                 if (isPreviousTokenSeparator) {
@@ -27069,7 +27069,7 @@ ${lanes.join("\n")}
             tokenFlags |= 16384;
             error2(Diagnostics.Numeric_separators_are_not_allowed_here, pos - 1, 1);
           }
-          return result + text.substring(start2, pos);
+          return result + text2.substring(start2, pos);
         }
         function scanNumber() {
           let start2 = pos;
@@ -27114,7 +27114,7 @@ ${lanes.join("\n")}
             if (!finalFragment) {
               error2(Diagnostics.Digit_expected);
             } else {
-              scientificFragment = text.substring(end2, preNumericPart) + finalFragment;
+              scientificFragment = text2.substring(end2, preNumericPart) + finalFragment;
               end2 = pos;
             }
           }
@@ -27128,7 +27128,7 @@ ${lanes.join("\n")}
               result += scientificFragment;
             }
           } else {
-            result = text.substring(start2, end2);
+            result = text2.substring(start2, end2);
           }
           if (tokenFlags & 8192) {
             error2(Diagnostics.Decimals_with_leading_zeros_are_not_allowed, start2, end2 - start2);
@@ -27152,7 +27152,7 @@ ${lanes.join("\n")}
           }
           const identifierStart = pos;
           const { length: length3 } = scanIdentifierParts();
-          if (length3 === 1 && text[identifierStart] === "n") {
+          if (length3 === 1 && text2[identifierStart] === "n") {
             if (isScientific) {
               error2(Diagnostics.A_bigint_literal_cannot_use_exponential_notation, numericStart, identifierStart - numericStart + 1);
             } else {
@@ -27172,7 +27172,7 @@ ${lanes.join("\n")}
             }
             pos++;
           }
-          tokenValue = text.substring(start2, pos);
+          tokenValue = text2.substring(start2, pos);
           return isOctal;
         }
         function scanExactNumberOfHexDigits(count, canHaveSeparators) {
@@ -27238,19 +27238,19 @@ ${lanes.join("\n")}
           let start2 = pos;
           while (true) {
             if (pos >= end) {
-              result += text.substring(start2, pos);
+              result += text2.substring(start2, pos);
               tokenFlags |= 4;
               error2(Diagnostics.Unterminated_string_literal);
               break;
             }
             const ch = charCodeUnchecked(pos);
             if (ch === quote2) {
-              result += text.substring(start2, pos);
+              result += text2.substring(start2, pos);
               pos++;
               break;
             }
             if (ch === 92 && !jsxAttributeString) {
-              result += text.substring(start2, pos);
+              result += text2.substring(start2, pos);
               result += scanEscapeSequence(
                 1 | 2
                 /* ReportErrors */
@@ -27259,7 +27259,7 @@ ${lanes.join("\n")}
               continue;
             }
             if ((ch === 10 || ch === 13) && !jsxAttributeString) {
-              result += text.substring(start2, pos);
+              result += text2.substring(start2, pos);
               tokenFlags |= 4;
               error2(Diagnostics.Unterminated_string_literal);
               break;
@@ -27276,7 +27276,7 @@ ${lanes.join("\n")}
           let resultingToken;
           while (true) {
             if (pos >= end) {
-              contents += text.substring(start2, pos);
+              contents += text2.substring(start2, pos);
               tokenFlags |= 4;
               error2(Diagnostics.Unterminated_template_literal);
               resultingToken = startedWithBacktick ? 15 : 18;
@@ -27284,25 +27284,25 @@ ${lanes.join("\n")}
             }
             const currChar = charCodeUnchecked(pos);
             if (currChar === 96) {
-              contents += text.substring(start2, pos);
+              contents += text2.substring(start2, pos);
               pos++;
               resultingToken = startedWithBacktick ? 15 : 18;
               break;
             }
             if (currChar === 36 && pos + 1 < end && charCodeUnchecked(pos + 1) === 123) {
-              contents += text.substring(start2, pos);
+              contents += text2.substring(start2, pos);
               pos += 2;
               resultingToken = startedWithBacktick ? 16 : 17;
               break;
             }
             if (currChar === 92) {
-              contents += text.substring(start2, pos);
+              contents += text2.substring(start2, pos);
               contents += scanEscapeSequence(1 | (shouldEmitInvalidEscapeError ? 2 : 0));
               start2 = pos;
               continue;
             }
             if (currChar === 13) {
-              contents += text.substring(start2, pos);
+              contents += text2.substring(start2, pos);
               pos++;
               if (pos < end && charCodeUnchecked(pos) === 10) {
                 pos++;
@@ -27350,7 +27350,7 @@ ${lanes.join("\n")}
               }
               tokenFlags |= 2048;
               if (flags & 6) {
-                const code = parseInt(text.substring(start2 + 1, pos), 8);
+                const code = parseInt(text2.substring(start2 + 1, pos), 8);
                 if (flags & 4 && !(flags & 32) && ch !== 48) {
                   error2(Diagnostics.Octal_escape_sequences_and_backreferences_are_not_allowed_in_a_character_class_If_this_was_intended_as_an_escape_sequence_use_the_syntax_0_instead, start2, pos - start2, "\\x" + code.toString(16).padStart(2, "0"));
                 } else {
@@ -27358,7 +27358,7 @@ ${lanes.join("\n")}
                 }
                 return String.fromCharCode(code);
               }
-              return text.substring(start2, pos);
+              return text2.substring(start2, pos);
             case 56:
             case 57:
               tokenFlags |= 2048;
@@ -27366,11 +27366,11 @@ ${lanes.join("\n")}
                 if (flags & 4 && !(flags & 32)) {
                   error2(Diagnostics.Decimal_escape_sequences_and_backreferences_are_not_allowed_in_a_character_class, start2, pos - start2);
                 } else {
-                  error2(Diagnostics.Escape_sequence_0_is_not_allowed, start2, pos - start2, text.substring(start2, pos));
+                  error2(Diagnostics.Escape_sequence_0_is_not_allowed, start2, pos - start2, text2.substring(start2, pos));
                 }
                 return String.fromCharCode(ch);
               }
-              return text.substring(start2, pos);
+              return text2.substring(start2, pos);
             case 98:
               return "\b";
             case 116:
@@ -27405,13 +27405,13 @@ ${lanes.join("\n")}
                   if (flags & 6) {
                     error2(Diagnostics.Hexadecimal_digit_expected);
                   }
-                  return text.substring(start2, pos);
+                  return text2.substring(start2, pos);
                 }
               }
               tokenFlags |= 1024;
-              const escapedValue = parseInt(text.substring(start2 + 2, pos), 16);
+              const escapedValue = parseInt(text2.substring(start2 + 2, pos), 16);
               const escapedValueString = String.fromCharCode(escapedValue);
-              if (flags & 16 && escapedValue >= 55296 && escapedValue <= 56319 && pos + 6 < end && text.substring(pos, pos + 2) === "\\u" && charCodeUnchecked(pos + 2) !== 123) {
+              if (flags & 16 && escapedValue >= 55296 && escapedValue <= 56319 && pos + 6 < end && text2.substring(pos, pos + 2) === "\\u" && charCodeUnchecked(pos + 2) !== 123) {
                 const nextStart = pos;
                 let nextPos = pos + 2;
                 for (; nextPos < nextStart + 6; nextPos++) {
@@ -27419,7 +27419,7 @@ ${lanes.join("\n")}
                     return escapedValueString;
                   }
                 }
-                const nextEscapedValue = parseInt(text.substring(nextStart + 2, nextPos), 16);
+                const nextEscapedValue = parseInt(text2.substring(nextStart + 2, nextPos), 16);
                 if (nextEscapedValue >= 56320 && nextEscapedValue <= 57343) {
                   pos = nextPos;
                   return escapedValueString + String.fromCharCode(nextEscapedValue);
@@ -27433,11 +27433,11 @@ ${lanes.join("\n")}
                   if (flags & 6) {
                     error2(Diagnostics.Hexadecimal_digit_expected);
                   }
-                  return text.substring(start2, pos);
+                  return text2.substring(start2, pos);
                 }
               }
               tokenFlags |= 4096;
-              return String.fromCharCode(parseInt(text.substring(start2 + 2, pos), 16));
+              return String.fromCharCode(parseInt(text2.substring(start2 + 2, pos), 16));
             // when encountering a LineContinuation (i.e. a backslash and a line terminator sequence),
             // the line terminator is interpreted to be "the empty code unit sequence".
             case 13:
@@ -27493,7 +27493,7 @@ ${lanes.join("\n")}
           }
           if (isInvalidExtendedEscape) {
             tokenFlags |= 2048;
-            return text.substring(start2, pos);
+            return text2.substring(start2, pos);
           }
           tokenFlags |= 8;
           return utf16EncodeAsString(escapedValue);
@@ -27549,7 +27549,7 @@ ${lanes.join("\n")}
                 break;
               }
               tokenFlags |= 1024;
-              result += text.substring(start2, pos);
+              result += text2.substring(start2, pos);
               result += utf16EncodeAsString(ch);
               pos += 6;
               start2 = pos;
@@ -27557,7 +27557,7 @@ ${lanes.join("\n")}
               break;
             }
           }
-          result += text.substring(start2, pos);
+          result += text2.substring(start2, pos);
           return result;
         }
         function getIdentifierToken() {
@@ -27596,7 +27596,7 @@ ${lanes.join("\n")}
             if (!isDigit(ch) || ch - 48 >= base) {
               break;
             }
-            value += text[pos];
+            value += text2[pos];
             pos++;
             isPreviousTokenSeparator = false;
           }
@@ -27629,8 +27629,8 @@ ${lanes.join("\n")}
             }
             const ch = codePointUnchecked(pos);
             if (pos === 0) {
-              if (ch === 35 && isShebangTrivia(text, pos)) {
-                pos = scanShebangTrivia(text, pos);
+              if (ch === 35 && isShebangTrivia(text2, pos)) {
+                pos = scanShebangTrivia(text2, pos);
                 if (skipTrivia2) {
                   continue;
                 } else {
@@ -27784,7 +27784,7 @@ ${lanes.join("\n")}
                   }
                   commentDirectives = appendIfCommentDirective(
                     commentDirectives,
-                    text.slice(tokenStart, pos),
+                    text2.slice(tokenStart, pos),
                     commentDirectiveRegExSingleLine,
                     tokenStart
                   );
@@ -27815,7 +27815,7 @@ ${lanes.join("\n")}
                   if (isJSDoc2 && shouldParseJSDoc()) {
                     tokenFlags |= 2;
                   }
-                  commentDirectives = appendIfCommentDirective(commentDirectives, text.slice(lastLineStart, pos), commentDirectiveRegExMultiLine, lastLineStart);
+                  commentDirectives = appendIfCommentDirective(commentDirectives, text2.slice(lastLineStart, pos), commentDirectiveRegExMultiLine, lastLineStart);
                   if (!commentClosed) {
                     error2(Diagnostics.Asterisk_Slash_expected);
                   }
@@ -27893,8 +27893,8 @@ ${lanes.join("\n")}
                 pos++;
                 return token = 27;
               case 60:
-                if (isConflictMarkerTrivia(text, pos)) {
-                  pos = scanConflictMarkerTrivia(text, pos, error2);
+                if (isConflictMarkerTrivia(text2, pos)) {
+                  pos = scanConflictMarkerTrivia(text2, pos, error2);
                   if (skipTrivia2) {
                     continue;
                   } else {
@@ -27916,8 +27916,8 @@ ${lanes.join("\n")}
                 pos++;
                 return token = 30;
               case 61:
-                if (isConflictMarkerTrivia(text, pos)) {
-                  pos = scanConflictMarkerTrivia(text, pos, error2);
+                if (isConflictMarkerTrivia(text2, pos)) {
+                  pos = scanConflictMarkerTrivia(text2, pos, error2);
                   if (skipTrivia2) {
                     continue;
                   } else {
@@ -27936,8 +27936,8 @@ ${lanes.join("\n")}
                 pos++;
                 return token = 64;
               case 62:
-                if (isConflictMarkerTrivia(text, pos)) {
-                  pos = scanConflictMarkerTrivia(text, pos, error2);
+                if (isConflictMarkerTrivia(text2, pos)) {
+                  pos = scanConflictMarkerTrivia(text2, pos, error2);
                   if (skipTrivia2) {
                     continue;
                   } else {
@@ -27974,8 +27974,8 @@ ${lanes.join("\n")}
                 pos++;
                 return token = 19;
               case 124:
-                if (isConflictMarkerTrivia(text, pos)) {
-                  pos = scanConflictMarkerTrivia(text, pos, error2);
+                if (isConflictMarkerTrivia(text2, pos)) {
+                  pos = scanConflictMarkerTrivia(text2, pos, error2);
                   if (skipTrivia2) {
                     continue;
                   } else {
@@ -28022,7 +28022,7 @@ ${lanes.join("\n")}
                 pos++;
                 return token = 0;
               case 35:
-                if (pos !== 0 && text[pos + 1] === "!") {
+                if (pos !== 0 && text2[pos + 1] === "!") {
                   error2(Diagnostics.can_only_be_used_at_the_start_of_a_file, pos, 2);
                   pos++;
                   return token = 0;
@@ -28091,7 +28091,7 @@ ${lanes.join("\n")}
           if (jsDocParsingMode === 3) {
             return false;
           }
-          return jsDocSeeOrLink.test(text.slice(fullStartPos, pos));
+          return jsDocSeeOrLink.test(text2.slice(fullStartPos, pos));
         }
         function reScanInvalidIdentifier() {
           Debug.assert(token === 0, "'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.");
@@ -28114,7 +28114,7 @@ ${lanes.join("\n")}
           if (isIdentifierStart(ch, languageVersion2)) {
             pos += charSize(ch);
             while (pos < end && isIdentifierPart(ch = codePointUnchecked(pos), languageVersion2)) pos += charSize(ch);
-            tokenValue = text.substring(tokenStart, pos);
+            tokenValue = text2.substring(tokenStart, pos);
             if (ch === 92) {
               tokenValue += scanIdentifierParts();
             }
@@ -28247,7 +28247,7 @@ ${lanes.join("\n")}
                 });
               }
             }
-            tokenValue = text.substring(tokenStart, pos);
+            tokenValue = text2.substring(tokenStart, pos);
             token = 14;
           }
           return token;
@@ -28675,7 +28675,7 @@ ${lanes.join("\n")}
             }
             let start2 = pos;
             let operand;
-            switch (text.slice(pos, pos + 2)) {
+            switch (text2.slice(pos, pos + 2)) {
               // TODO: don't use slice
               case "--":
               case "&&":
@@ -28741,7 +28741,7 @@ ${lanes.join("\n")}
                     pos++;
                     error2(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
                     start2 = pos - 2;
-                    operand = text.slice(start2, pos);
+                    operand = text2.slice(start2, pos);
                     continue;
                   } else {
                     if (!operand) {
@@ -28780,20 +28780,20 @@ ${lanes.join("\n")}
                   } else {
                     error2(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos - 1, 1, String.fromCharCode(ch));
                   }
-                  operand = text.slice(start2, pos);
+                  operand = text2.slice(start2, pos);
                   continue;
               }
               if (isClassContentExit(charCodeChecked(pos))) {
                 break;
               }
               start2 = pos;
-              switch (text.slice(pos, pos + 2)) {
+              switch (text2.slice(pos, pos + 2)) {
                 // TODO: don't use slice
                 case "--":
                 case "&&":
                   error2(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos, 2);
                   pos += 2;
-                  operand = text.slice(start2, pos);
+                  operand = text2.slice(start2, pos);
                   break;
                 default:
                   operand = scanClassSetOperand();
@@ -28984,7 +28984,7 @@ ${lanes.join("\n")}
                 case 126:
                   error2(Diagnostics.A_character_class_must_not_contain_a_reserved_double_punctuator_Did_you_mean_to_escape_it_with_backslash, pos, 2);
                   pos += 2;
-                  return text.substring(pos - 2, pos);
+                  return text2.substring(pos - 2, pos);
               }
             }
             switch (ch) {
@@ -29128,7 +29128,7 @@ ${lanes.join("\n")}
           function scanSourceCharacter() {
             const size = anyUnicodeMode ? charSize(codePointChecked(pos)) : 1;
             pos += size;
-            return size > 0 ? text.substring(pos - size, pos) : "";
+            return size > 0 ? text2.substring(pos - size, pos) : "";
           }
           function scanExpectedChar(ch) {
             if (charCodeChecked(pos) === ch) {
@@ -29168,8 +29168,8 @@ ${lanes.join("\n")}
             error2(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, size, getNameOfScriptTarget(availableFrom));
           }
         }
-        function appendIfCommentDirective(commentDirectives2, text2, commentDirectiveRegEx, lineStart) {
-          const type = getDirectiveFromComment(text2.trimStart(), commentDirectiveRegEx);
+        function appendIfCommentDirective(commentDirectives2, text22, commentDirectiveRegEx, lineStart) {
+          const type = getDirectiveFromComment(text22.trimStart(), commentDirectiveRegEx);
           if (type === void 0) {
             return commentDirectives2;
           }
@@ -29181,8 +29181,8 @@ ${lanes.join("\n")}
             }
           );
         }
-        function getDirectiveFromComment(text2, commentDirectiveRegEx) {
-          const match = commentDirectiveRegEx.exec(text2);
+        function getDirectiveFromComment(text22, commentDirectiveRegEx) {
+          const match = commentDirectiveRegEx.exec(text22);
           if (!match) {
             return void 0;
           }
@@ -29253,8 +29253,8 @@ ${lanes.join("\n")}
               break;
             }
             if (char === 60) {
-              if (isConflictMarkerTrivia(text, pos)) {
-                pos = scanConflictMarkerTrivia(text, pos, error2);
+              if (isConflictMarkerTrivia(text2, pos)) {
+                pos = scanConflictMarkerTrivia(text2, pos, error2);
                 return token = 7;
               }
               break;
@@ -29274,7 +29274,7 @@ ${lanes.join("\n")}
             }
             pos++;
           }
-          tokenValue = text.substring(fullStartPos, pos);
+          tokenValue = text2.substring(fullStartPos, pos);
           return firstNonWhitespace === -1 ? 13 : 12;
         }
         function scanJsxIdentifier() {
@@ -29332,7 +29332,7 @@ ${lanes.join("\n")}
           if (pos === tokenStart) {
             return scanJsDocToken();
           }
-          tokenValue = text.substring(tokenStart, pos);
+          tokenValue = text2.substring(tokenStart, pos);
           return token = 82;
         }
         function scanJsDocToken() {
@@ -29413,7 +29413,7 @@ ${lanes.join("\n")}
           if (isIdentifierStart(ch, languageVersion)) {
             let char = ch;
             while (pos < end && isIdentifierPart(char = codePointUnchecked(pos), languageVersion) || char === 45) pos += charSize(char);
-            tokenValue = text.substring(tokenStart, pos);
+            tokenValue = text2.substring(tokenStart, pos);
             if (char === 92) {
               tokenValue += scanIdentifierParts();
             }
@@ -29449,7 +29449,7 @@ ${lanes.join("\n")}
           const saveTokenValue = tokenValue;
           const saveTokenFlags = tokenFlags;
           const saveErrorExpectations = commentDirectives;
-          setText(text, start2, length3);
+          setText(text2, start2, length3);
           const result = callback();
           end = saveEnd;
           pos = savePos;
@@ -29476,14 +29476,14 @@ ${lanes.join("\n")}
           );
         }
         function getText() {
-          return text;
+          return text2;
         }
         function clearCommentDirectives() {
           commentDirectives = void 0;
         }
         function setText(newText, start2, length3) {
-          text = newText || "";
-          end = length3 === void 0 ? text.length : start2 + length3;
+          text2 = newText || "";
+          end = length3 === void 0 ? text2.length : start2 + length3;
           resetTokenState(start2 || 0);
         }
         function setOnError(errorCallback) {
@@ -29804,7 +29804,7 @@ ${lanes.join("\n")}
         }
         setUILocale(locale);
         function trySetLanguageAndTerritory(language2, territory2, errors2) {
-          const compilerFilePath = normalizePath3(sys2.getExecutingFilePath());
+          const compilerFilePath = normalizePath4(sys2.getExecutingFilePath());
           const containingDirectoryPath = getDirectoryPath(compilerFilePath);
           let filePath = combinePaths(containingDirectoryPath, language2);
           if (territory2) {
@@ -31123,22 +31123,22 @@ ${lanes.join("\n")}
         if (parseTreeNode && parseTreeNode.kind === 170) {
           const paramIdx = parseTreeNode.parent.parameters.indexOf(parseTreeNode);
           const previousSibling = paramIdx > 0 ? parseTreeNode.parent.parameters[paramIdx - 1] : void 0;
-          const text = sourceFile.text;
+          const text2 = sourceFile.text;
           const commentRanges = previousSibling ? concatenate(
             // to handle
             // ... parameters, /** @internal */
             // public param: string
-            getTrailingCommentRanges(text, skipTrivia(
-              text,
+            getTrailingCommentRanges(text2, skipTrivia(
+              text2,
               previousSibling.end + 1,
               /*stopAfterLineBreak*/
               false,
               /*stopAtComments*/
               true
             )),
-            getLeadingCommentRanges(text, node.pos)
-          ) : getTrailingCommentRanges(text, skipTrivia(
-            text,
+            getLeadingCommentRanges(text2, node.pos)
+          ) : getTrailingCommentRanges(text2, skipTrivia(
+            text2,
             node.pos,
             /*stopAfterLineBreak*/
             false,
@@ -31189,7 +31189,7 @@ ${lanes.join("\n")}
       var stringWriter = createSingleLineStringWriter();
       function createSingleLineStringWriter() {
         var str = "";
-        const writeText = (text) => str += text;
+        const writeText = (text2) => str += text2;
         return {
           getText: () => str,
           write: writeText,
@@ -31507,15 +31507,15 @@ ${lanes.join("\n")}
       function insertStatementAfterCustomPrologue(to, statement) {
         return insertStatementAfterPrologue(to, statement, isAnyPrologueDirective);
       }
-      function isRecognizedTripleSlashComment(text, commentPos, commentEnd) {
-        if (text.charCodeAt(commentPos + 1) === 47 && commentPos + 2 < commentEnd && text.charCodeAt(commentPos + 2) === 47) {
-          const textSubStr = text.substring(commentPos, commentEnd);
+      function isRecognizedTripleSlashComment(text2, commentPos, commentEnd) {
+        if (text2.charCodeAt(commentPos + 1) === 47 && commentPos + 2 < commentEnd && text2.charCodeAt(commentPos + 2) === 47) {
+          const textSubStr = text2.substring(commentPos, commentEnd);
           return fullTripleSlashReferencePathRegEx.test(textSubStr) || fullTripleSlashAMDReferencePathRegEx.test(textSubStr) || fullTripleSlashAMDModuleRegEx.test(textSubStr) || fullTripleSlashReferenceTypeReferenceDirectiveRegEx.test(textSubStr) || fullTripleSlashLibReferenceRegEx.test(textSubStr) || defaultLibReferenceRegEx.test(textSubStr) ? true : false;
         }
         return false;
       }
-      function isPinnedComment(text, start) {
-        return text.charCodeAt(start + 1) === 42 && text.charCodeAt(start + 2) === 33;
+      function isPinnedComment(text2, start) {
+        return text2.charCodeAt(start + 1) === 42 && text2.charCodeAt(start + 2) === 33;
       }
       function createCommentDirectivesMap(sourceFile, commentDirectives) {
         const directivesByLine = new Map(
@@ -31607,11 +31607,11 @@ ${lanes.join("\n")}
         if (nodeIsMissing(node)) {
           return "";
         }
-        let text = sourceText.substring(includeTrivia ? node.pos : skipTrivia(sourceText, node.pos), node.end);
+        let text2 = sourceText.substring(includeTrivia ? node.pos : skipTrivia(sourceText, node.pos), node.end);
         if (isJSDocTypeExpressionOrChild(node)) {
-          text = text.split(/\r\n|\n|\r/).map((line) => line.replace(/^\s*\*/, "").trimStart()).join("\n");
+          text2 = text2.split(/\r\n|\n|\r/).map((line) => line.replace(/^\s*\*/, "").trimStart()).join("\n");
         }
-        return text;
+        return text2;
       }
       function getTextOfNode(node, includeTrivia = false) {
         return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node, includeTrivia);
@@ -32761,12 +32761,12 @@ ${lanes.join("\n")}
       function getLeadingCommentRangesOfNode(node, sourceFileOfNode) {
         return node.kind !== 12 ? getLeadingCommentRanges(sourceFileOfNode.text, node.pos) : void 0;
       }
-      function getJSDocCommentRanges(node, text) {
-        const commentRanges = node.kind === 170 || node.kind === 169 || node.kind === 219 || node.kind === 220 || node.kind === 218 || node.kind === 261 || node.kind === 282 ? concatenate(getTrailingCommentRanges(text, node.pos), getLeadingCommentRanges(text, node.pos)) : getLeadingCommentRanges(text, node.pos);
+      function getJSDocCommentRanges(node, text2) {
+        const commentRanges = node.kind === 170 || node.kind === 169 || node.kind === 219 || node.kind === 220 || node.kind === 218 || node.kind === 261 || node.kind === 282 ? concatenate(getTrailingCommentRanges(text2, node.pos), getLeadingCommentRanges(text2, node.pos)) : getLeadingCommentRanges(text2, node.pos);
         return filter(
           commentRanges,
           (comment) => comment.end <= node.end && // Due to parse errors sometime empty parameter may get comments assigned to it that end up not in parameter range
-          text.charCodeAt(comment.pos + 1) === 42 && text.charCodeAt(comment.pos + 2) === 42 && text.charCodeAt(comment.pos + 3) !== 47
+          text2.charCodeAt(comment.pos + 1) === 42 && text2.charCodeAt(comment.pos + 2) === 42 && text2.charCodeAt(comment.pos + 3) !== 47
           /* slash */
         );
       }
@@ -35412,10 +35412,10 @@ ${lanes.join("\n")}
         sourceFilePath = isSourceFileInCommonSourceDirectory ? sourceFilePath.substring(commonSourceDirectory.length) : sourceFilePath;
         return combinePaths(newDirPath, sourceFilePath);
       }
-      function writeFile2(host, diagnostics, fileName, text, writeByteOrderMark, sourceFiles, data) {
+      function writeFile2(host, diagnostics, fileName, text2, writeByteOrderMark, sourceFiles, data) {
         host.writeFile(
           fileName,
-          text,
+          text2,
           writeByteOrderMark,
           (hostErrorMessage) => {
             diagnostics.add(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
@@ -35435,7 +35435,7 @@ ${lanes.join("\n")}
         try {
           writeFile22(path, data, writeByteOrderMark);
         } catch {
-          ensureDirectoriesExist(getDirectoryPath(normalizePath3(path)), createDirectory, directoryExists);
+          ensureDirectoriesExist(getDirectoryPath(normalizePath4(path)), createDirectory, directoryExists);
           writeFile22(path, data, writeByteOrderMark);
         }
       }
@@ -35569,7 +35569,7 @@ ${lanes.join("\n")}
           writer.writeLine();
         }
       }
-      function emitComments(text, lineMap, writer, comments, leadingSeparator, trailingSeparator, newLine, writeComment) {
+      function emitComments(text2, lineMap, writer, comments, leadingSeparator, trailingSeparator, newLine, writeComment) {
         if (comments && comments.length > 0) {
           if (leadingSeparator) {
             writer.writeSpace(" ");
@@ -35580,7 +35580,7 @@ ${lanes.join("\n")}
               writer.writeSpace(" ");
               emitInterveningSeparator = false;
             }
-            writeComment(text, lineMap, writer, comment.pos, comment.end, newLine);
+            writeComment(text2, lineMap, writer, comment.pos, comment.end, newLine);
             if (comment.hasTrailingNewLine) {
               writer.writeLine();
             } else {
@@ -35592,15 +35592,15 @@ ${lanes.join("\n")}
           }
         }
       }
-      function emitDetachedComments(text, lineMap, writer, writeComment, node, newLine, removeComments) {
+      function emitDetachedComments(text2, lineMap, writer, writeComment, node, newLine, removeComments) {
         let leadingComments;
         let currentDetachedCommentInfo;
         if (removeComments) {
           if (node.pos === 0) {
-            leadingComments = filter(getLeadingCommentRanges(text, node.pos), isPinnedCommentLocal);
+            leadingComments = filter(getLeadingCommentRanges(text2, node.pos), isPinnedCommentLocal);
           }
         } else {
-          leadingComments = getLeadingCommentRanges(text, node.pos);
+          leadingComments = getLeadingCommentRanges(text2, node.pos);
         }
         if (leadingComments) {
           const detachedComments = [];
@@ -35618,11 +35618,11 @@ ${lanes.join("\n")}
           }
           if (detachedComments.length) {
             const lastCommentLine = getLineOfLocalPositionFromLineMap(lineMap, last(detachedComments).end);
-            const nodeLine = getLineOfLocalPositionFromLineMap(lineMap, skipTrivia(text, node.pos));
+            const nodeLine = getLineOfLocalPositionFromLineMap(lineMap, skipTrivia(text2, node.pos));
             if (nodeLine >= lastCommentLine + 2) {
               emitNewLineBeforeLeadingComments(lineMap, writer, node, leadingComments);
               emitComments(
-                text,
+                text2,
                 lineMap,
                 writer,
                 detachedComments,
@@ -35639,22 +35639,22 @@ ${lanes.join("\n")}
         }
         return currentDetachedCommentInfo;
         function isPinnedCommentLocal(comment) {
-          return isPinnedComment(text, comment.pos);
+          return isPinnedComment(text2, comment.pos);
         }
       }
-      function writeCommentRange(text, lineMap, writer, commentPos, commentEnd, newLine) {
-        if (text.charCodeAt(commentPos + 1) === 42) {
+      function writeCommentRange(text2, lineMap, writer, commentPos, commentEnd, newLine) {
+        if (text2.charCodeAt(commentPos + 1) === 42) {
           const firstCommentLineAndCharacter = computeLineAndCharacterOfPosition(lineMap, commentPos);
           const lineCount = lineMap.length;
           let firstCommentLineIndent;
           for (let pos = commentPos, currentLine = firstCommentLineAndCharacter.line; pos < commentEnd; currentLine++) {
-            const nextLineStart = currentLine + 1 === lineCount ? text.length + 1 : lineMap[currentLine + 1];
+            const nextLineStart = currentLine + 1 === lineCount ? text2.length + 1 : lineMap[currentLine + 1];
             if (pos !== commentPos) {
               if (firstCommentLineIndent === void 0) {
-                firstCommentLineIndent = calculateIndent(text, lineMap[firstCommentLineAndCharacter.line], commentPos);
+                firstCommentLineIndent = calculateIndent(text2, lineMap[firstCommentLineAndCharacter.line], commentPos);
               }
               const currentWriterIndentSpacing = writer.getIndent() * getIndentSize();
-              const spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(text, pos, nextLineStart);
+              const spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(text2, pos, nextLineStart);
               if (spacesToEmit > 0) {
                 let numberOfSingleSpacesToEmit = spacesToEmit % getIndentSize();
                 const indentSizeSpaceString = getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / getIndentSize());
@@ -35667,16 +35667,16 @@ ${lanes.join("\n")}
                 writer.rawWrite("");
               }
             }
-            writeTrimmedCurrentLine(text, commentEnd, writer, newLine, pos, nextLineStart);
+            writeTrimmedCurrentLine(text2, commentEnd, writer, newLine, pos, nextLineStart);
             pos = nextLineStart;
           }
         } else {
-          writer.writeComment(text.substring(commentPos, commentEnd));
+          writer.writeComment(text2.substring(commentPos, commentEnd));
         }
       }
-      function writeTrimmedCurrentLine(text, commentEnd, writer, newLine, pos, nextLineStart) {
+      function writeTrimmedCurrentLine(text2, commentEnd, writer, newLine, pos, nextLineStart) {
         const end = Math.min(commentEnd, nextLineStart - 1);
-        const currentLineText = text.substring(pos, end).trim();
+        const currentLineText = text2.substring(pos, end).trim();
         if (currentLineText) {
           writer.writeComment(currentLineText);
           if (end !== commentEnd) {
@@ -35686,10 +35686,10 @@ ${lanes.join("\n")}
           writer.rawWrite(newLine);
         }
       }
-      function calculateIndent(text, pos, end) {
+      function calculateIndent(text2, pos, end) {
         let currentLineIndent = 0;
-        for (; pos < end && isWhiteSpaceSingleLine(text.charCodeAt(pos)); pos++) {
-          if (text.charCodeAt(pos) === 9) {
+        for (; pos < end && isWhiteSpaceSingleLine(text2.charCodeAt(pos)); pos++) {
+          if (text2.charCodeAt(pos) === 9) {
             currentLineIndent += getIndentSize() - currentLineIndent % getIndentSize();
           } else {
             currentLineIndent++;
@@ -36151,9 +36151,9 @@ ${lanes.join("\n")}
       function readJson(path, host) {
         return readJsonOrUndefined(path, host) || {};
       }
-      function tryParseJson(text) {
+      function tryParseJson(text2) {
         try {
-          return JSON.parse(text);
+          return JSON.parse(text2);
         } catch {
           return void 0;
         }
@@ -36624,9 +36624,9 @@ ${lanes.join("\n")}
         this.original = void 0;
         this.emitNode = void 0;
       }
-      function SourceMapSource(fileName, text, skipTrivia2) {
+      function SourceMapSource(fileName, text2, skipTrivia2) {
         this.fileName = fileName;
-        this.text = text;
+        this.text = text2;
         this.skipTrivia = skipTrivia2 || ((pos) => pos);
       }
       var objectAllocator = {
@@ -36649,8 +36649,8 @@ ${lanes.join("\n")}
         Object.assign(objectAllocator, alloc);
         forEach(objectAllocatorPatchers, (fn) => fn(objectAllocator));
       }
-      function formatStringFromArgs(text, args) {
-        return text.replace(/\{(\d+)\}/g, (_match, index) => "" + Debug.checkDefined(args[+index]));
+      function formatStringFromArgs(text2, args) {
+        return text2.replace(/\{(\d+)\}/g, (_match, index) => "" + Debug.checkDefined(args[+index]));
       }
       var localizedDiagnosticMessages;
       function setLocalizedDiagnosticMessages(messages) {
@@ -36669,15 +36669,15 @@ ${lanes.join("\n")}
           length2 = sourceText.length - start;
         }
         assertDiagnosticLocation(sourceText, start, length2);
-        let text = getLocaleSpecificMessage(message);
+        let text2 = getLocaleSpecificMessage(message);
         if (some(args)) {
-          text = formatStringFromArgs(text, args);
+          text2 = formatStringFromArgs(text2, args);
         }
         return {
           file: void 0,
           start,
           length: length2,
-          messageText: text,
+          messageText: text2,
           category: message.category,
           code: message.code,
           reportsUnnecessary: message.reportsUnnecessary,
@@ -36725,15 +36725,15 @@ ${lanes.join("\n")}
       }
       function createFileDiagnostic(file, start, length2, message, ...args) {
         assertDiagnosticLocation(file.text, start, length2);
-        let text = getLocaleSpecificMessage(message);
+        let text2 = getLocaleSpecificMessage(message);
         if (some(args)) {
-          text = formatStringFromArgs(text, args);
+          text2 = formatStringFromArgs(text2, args);
         }
         return {
           file,
           start,
           length: length2,
-          messageText: text,
+          messageText: text2,
           category: message.category,
           code: message.code,
           reportsUnnecessary: message.reportsUnnecessary,
@@ -36741,22 +36741,22 @@ ${lanes.join("\n")}
         };
       }
       function formatMessage(message, ...args) {
-        let text = getLocaleSpecificMessage(message);
+        let text2 = getLocaleSpecificMessage(message);
         if (some(args)) {
-          text = formatStringFromArgs(text, args);
+          text2 = formatStringFromArgs(text2, args);
         }
-        return text;
+        return text2;
       }
       function createCompilerDiagnostic(message, ...args) {
-        let text = getLocaleSpecificMessage(message);
+        let text2 = getLocaleSpecificMessage(message);
         if (some(args)) {
-          text = formatStringFromArgs(text, args);
+          text2 = formatStringFromArgs(text2, args);
         }
         return {
           file: void 0,
           start: void 0,
           length: void 0,
-          messageText: text,
+          messageText: text2,
           category: message.category,
           code: message.code,
           reportsUnnecessary: message.reportsUnnecessary,
@@ -36775,12 +36775,12 @@ ${lanes.join("\n")}
         };
       }
       function chainDiagnosticMessages(details, message, ...args) {
-        let text = getLocaleSpecificMessage(message);
+        let text2 = getLocaleSpecificMessage(message);
         if (some(args)) {
-          text = formatStringFromArgs(text, args);
+          text2 = formatStringFromArgs(text2, args);
         }
         return {
-          messageText: text,
+          messageText: text2,
           category: message.category,
           code: message.code,
           next: details === void 0 || Array.isArray(details) ? details : [details]
@@ -37364,8 +37364,8 @@ ${lanes.join("\n")}
         return withoutPrefix === void 0 ? void 0 : stripLeadingDirectorySeparator(withoutPrefix);
       }
       var reservedCharacterPattern = /[^\w\s/]/g;
-      function regExpEscape(text) {
-        return text.replace(reservedCharacterPattern, escapeRegExpCharacter);
+      function regExpEscape(text2) {
+        return text2.replace(reservedCharacterPattern, escapeRegExpCharacter);
       }
       function escapeRegExpCharacter(match) {
         return "\\" + match;
@@ -37487,8 +37487,8 @@ ${lanes.join("\n")}
         return match === "*" ? singleAsteriskRegexFragment : match === "?" ? "[^/]" : "\\" + match;
       }
       function getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames2, currentDirectory) {
-        path = normalizePath3(path);
-        currentDirectory = normalizePath3(currentDirectory);
+        path = normalizePath4(path);
+        currentDirectory = normalizePath4(currentDirectory);
         const absolutePath = combinePaths(currentDirectory, path);
         return {
           includeFilePatterns: map(getRegularExpressionsForWildcards(includes, absolutePath, "files"), (pattern) => `^${pattern}$`),
@@ -37502,8 +37502,8 @@ ${lanes.join("\n")}
         return new RegExp(pattern, useCaseSensitiveFileNames2 ? "" : "i");
       }
       function matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames2, currentDirectory, depth, getFileSystemEntries, realpath2) {
-        path = normalizePath3(path);
-        currentDirectory = normalizePath3(currentDirectory);
+        path = normalizePath4(path);
+        currentDirectory = normalizePath4(currentDirectory);
         const patterns = getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames2, currentDirectory);
         const includeFileRegexes = patterns.includeFilePatterns && patterns.includeFilePatterns.map((pattern) => getRegexFromPattern(pattern, useCaseSensitiveFileNames2));
         const includeDirectoryRegex = patterns.includeDirectoryPattern && getRegexFromPattern(patterns.includeDirectoryPattern, useCaseSensitiveFileNames2);
@@ -37554,7 +37554,7 @@ ${lanes.join("\n")}
         if (includes) {
           const includeBasePaths = [];
           for (const include of includes) {
-            const absolute = isRootedDiskPath(include) ? include : normalizePath3(combinePaths(path, include));
+            const absolute = isRootedDiskPath(include) ? include : normalizePath4(combinePaths(path, include));
             includeBasePaths.push(getIncludeBasePath(absolute));
           }
           includeBasePaths.sort(getStringComparer(!useCaseSensitiveFileNames2));
@@ -37724,7 +37724,7 @@ ${lanes.join("\n")}
         return ModuleSpecifierEnding2;
       })(ModuleSpecifierEnding || {});
       function usesExtensionsOnImports({ imports }, hasExtension2 = or(hasJSFileExtension, hasTSFileExtension)) {
-        return firstDefined(imports, ({ text }) => pathIsRelative(text) && !fileExtensionIsOneOf(text, extensionsNotSupportingExtensionlessResolution) ? hasExtension2(text) : void 0) || false;
+        return firstDefined(imports, ({ text: text2 }) => pathIsRelative(text2) && !fileExtensionIsOneOf(text2, extensionsNotSupportingExtensionlessResolution) ? hasExtension2(text2) : void 0) || false;
       }
       function getModuleSpecifierEndingPreference(preference, resolutionMode, compilerOptions, sourceFile) {
         const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
@@ -38050,19 +38050,19 @@ ${lanes.join("\n")}
       function pseudoBigIntToString({ negative, base10Value }) {
         return (negative && base10Value !== "0" ? "-" : "") + base10Value;
       }
-      function parseBigInt(text) {
+      function parseBigInt(text2) {
         if (!isValidBigIntString(
-          text,
+          text2,
           /*roundTripOnly*/
           false
         )) {
           return void 0;
         }
-        return parseValidBigInt(text);
+        return parseValidBigInt(text2);
       }
-      function parseValidBigInt(text) {
-        const negative = text.startsWith("-");
-        const base10Value = parsePseudoBigInt(`${negative ? text.slice(1) : text}n`);
+      function parseValidBigInt(text2) {
+        const negative = text2.startsWith("-");
+        const base10Value = parsePseudoBigInt(`${negative ? text2.slice(1) : text2}n`);
         return { negative, base10Value };
       }
       function isValidBigIntString(s, roundTripOnly) {
@@ -38301,8 +38301,8 @@ ${lanes.join("\n")}
       function isFunctionExpressionOrArrowFunction(node) {
         return node.kind === 219 || node.kind === 220;
       }
-      function escapeSnippetText(text) {
-        return text.replace(/\$/g, () => "\\$");
+      function escapeSnippetText(text2) {
+        return text2.replace(/\$/g, () => "\\$");
       }
       function isNumericLiteralName(name) {
         return (+name).toString() === name;
@@ -40975,13 +40975,13 @@ ${lanes.join("\n")}
           return update(updated, original);
         }
         function createNumericLiteral(value, numericLiteralFlags = 0) {
-          const text = typeof value === "number" ? value + "" : value;
-          Debug.assert(text.charCodeAt(0) !== 45, "Negative numbers should be created in combination with createPrefixUnaryExpression");
+          const text2 = typeof value === "number" ? value + "" : value;
+          Debug.assert(text2.charCodeAt(0) !== 45, "Negative numbers should be created in combination with createPrefixUnaryExpression");
           const node = createBaseDeclaration(
             9
             /* NumericLiteral */
           );
-          node.text = text;
+          node.text = text2;
           node.numericLiteralFlags = numericLiteralFlags;
           if (numericLiteralFlags & 384) node.transformFlags |= 1024;
           return node;
@@ -40995,17 +40995,17 @@ ${lanes.join("\n")}
           node.transformFlags |= 32;
           return node;
         }
-        function createBaseStringLiteral(text, isSingleQuote) {
+        function createBaseStringLiteral(text2, isSingleQuote) {
           const node = createBaseDeclaration(
             11
             /* StringLiteral */
           );
-          node.text = text;
+          node.text = text2;
           node.singleQuote = isSingleQuote;
           return node;
         }
-        function createStringLiteral(text, isSingleQuote, hasExtendedUnicodeEscape) {
-          const node = createBaseStringLiteral(text, isSingleQuote);
+        function createStringLiteral(text2, isSingleQuote, hasExtendedUnicodeEscape) {
+          const node = createBaseStringLiteral(text2, isSingleQuote);
           node.hasExtendedUnicodeEscape = hasExtendedUnicodeEscape;
           if (hasExtendedUnicodeEscape) node.transformFlags |= 1024;
           return node;
@@ -41019,48 +41019,48 @@ ${lanes.join("\n")}
           node.textSourceNode = sourceNode;
           return node;
         }
-        function createRegularExpressionLiteral(text) {
+        function createRegularExpressionLiteral(text2) {
           const node = createBaseToken(
             14
             /* RegularExpressionLiteral */
           );
-          node.text = text;
+          node.text = text2;
           return node;
         }
-        function createLiteralLikeNode(kind, text) {
+        function createLiteralLikeNode(kind, text2) {
           switch (kind) {
             case 9:
               return createNumericLiteral(
-                text,
+                text2,
                 /*numericLiteralFlags*/
                 0
               );
             case 10:
-              return createBigIntLiteral(text);
+              return createBigIntLiteral(text2);
             case 11:
               return createStringLiteral(
-                text,
+                text2,
                 /*isSingleQuote*/
                 void 0
               );
             case 12:
               return createJsxText(
-                text,
+                text2,
                 /*containsOnlyTriviaWhiteSpaces*/
                 false
               );
             case 13:
               return createJsxText(
-                text,
+                text2,
                 /*containsOnlyTriviaWhiteSpaces*/
                 true
               );
             case 14:
-              return createRegularExpressionLiteral(text);
+              return createRegularExpressionLiteral(text2);
             case 15:
               return createTemplateLiteralLikeNode(
                 kind,
-                text,
+                text2,
                 /*rawText*/
                 void 0,
                 /*templateFlags*/
@@ -41079,8 +41079,8 @@ ${lanes.join("\n")}
           node.symbol = void 0;
           return node;
         }
-        function createBaseGeneratedIdentifier(text, autoGenerateFlags, prefix, suffix) {
-          const node = createBaseIdentifier(escapeLeadingUnderscores(text));
+        function createBaseGeneratedIdentifier(text2, autoGenerateFlags, prefix, suffix) {
+          const node = createBaseIdentifier(escapeLeadingUnderscores(text2));
           setIdentifierAutoGenerate(node, {
             flags: autoGenerateFlags,
             id: nextAutoGenerateId,
@@ -41090,14 +41090,14 @@ ${lanes.join("\n")}
           nextAutoGenerateId++;
           return node;
         }
-        function createIdentifier(text, originalKeywordKind, hasExtendedUnicodeEscape) {
-          if (originalKeywordKind === void 0 && text) {
-            originalKeywordKind = stringToToken(text);
+        function createIdentifier(text2, originalKeywordKind, hasExtendedUnicodeEscape) {
+          if (originalKeywordKind === void 0 && text2) {
+            originalKeywordKind = stringToToken(text2);
           }
           if (originalKeywordKind === 80) {
             originalKeywordKind = void 0;
           }
-          const node = createBaseIdentifier(escapeLeadingUnderscores(text));
+          const node = createBaseIdentifier(escapeLeadingUnderscores(text2));
           if (hasExtendedUnicodeEscape) node.flags |= 256;
           if (node.escapedText === "await") {
             node.transformFlags |= 67108864;
@@ -41128,14 +41128,14 @@ ${lanes.join("\n")}
             void 0
           );
         }
-        function createUniqueName(text, flags2 = 0, prefix, suffix) {
+        function createUniqueName(text2, flags2 = 0, prefix, suffix) {
           Debug.assert(!(flags2 & 7), "Argument out of range: flags");
           Debug.assert((flags2 & (16 | 32)) !== 32, "GeneratedIdentifierFlags.FileLevel cannot be set without also setting GeneratedIdentifierFlags.Optimistic");
-          return createBaseGeneratedIdentifier(text, 3 | flags2, prefix, suffix);
+          return createBaseGeneratedIdentifier(text2, 3 | flags2, prefix, suffix);
         }
         function getGeneratedNameForNode(node, flags2 = 0, prefix, suffix) {
           Debug.assert(!(flags2 & 7), "Argument out of range: flags");
-          const text = !node ? "" : isMemberName(node) ? formatGeneratedName(
+          const text2 = !node ? "" : isMemberName(node) ? formatGeneratedName(
             /*privateName*/
             false,
             prefix,
@@ -41144,7 +41144,7 @@ ${lanes.join("\n")}
             idText
           ) : `generated@${getNodeId(node)}`;
           if (prefix || suffix) flags2 |= 16;
-          const name = createBaseGeneratedIdentifier(text, 4 | flags2, prefix, suffix);
+          const name = createBaseGeneratedIdentifier(text2, 4 | flags2, prefix, suffix);
           name.original = node;
           return name;
         }
@@ -41157,12 +41157,12 @@ ${lanes.join("\n")}
           node.transformFlags |= 16777216;
           return node;
         }
-        function createPrivateIdentifier(text) {
-          if (!startsWith(text, "#")) Debug.fail("First character of private identifier must be #: " + text);
-          return createBasePrivateIdentifier(escapeLeadingUnderscores(text));
+        function createPrivateIdentifier(text2) {
+          if (!startsWith(text2, "#")) Debug.fail("First character of private identifier must be #: " + text2);
+          return createBasePrivateIdentifier(escapeLeadingUnderscores(text2));
         }
-        function createBaseGeneratedPrivateIdentifier(text, autoGenerateFlags, prefix, suffix) {
-          const node = createBasePrivateIdentifier(escapeLeadingUnderscores(text));
+        function createBaseGeneratedPrivateIdentifier(text2, autoGenerateFlags, prefix, suffix) {
+          const node = createBasePrivateIdentifier(escapeLeadingUnderscores(text2));
           setIdentifierAutoGenerate(node, {
             flags: autoGenerateFlags,
             id: nextAutoGenerateId,
@@ -41172,13 +41172,13 @@ ${lanes.join("\n")}
           nextAutoGenerateId++;
           return node;
         }
-        function createUniquePrivateName(text, prefix, suffix) {
-          if (text && !startsWith(text, "#")) Debug.fail("First character of private identifier must be #: " + text);
-          const autoGenerateFlags = 8 | (text ? 3 : 1);
-          return createBaseGeneratedPrivateIdentifier(text ?? "", autoGenerateFlags, prefix, suffix);
+        function createUniquePrivateName(text2, prefix, suffix) {
+          if (text2 && !startsWith(text2, "#")) Debug.fail("First character of private identifier must be #: " + text2);
+          const autoGenerateFlags = 8 | (text2 ? 3 : 1);
+          return createBaseGeneratedPrivateIdentifier(text2 ?? "", autoGenerateFlags, prefix, suffix);
         }
         function getGeneratedPrivateNameForNode(node, prefix, suffix) {
-          const text = isMemberName(node) ? formatGeneratedName(
+          const text2 = isMemberName(node) ? formatGeneratedName(
             /*privateName*/
             true,
             prefix,
@@ -41187,7 +41187,7 @@ ${lanes.join("\n")}
             idText
           ) : `#generated@${getNodeId(node)}`;
           const flags2 = prefix || suffix ? 16 : 0;
-          const name = createBaseGeneratedPrivateIdentifier(text, 4 | flags2, prefix, suffix);
+          const name = createBaseGeneratedPrivateIdentifier(text2, 4 | flags2, prefix, suffix);
           name.original = node;
           return name;
         }
@@ -42579,24 +42579,24 @@ ${lanes.join("\n")}
         function updateTemplateExpression(node, head, templateSpans) {
           return node.head !== head || node.templateSpans !== templateSpans ? update(createTemplateExpression(head, templateSpans), node) : node;
         }
-        function checkTemplateLiteralLikeNode(kind, text, rawText, templateFlags = 0) {
+        function checkTemplateLiteralLikeNode(kind, text2, rawText, templateFlags = 0) {
           Debug.assert(!(templateFlags & ~7176), "Unsupported template flags.");
           let cooked = void 0;
-          if (rawText !== void 0 && rawText !== text) {
+          if (rawText !== void 0 && rawText !== text2) {
             cooked = getCookedText(kind, rawText);
             if (typeof cooked === "object") {
               return Debug.fail("Invalid raw text");
             }
           }
-          if (text === void 0) {
+          if (text2 === void 0) {
             if (cooked === void 0) {
               return Debug.fail("Arguments 'text' and 'rawText' may not both be undefined.");
             }
-            text = cooked;
+            text2 = cooked;
           } else if (cooked !== void 0) {
-            Debug.assert(text === cooked, "Expected argument 'text' to be the normalized (i.e. 'cooked') version of argument 'rawText'.");
+            Debug.assert(text2 === cooked, "Expected argument 'text' to be the normalized (i.e. 'cooked') version of argument 'rawText'.");
           }
-          return text;
+          return text2;
         }
         function getTransformFlagsOfTemplateLiteralLike(templateFlags) {
           let transformFlags = 1024;
@@ -42605,43 +42605,43 @@ ${lanes.join("\n")}
           }
           return transformFlags;
         }
-        function createTemplateLiteralLikeToken(kind, text, rawText, templateFlags) {
+        function createTemplateLiteralLikeToken(kind, text2, rawText, templateFlags) {
           const node = createBaseToken(kind);
-          node.text = text;
+          node.text = text2;
           node.rawText = rawText;
           node.templateFlags = templateFlags & 7176;
           node.transformFlags = getTransformFlagsOfTemplateLiteralLike(node.templateFlags);
           return node;
         }
-        function createTemplateLiteralLikeDeclaration(kind, text, rawText, templateFlags) {
+        function createTemplateLiteralLikeDeclaration(kind, text2, rawText, templateFlags) {
           const node = createBaseDeclaration(kind);
-          node.text = text;
+          node.text = text2;
           node.rawText = rawText;
           node.templateFlags = templateFlags & 7176;
           node.transformFlags = getTransformFlagsOfTemplateLiteralLike(node.templateFlags);
           return node;
         }
-        function createTemplateLiteralLikeNode(kind, text, rawText, templateFlags) {
+        function createTemplateLiteralLikeNode(kind, text2, rawText, templateFlags) {
           if (kind === 15) {
-            return createTemplateLiteralLikeDeclaration(kind, text, rawText, templateFlags);
+            return createTemplateLiteralLikeDeclaration(kind, text2, rawText, templateFlags);
           }
-          return createTemplateLiteralLikeToken(kind, text, rawText, templateFlags);
+          return createTemplateLiteralLikeToken(kind, text2, rawText, templateFlags);
         }
-        function createTemplateHead(text, rawText, templateFlags) {
-          text = checkTemplateLiteralLikeNode(16, text, rawText, templateFlags);
-          return createTemplateLiteralLikeNode(16, text, rawText, templateFlags);
+        function createTemplateHead(text2, rawText, templateFlags) {
+          text2 = checkTemplateLiteralLikeNode(16, text2, rawText, templateFlags);
+          return createTemplateLiteralLikeNode(16, text2, rawText, templateFlags);
         }
-        function createTemplateMiddle(text, rawText, templateFlags) {
-          text = checkTemplateLiteralLikeNode(16, text, rawText, templateFlags);
-          return createTemplateLiteralLikeNode(17, text, rawText, templateFlags);
+        function createTemplateMiddle(text2, rawText, templateFlags) {
+          text2 = checkTemplateLiteralLikeNode(16, text2, rawText, templateFlags);
+          return createTemplateLiteralLikeNode(17, text2, rawText, templateFlags);
         }
-        function createTemplateTail(text, rawText, templateFlags) {
-          text = checkTemplateLiteralLikeNode(16, text, rawText, templateFlags);
-          return createTemplateLiteralLikeNode(18, text, rawText, templateFlags);
+        function createTemplateTail(text2, rawText, templateFlags) {
+          text2 = checkTemplateLiteralLikeNode(16, text2, rawText, templateFlags);
+          return createTemplateLiteralLikeNode(18, text2, rawText, templateFlags);
         }
-        function createNoSubstitutionTemplateLiteral(text, rawText, templateFlags) {
-          text = checkTemplateLiteralLikeNode(16, text, rawText, templateFlags);
-          return createTemplateLiteralLikeDeclaration(15, text, rawText, templateFlags);
+        function createNoSubstitutionTemplateLiteral(text2, rawText, templateFlags) {
+          text2 = checkTemplateLiteralLikeNode(16, text2, rawText, templateFlags);
+          return createTemplateLiteralLikeDeclaration(15, text2, rawText, templateFlags);
         }
         function createYieldExpression(asteriskToken, expression) {
           Debug.assert(!asteriskToken || !!expression, "A `YieldExpression` with an asteriskToken must have an expression.");
@@ -43803,41 +43803,41 @@ ${lanes.join("\n")}
         function updateJSDocMemberName(node, left, right) {
           return node.left !== left || node.right !== right ? update(createJSDocMemberName(left, right), node) : node;
         }
-        function createJSDocLink(name, text) {
+        function createJSDocLink(name, text2) {
           const node = createBaseNode(
             325
             /* JSDocLink */
           );
           node.name = name;
-          node.text = text;
+          node.text = text2;
           return node;
         }
-        function updateJSDocLink(node, name, text) {
-          return node.name !== name ? update(createJSDocLink(name, text), node) : node;
+        function updateJSDocLink(node, name, text2) {
+          return node.name !== name ? update(createJSDocLink(name, text2), node) : node;
         }
-        function createJSDocLinkCode(name, text) {
+        function createJSDocLinkCode(name, text2) {
           const node = createBaseNode(
             326
             /* JSDocLinkCode */
           );
           node.name = name;
-          node.text = text;
+          node.text = text2;
           return node;
         }
-        function updateJSDocLinkCode(node, name, text) {
-          return node.name !== name ? update(createJSDocLinkCode(name, text), node) : node;
+        function updateJSDocLinkCode(node, name, text2) {
+          return node.name !== name ? update(createJSDocLinkCode(name, text2), node) : node;
         }
-        function createJSDocLinkPlain(name, text) {
+        function createJSDocLinkPlain(name, text2) {
           const node = createBaseNode(
             327
             /* JSDocLinkPlain */
           );
           node.name = name;
-          node.text = text;
+          node.text = text2;
           return node;
         }
-        function updateJSDocLinkPlain(node, name, text) {
-          return node.name !== name ? update(createJSDocLinkPlain(name, text), node) : node;
+        function updateJSDocLinkPlain(node, name, text2) {
+          return node.name !== name ? update(createJSDocLinkPlain(name, text2), node) : node;
         }
         function updateJSDocImplementsTag(node, tagName = getDefaultTagName(node), className, comment) {
           return node.tagName !== tagName || node.class !== className || node.comment !== comment ? update(createJSDocImplementsTag(tagName, className, comment), node) : node;
@@ -43888,16 +43888,16 @@ ${lanes.join("\n")}
         function updateJSDocImportTag(node, tagName, importClause, moduleSpecifier, attributes, comment) {
           return node.tagName !== tagName || node.comment !== comment || node.importClause !== importClause || node.moduleSpecifier !== moduleSpecifier || node.attributes !== attributes ? update(createJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comment), node) : node;
         }
-        function createJSDocText(text) {
+        function createJSDocText(text2) {
           const node = createBaseNode(
             322
             /* JSDocText */
           );
-          node.text = text;
+          node.text = text2;
           return node;
         }
-        function updateJSDocText(node, text) {
-          return node.text !== text ? update(createJSDocText(text), node) : node;
+        function updateJSDocText(node, text2) {
+          return node.text !== text2 ? update(createJSDocText(text2), node) : node;
         }
         function createJSDocComment(comment, tags) {
           const node = createBaseNode(
@@ -43985,18 +43985,18 @@ ${lanes.join("\n")}
         function updateJsxFragment(node, openingFragment, children, closingFragment) {
           return node.openingFragment !== openingFragment || node.children !== children || node.closingFragment !== closingFragment ? update(createJsxFragment(openingFragment, children, closingFragment), node) : node;
         }
-        function createJsxText(text, containsOnlyTriviaWhiteSpaces) {
+        function createJsxText(text2, containsOnlyTriviaWhiteSpaces) {
           const node = createBaseNode(
             12
             /* JsxText */
           );
-          node.text = text;
+          node.text = text2;
           node.containsOnlyTriviaWhiteSpaces = !!containsOnlyTriviaWhiteSpaces;
           node.transformFlags |= 2;
           return node;
         }
-        function updateJsxText(node, text, containsOnlyTriviaWhiteSpaces) {
-          return node.text !== text || node.containsOnlyTriviaWhiteSpaces !== containsOnlyTriviaWhiteSpaces ? update(createJsxText(text, containsOnlyTriviaWhiteSpaces), node) : node;
+        function updateJsxText(node, text2, containsOnlyTriviaWhiteSpaces) {
+          return node.text !== text2 || node.containsOnlyTriviaWhiteSpaces !== containsOnlyTriviaWhiteSpaces ? update(createJsxText(text2, containsOnlyTriviaWhiteSpaces), node) : node;
         }
         function createJsxOpeningFragment() {
           const node = createBaseNode(
@@ -45267,8 +45267,8 @@ ${lanes.join("\n")}
       };
       var factory = createNodeFactory(4, syntheticFactory);
       var SourceMapSource2;
-      function createSourceMapSource(fileName, text, skipTrivia2) {
-        return new (SourceMapSource2 || (SourceMapSource2 = objectAllocator.getSourceMapSourceConstructor()))(fileName, text, skipTrivia2);
+      function createSourceMapSource(fileName, text2, skipTrivia2) {
+        return new (SourceMapSource2 || (SourceMapSource2 = objectAllocator.getSourceMapSourceConstructor()))(fileName, text2, skipTrivia2);
       }
       function setOriginalNode(node, original) {
         if (node.original !== original) {
@@ -45438,8 +45438,8 @@ ${lanes.join("\n")}
         getOrCreateEmitNode(node).leadingComments = comments;
         return node;
       }
-      function addSyntheticLeadingComment(node, kind, text, hasTrailingNewLine) {
-        return setSyntheticLeadingComments(node, append(getSyntheticLeadingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
+      function addSyntheticLeadingComment(node, kind, text2, hasTrailingNewLine) {
+        return setSyntheticLeadingComments(node, append(getSyntheticLeadingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text: text2 }));
       }
       function getSyntheticTrailingComments(node) {
         var _a;
@@ -45449,8 +45449,8 @@ ${lanes.join("\n")}
         getOrCreateEmitNode(node).trailingComments = comments;
         return node;
       }
-      function addSyntheticTrailingComment(node, kind, text, hasTrailingNewLine) {
-        return setSyntheticTrailingComments(node, append(getSyntheticTrailingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
+      function addSyntheticTrailingComment(node, kind, text2, hasTrailingNewLine) {
+        return setSyntheticTrailingComments(node, append(getSyntheticTrailingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text: text2 }));
       }
       function moveSyntheticComments(node, original) {
         setSyntheticLeadingComments(node, getSyntheticLeadingComments(original));
@@ -48514,8 +48514,8 @@ ${lanes.join("\n")}
           }
         }
       }
-      function isJSDocLikeText(text, start) {
-        return text.charCodeAt(start + 1) === 42 && text.charCodeAt(start + 2) === 42 && text.charCodeAt(start + 3) !== 47;
+      function isJSDocLikeText(text2, start) {
+        return text2.charCodeAt(start + 1) === 42 && text2.charCodeAt(start + 2) === 42 && text2.charCodeAt(start + 3) !== 47;
       }
       function isFileProbablyExternalModule(sourceFile) {
         return forEach(sourceFile.statements, isAnExternalModuleIndicatorNode) || getImportMetaIfNecessary(sourceFile);
@@ -49649,8 +49649,8 @@ ${lanes.join("\n")}
         (_b = tracing) == null ? void 0 : _b.pop();
         return result;
       }
-      function parseIsolatedEntityName(text, languageVersion) {
-        return Parser.parseIsolatedEntityName(text, languageVersion);
+      function parseIsolatedEntityName(text2, languageVersion) {
+        return Parser.parseIsolatedEntityName(text2, languageVersion);
       }
       function parseJsonText(fileName, sourceText) {
         return Parser.parseJsonText(fileName, sourceText);
@@ -49926,7 +49926,7 @@ ${lanes.join("\n")}
           IdentifierConstructor2 = objectAllocator.getIdentifierConstructor();
           PrivateIdentifierConstructor2 = objectAllocator.getPrivateIdentifierConstructor();
           SourceFileConstructor2 = objectAllocator.getSourceFileConstructor();
-          fileName = normalizePath3(_fileName);
+          fileName = normalizePath4(_fileName);
           sourceText = _sourceText;
           languageVersion = _languageVersion;
           syntaxCursor = _syntaxCursor;
@@ -50671,10 +50671,10 @@ ${lanes.join("\n")}
           ) : kind === 283 ? factory2.createMissingDeclaration() : factoryCreateToken(kind);
           return finishNode(result, pos);
         }
-        function internIdentifier(text) {
-          let identifier = identifiers.get(text);
+        function internIdentifier(text2) {
+          let identifier = identifiers.get(text2);
           if (identifier === void 0) {
-            identifiers.set(text, identifier = text);
+            identifiers.set(text2, identifier = text2);
           }
           return identifier;
         }
@@ -50683,10 +50683,10 @@ ${lanes.join("\n")}
             identifierCount++;
             const pos = scanner2.hasPrecedingJSDocLeadingAsterisks() ? scanner2.getTokenStart() : getNodePos();
             const originalKeywordKind = token();
-            const text = internIdentifier(scanner2.getTokenValue());
+            const text2 = internIdentifier(scanner2.getTokenValue());
             const hasExtendedUnicodeEscape = scanner2.hasExtendedUnicodeEscape();
             nextTokenWithoutCheck();
-            return finishNode(factoryCreateIdentifier(text, originalKeywordKind, hasExtendedUnicodeEscape), pos);
+            return finishNode(factoryCreateIdentifier(text2, originalKeywordKind, hasExtendedUnicodeEscape), pos);
           }
           if (token() === 81) {
             parseErrorAtCurrentToken(privateIdentifierDiagnosticMessage || Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
@@ -56573,12 +56573,12 @@ ${lanes.join("\n")}
               let state = 1;
               let margin;
               let indent3 = start - (content.lastIndexOf("\n", start) + 1) + 4;
-              function pushComment(text) {
+              function pushComment(text2) {
                 if (!margin) {
                   margin = indent3;
                 }
-                comments.push(text);
-                indent3 += text.length;
+                comments.push(text2);
+                indent3 += text2.length;
               }
               nextTokenJSDoc();
               while (parseOptionalJsdoc(
@@ -56842,12 +56842,12 @@ ${lanes.join("\n")}
               let linkEnd2;
               let state = 0;
               let margin;
-              function pushComment(text) {
+              function pushComment(text2) {
                 if (!margin) {
                   margin = indent3;
                 }
-                comments2.push(text);
-                indent3 += text.length;
+                comments2.push(text2);
+                indent3 += text2.length;
               }
               if (initialMargin !== void 0) {
                 if (initialMargin !== "") {
@@ -56949,13 +56949,13 @@ ${lanes.join("\n")}
               nextTokenJSDoc();
               skipWhitespace();
               const name = parseJSDocLinkName();
-              const text = [];
+              const text2 = [];
               while (token() !== 20 && token() !== 4 && token() !== 1) {
-                text.push(scanner2.getTokenText());
+                text2.push(scanner2.getTokenText());
                 nextTokenJSDoc();
               }
               const create = linkType === "link" ? factory2.createJSDocLink : linkType === "linkcode" ? factory2.createJSDocLinkCode : factory2.createJSDocLinkPlain;
-              return finishNode(create(name, text.join("")), start2, scanner2.getTokenEnd());
+              return finishNode(create(name, text2.join("")), start2, scanner2.getTokenEnd());
             }
             function parseJSDocLinkName() {
               if (tokenIsIdentifierOrKeyword(token())) {
@@ -57556,8 +57556,8 @@ ${lanes.join("\n")}
               const start2 = scanner2.getTokenStart();
               const end2 = scanner2.getTokenEnd();
               const originalKeywordKind = token();
-              const text = internIdentifier(scanner2.getTokenValue());
-              const result2 = finishNode(factoryCreateIdentifier(text, originalKeywordKind), start2, end2);
+              const text2 = internIdentifier(scanner2.getTokenValue());
+              const result2 = finishNode(factoryCreateIdentifier(text2, originalKeywordKind), start2, end2);
               nextTokenJSDoc();
               return result2;
             }
@@ -57680,14 +57680,14 @@ ${lanes.join("\n")}
           }
           return;
           function visitNode3(node) {
-            let text = "";
+            let text2 = "";
             if (aggressiveChecks && shouldCheckNode(node)) {
-              text = oldText.substring(node.pos, node.end);
+              text2 = oldText.substring(node.pos, node.end);
             }
             unsetNodeChildren(node, origSourceFile);
             setTextRangePosEnd(node, node.pos + delta, node.end + delta);
             if (aggressiveChecks && shouldCheckNode(node)) {
-              Debug.assert(text === newText.substring(node.pos, node.end));
+              Debug.assert(text2 === newText.substring(node.pos, node.end));
             }
             forEachChild(node, visitNode3, visitArray2);
             if (hasJSDocNodes(node)) {
@@ -58092,8 +58092,8 @@ ${lanes.join("\n")}
       }
       var tripleSlashXMLCommentStartRegEx = /^\/\/\/\s*<(\S+)\s.*?\/>/m;
       var singleLinePragmaRegEx = /^\/\/\/?\s*@([^\s:]+)((?:[^\S\r\n]|:).*)?$/m;
-      function extractPragmas(pragmas, range, text) {
-        const tripleSlash = range.kind === 2 && tripleSlashXMLCommentStartRegEx.exec(text);
+      function extractPragmas(pragmas, range, text2) {
+        const tripleSlash = range.kind === 2 && tripleSlashXMLCommentStartRegEx.exec(text2);
         if (tripleSlash) {
           const name = tripleSlash[1].toLowerCase();
           const pragma = commentPragmas[name];
@@ -58104,7 +58104,7 @@ ${lanes.join("\n")}
             const argument = {};
             for (const arg of pragma.args) {
               const matcher = getNamedArgRegEx(arg.name);
-              const matchResult = matcher.exec(text);
+              const matchResult = matcher.exec(text2);
               if (!matchResult && !arg.optional) {
                 return;
               } else if (matchResult) {
@@ -58127,14 +58127,14 @@ ${lanes.join("\n")}
           }
           return;
         }
-        const singleLine = range.kind === 2 && singleLinePragmaRegEx.exec(text);
+        const singleLine = range.kind === 2 && singleLinePragmaRegEx.exec(text2);
         if (singleLine) {
           return addPragmaForMatch(pragmas, range, 2, singleLine);
         }
         if (range.kind === 3) {
           const multiLinePragmaRegEx = /@(\S+)(\s+(?:\S.*)?)?$/gm;
           let multiLineMatch;
-          while (multiLineMatch = multiLinePragmaRegEx.exec(text)) {
+          while (multiLineMatch = multiLinePragmaRegEx.exec(text2)) {
             addPragmaForMatch(pragmas, range, 4, multiLineMatch);
           }
         }
@@ -58152,10 +58152,10 @@ ${lanes.join("\n")}
         pragmas.push({ name, args: { arguments: argument, range } });
         return;
       }
-      function getNamedPragmaArguments(pragma, text) {
-        if (!text) return {};
+      function getNamedPragmaArguments(pragma, text2) {
+        if (!text2) return {};
         if (!pragma.args) return {};
-        const args = text.trim().split(/\s+/);
+        const args = text2.trim().split(/\s+/);
         const argMap = {};
         for (let i = 0; i < pragma.args.length; i++) {
           const argument = pragma.args[i];
@@ -59863,7 +59863,7 @@ ${lanes.join("\n")}
         const possibleOption = getSpellingSuggestion(unknownOption, diagnostics.optionDeclarations, getOptionName);
         return possibleOption ? createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, diagnostics.unknownDidYouMeanDiagnostic, unknownOptionErrorText || unknownOption, possibleOption.name) : createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, diagnostics.unknownOptionDiagnostic, unknownOptionErrorText || unknownOption);
       }
-      function parseCommandLineWorker(diagnostics, commandLine, readFile4) {
+      function parseCommandLineWorker(diagnostics, commandLine, readFile6) {
         const options = {};
         let watchOptions;
         const fileNames = [];
@@ -59911,29 +59911,29 @@ ${lanes.join("\n")}
           }
         }
         function parseResponseFile(fileName) {
-          const text = tryReadFile(fileName, readFile4 || ((fileName2) => sys.readFile(fileName2)));
-          if (!isString(text)) {
-            errors.push(text);
+          const text2 = tryReadFile(fileName, readFile6 || ((fileName2) => sys.readFile(fileName2)));
+          if (!isString(text2)) {
+            errors.push(text2);
             return;
           }
           const args = [];
           let pos = 0;
           while (true) {
-            while (pos < text.length && text.charCodeAt(pos) <= 32) pos++;
-            if (pos >= text.length) break;
+            while (pos < text2.length && text2.charCodeAt(pos) <= 32) pos++;
+            if (pos >= text2.length) break;
             const start = pos;
-            if (text.charCodeAt(start) === 34) {
+            if (text2.charCodeAt(start) === 34) {
               pos++;
-              while (pos < text.length && text.charCodeAt(pos) !== 34) pos++;
-              if (pos < text.length) {
-                args.push(text.substring(start + 1, pos));
+              while (pos < text2.length && text2.charCodeAt(pos) !== 34) pos++;
+              if (pos < text2.length) {
+                args.push(text2.substring(start + 1, pos));
                 pos++;
               } else {
                 errors.push(createCompilerDiagnostic(Diagnostics.Unterminated_quoted_string_in_response_file_0, fileName));
               }
             } else {
-              while (text.charCodeAt(pos) > 32) pos++;
-              args.push(text.substring(start, pos));
+              while (text2.charCodeAt(pos) > 32) pos++;
+              args.push(text2.substring(start, pos));
             }
           }
           parseStrings(args);
@@ -60014,8 +60014,8 @@ ${lanes.join("\n")}
         unknownDidYouMeanDiagnostic: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1,
         optionTypeMismatchDiagnostic: Diagnostics.Compiler_option_0_expects_an_argument
       };
-      function parseCommandLine(commandLine, readFile4) {
-        return parseCommandLineWorker(compilerOptionsDidYouMeanDiagnostics, commandLine, readFile4);
+      function parseCommandLine(commandLine, readFile6) {
+        return parseCommandLineWorker(compilerOptionsDidYouMeanDiagnostics, commandLine, readFile6);
       }
       function getOptionFromName(optionName, allowShort) {
         return getOptionDeclarationFromName(getOptionsNameMap, optionName, allowShort);
@@ -60097,8 +60097,8 @@ ${lanes.join("\n")}
           watchOptionsToExtend
         );
       }
-      function readConfigFile(fileName, readFile4) {
-        const textOrDiagnostic = tryReadFile(fileName, readFile4);
+      function readConfigFile(fileName, readFile6) {
+        const textOrDiagnostic = tryReadFile(fileName, readFile6);
         return isString(textOrDiagnostic) ? parseConfigFileTextToJson(fileName, textOrDiagnostic) : { config: {}, error: textOrDiagnostic };
       }
       function parseConfigFileTextToJson(fileName, jsonText) {
@@ -60113,18 +60113,18 @@ ${lanes.join("\n")}
           error: jsonSourceFile.parseDiagnostics.length ? jsonSourceFile.parseDiagnostics[0] : void 0
         };
       }
-      function readJsonConfigFile(fileName, readFile4) {
-        const textOrDiagnostic = tryReadFile(fileName, readFile4);
+      function readJsonConfigFile(fileName, readFile6) {
+        const textOrDiagnostic = tryReadFile(fileName, readFile6);
         return isString(textOrDiagnostic) ? parseJsonText(fileName, textOrDiagnostic) : { fileName, parseDiagnostics: [textOrDiagnostic] };
       }
-      function tryReadFile(fileName, readFile4) {
-        let text;
+      function tryReadFile(fileName, readFile6) {
+        let text2;
         try {
-          text = readFile4(fileName);
+          text2 = readFile6(fileName);
         } catch (e) {
           return createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message);
         }
-        return text === void 0 ? createCompilerDiagnostic(Diagnostics.Cannot_read_file_0, fileName) : text;
+        return text2 === void 0 ? createCompilerDiagnostic(Diagnostics.Cannot_read_file_0, fileName) : text2;
       }
       function commandLineOptionsToMap(options) {
         return arrayToMap(options, getOptionName);
@@ -60816,7 +60816,7 @@ ${lanes.join("\n")}
           basePath
         );
         options.configFilePath = configFileName && normalizeSlashes(configFileName);
-        const basePathForFileNames = normalizePath3(configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath);
+        const basePathForFileNames = normalizePath4(configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath);
         const configFileSpecs = getConfigFileSpecs();
         if (sourceFile) sourceFile.configFileSpecs = configFileSpecs;
         setConfigFileInOptions(options, sourceFile);
@@ -61420,7 +61420,7 @@ ${lanes.join("\n")}
       var invalidTrailingRecursionPattern = /(?:^|\/)\*\*\/?$/;
       var wildcardDirectoryPattern = /^[^*?]*(?=\/[^/]*[*?])/;
       function getFileNamesFromConfigSpecs(configFileSpecs, basePath, options, host, extraFileExtensions = emptyArray) {
-        basePath = normalizePath3(basePath);
+        basePath = normalizePath4(basePath);
         const keyMapper = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
         const literalFileMap = /* @__PURE__ */ new Map();
         const wildcardFileMap = /* @__PURE__ */ new Map();
@@ -61484,7 +61484,7 @@ ${lanes.join("\n")}
       function isExcludedFile(pathToCheck, spec2, basePath, useCaseSensitiveFileNames2, currentDirectory) {
         const { validatedFilesSpec, validatedIncludeSpecs, validatedExcludeSpecs } = spec2;
         if (!length(validatedIncludeSpecs) || !length(validatedExcludeSpecs)) return false;
-        basePath = normalizePath3(basePath);
+        basePath = normalizePath4(basePath);
         const keyMapper = createGetCanonicalFileName(useCaseSensitiveFileNames2);
         if (validatedFilesSpec) {
           for (const fileName of validatedFilesSpec) {
@@ -61510,7 +61510,7 @@ ${lanes.join("\n")}
         );
       }
       function matchesExcludeWorker(pathToCheck, excludeSpecs, useCaseSensitiveFileNames2, currentDirectory, basePath) {
-        const excludePattern = getRegularExpressionForWildcard(excludeSpecs, combinePaths(normalizePath3(currentDirectory), basePath), "exclude");
+        const excludePattern = getRegularExpressionForWildcard(excludeSpecs, combinePaths(normalizePath4(currentDirectory), basePath), "exclude");
         const excludeRegex = excludePattern && getRegexFromPattern(excludePattern, useCaseSensitiveFileNames2);
         if (!excludeRegex) return false;
         if (excludeRegex.test(pathToCheck)) return true;
@@ -61546,7 +61546,7 @@ ${lanes.join("\n")}
         if (include !== void 0) {
           const recursiveKeys = [];
           for (const file of include) {
-            const spec2 = normalizePath3(combinePaths(basePath, file));
+            const spec2 = normalizePath4(combinePaths(basePath, file));
             if (excludeRegex && excludeRegex.test(spec2)) {
               continue;
             }
@@ -61836,7 +61836,7 @@ ${lanes.join("\n")}
           }
           return;
         }
-        const path = normalizePath3(combinePaths(baseDirectory, fileName));
+        const path = normalizePath4(combinePaths(baseDirectory, fileName));
         if (state.traceEnabled) {
           trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, fieldName, fileName, path);
         }
@@ -61915,7 +61915,7 @@ ${lanes.join("\n")}
       }
       function getDefaultTypeRoots(currentDirectory) {
         let typeRoots;
-        forEachAncestorDirectory(normalizePath3(currentDirectory), (directory) => {
+        forEachAncestorDirectory(normalizePath4(currentDirectory), (directory) => {
           const atTypes = combinePaths(directory, nodeModulesAtTypes);
           (typeRoots ?? (typeRoots = [])).push(atTypes);
         });
@@ -62199,7 +62199,7 @@ ${lanes.join("\n")}
             for (const root of typeRoots) {
               if (host.directoryExists(root)) {
                 for (const typeDirectivePath of host.getDirectories(root)) {
-                  const normalized = normalizePath3(typeDirectivePath);
+                  const normalized = normalizePath4(typeDirectivePath);
                   const packageJsonPath = combinePaths(root, normalized, "package.json");
                   const isNotNeededPackage = host.fileExists(packageJsonPath) && readJson(packageJsonPath, host).typings === null;
                   if (!isNotNeededPackage) {
@@ -62661,11 +62661,11 @@ ${lanes.join("\n")}
         if (state.traceEnabled) {
           trace(state.host, Diagnostics.rootDirs_option_is_set_using_it_to_resolve_relative_module_name_0, moduleName);
         }
-        const candidate = normalizePath3(combinePaths(containingDirectory, moduleName));
+        const candidate = normalizePath4(combinePaths(containingDirectory, moduleName));
         let matchedRootDir;
         let matchedNormalizedPrefix;
         for (const rootDir of state.compilerOptions.rootDirs) {
-          let normalizedRoot = normalizePath3(rootDir);
+          let normalizedRoot = normalizePath4(rootDir);
           if (!endsWith(normalizedRoot, directorySeparator)) {
             normalizedRoot += directorySeparator;
           }
@@ -62697,7 +62697,7 @@ ${lanes.join("\n")}
             if (rootDir === matchedRootDir) {
               continue;
             }
-            const candidate2 = combinePaths(normalizePath3(rootDir), suffix);
+            const candidate2 = combinePaths(normalizePath4(rootDir), suffix);
             if (state.traceEnabled) {
               trace(state.host, Diagnostics.Loading_0_from_the_root_dir_1_candidate_location_2, suffix, rootDir, candidate2);
             }
@@ -62721,7 +62721,7 @@ ${lanes.join("\n")}
         if (state.traceEnabled) {
           trace(state.host, Diagnostics.baseUrl_option_is_set_to_0_using_this_value_to_resolve_non_relative_module_name_1, baseUrl, moduleName);
         }
-        const candidate = normalizePath3(combinePaths(baseUrl, moduleName));
+        const candidate = normalizePath4(combinePaths(baseUrl, moduleName));
         if (state.traceEnabled) {
           trace(state.host, Diagnostics.Resolving_module_name_0_relative_to_base_url_1_2, moduleName, baseUrl, candidate);
         }
@@ -63008,14 +63008,14 @@ ${lanes.join("\n")}
         const combined = combinePaths(containingDirectory, moduleName);
         const parts = getPathComponents(combined);
         const lastPart = lastOrUndefined(parts);
-        const path = lastPart === "." || lastPart === ".." ? ensureTrailingDirectorySeparator(normalizePath3(combined)) : normalizePath3(combined);
+        const path = lastPart === "." || lastPart === ".." ? ensureTrailingDirectorySeparator(normalizePath4(combined)) : normalizePath4(combined);
         return { path, parts };
       }
       function realPath(path, host, traceEnabled) {
         if (!host.realpath) {
           return path;
         }
-        const real = normalizePath3(host.realpath(path));
+        const real = normalizePath4(host.realpath(path));
         if (traceEnabled) {
           trace(host, Diagnostics.Resolving_real_path_for_0_result_1, path, real);
         }
@@ -63066,7 +63066,7 @@ ${lanes.join("\n")}
         return path.includes(nodeModulesPathPart);
       }
       function parseNodeModuleFromPath(resolved, isFolder) {
-        const path = normalizePath3(resolved);
+        const path = normalizePath4(resolved);
         const idx = path.lastIndexOf(nodeModulesPathPart);
         if (idx === -1) {
           return void 0;
@@ -64109,7 +64109,7 @@ ${lanes.join("\n")}
       }
       function loadModuleFromSpecificNodeModulesDirectory(extensions, moduleName, nodeModulesDirectory, nodeModulesDirectoryExists, state, cache, redirectedReference) {
         var _a, _b;
-        const candidate = normalizePath3(combinePaths(nodeModulesDirectory, moduleName));
+        const candidate = normalizePath4(combinePaths(nodeModulesDirectory, moduleName));
         const { packageName, rest } = parsePackageName(moduleName);
         const packageDirectory = combinePaths(nodeModulesDirectory, packageName);
         let rootPackageInfo;
@@ -64174,7 +64174,7 @@ ${lanes.join("\n")}
           }
           const resolved = forEach(paths[matchedPatternText], (subst) => {
             const path = matchedStar ? replaceFirstStar(subst, matchedStar) : subst;
-            const candidate = normalizePath3(combinePaths(baseDirectory, path));
+            const candidate = normalizePath4(combinePaths(baseDirectory, path));
             if (state.traceEnabled) {
               trace(state.host, Diagnostics.Trying_substitution_0_candidate_module_location_Colon_1, subst, path);
             }
@@ -64295,7 +64295,7 @@ ${lanes.join("\n")}
                 if (resolutionFromCache) {
                   return resolutionFromCache;
                 }
-                const searchName = normalizePath3(combinePaths(directory, moduleName));
+                const searchName = normalizePath4(combinePaths(directory, moduleName));
                 return toSearchResult(loadModuleFromFileNoPackageId(
                   extensions,
                   searchName,
@@ -64312,7 +64312,7 @@ ${lanes.join("\n")}
               return resolved3;
             }
           } else {
-            const candidate = normalizePath3(combinePaths(containingDirectory, moduleName));
+            const candidate = normalizePath4(combinePaths(containingDirectory, moduleName));
             return toSearchResult(loadModuleFromFileNoPackageId(
               extensions,
               candidate,
@@ -66098,10 +66098,10 @@ ${lanes.join("\n")}
             } else {
               let pattern;
               if (node.name.kind === 11) {
-                const { text } = node.name;
-                pattern = tryParsePattern(text);
+                const { text: text2 } = node.name;
+                pattern = tryParsePattern(text2);
                 if (pattern === void 0) {
-                  errorOnFirstToken(node.name, Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, text);
+                  errorOnFirstToken(node.name, Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, text2);
                 }
               }
               const symbol = declareSymbolAndAddToSymbolTable(
@@ -68519,7 +68519,7 @@ ${lanes.join("\n")}
       function tryGetModuleNameFromPaths(relativeToBaseUrl, paths, allowedEndings, baseDirectory, getCanonicalFileName, host, compilerOptions) {
         for (const key in paths) {
           for (const patternText2 of paths[key]) {
-            const normalized = normalizePath3(patternText2);
+            const normalized = normalizePath4(patternText2);
             const pattern = getRelativePathIfInSameVolume(normalized, baseDirectory, getCanonicalFileName) ?? normalized;
             const indexOfStar = pattern.indexOf("*");
             const candidates = allowedEndings.map((ending) => ({
@@ -76463,14 +76463,14 @@ ${lanes.join("\n")}
             if (context.flags & 4) {
               const rawtext = result.escapedText;
               let i = ((_c = context.typeParameterNamesByTextNextNameCount) == null ? void 0 : _c.get(rawtext)) || 0;
-              let text = rawtext;
-              while (((_d = context.typeParameterNamesByText) == null ? void 0 : _d.has(text)) || typeParameterShadowsOtherTypeParameterInScope(text, context, type)) {
+              let text2 = rawtext;
+              while (((_d = context.typeParameterNamesByText) == null ? void 0 : _d.has(text2)) || typeParameterShadowsOtherTypeParameterInScope(text2, context, type)) {
                 i++;
-                text = `${rawtext}_${i}`;
+                text2 = `${rawtext}_${i}`;
               }
-              if (text !== rawtext) {
+              if (text2 !== rawtext) {
                 const typeArguments = getIdentifierTypeArguments(result);
-                result = factory.createIdentifier(text);
+                result = factory.createIdentifier(text2);
                 setIdentifierTypeArguments(result, typeArguments);
               }
               if (context.mustCreateTypeParametersNamesLookups) {
@@ -76481,7 +76481,7 @@ ${lanes.join("\n")}
               }
               context.typeParameterNamesByTextNextNameCount.set(rawtext, i);
               context.typeParameterNames.set(getTypeId(type), result);
-              context.typeParameterNamesByText.add(text);
+              context.typeParameterNamesByText.add(text2);
             }
             return result;
           }
@@ -79949,9 +79949,9 @@ ${lanes.join("\n")}
               objectFlags |= 512;
               return;
             }
-            const text = getPropertyNameFromType(exprType);
+            const text2 = getPropertyNameFromType(exprType);
             const flags = 4 | (e.initializer ? 16777216 : 0);
-            const symbol = createSymbol(flags, text);
+            const symbol = createSymbol(flags, text2);
             symbol.links.type = getTypeFromBindingElement(e, includePatternInType, reportErrors2);
             members.set(symbol.escapedName, symbol);
           });
@@ -84071,15 +84071,15 @@ ${lanes.join("\n")}
         }
         function getUnresolvedSymbolForEntityName(name) {
           const identifier = name.kind === 167 ? name.right : name.kind === 212 ? name.name : name;
-          const text = identifier.escapedText;
-          if (text) {
+          const text2 = identifier.escapedText;
+          if (text2) {
             const parentSymbol = name.kind === 167 ? getUnresolvedSymbolForEntityName(name.left) : name.kind === 212 ? getUnresolvedSymbolForEntityName(name.expression) : void 0;
-            const path = parentSymbol ? `${getSymbolPath(parentSymbol)}.${text}` : text;
+            const path = parentSymbol ? `${getSymbolPath(parentSymbol)}.${text2}` : text2;
             let result = unresolvedSymbols.get(path);
             if (!result) {
               unresolvedSymbols.set(path, result = createSymbol(
                 524288,
-                text,
+                text2,
                 1048576
                 /* Unresolved */
               ));
@@ -85870,14 +85870,14 @@ ${lanes.join("\n")}
           }
           const newTypes = [];
           const newTexts = [];
-          let text = texts[0];
+          let text2 = texts[0];
           if (!addSpans(texts, types)) {
             return stringType;
           }
           if (newTypes.length === 0) {
-            return getStringLiteralType(text);
+            return getStringLiteralType(text2);
           }
-          newTexts.push(text);
+          newTexts.push(text2);
           if (every(newTexts, (t) => t === "")) {
             if (every(newTypes, (t) => !!(t.flags & 4))) {
               return stringType;
@@ -85896,16 +85896,16 @@ ${lanes.join("\n")}
             for (let i = 0; i < types2.length; i++) {
               const t = types2[i];
               if (t.flags & (2944 | 65536 | 32768)) {
-                text += getTemplateStringForType(t) || "";
-                text += texts2[i + 1];
+                text2 += getTemplateStringForType(t) || "";
+                text2 += texts2[i + 1];
               } else if (t.flags & 134217728) {
-                text += t.texts[0];
+                text2 += t.texts[0];
                 if (!addSpans(t.texts, t.types)) return false;
-                text += texts2[i + 1];
+                text2 += texts2[i + 1];
               } else if (isGenericIndexType(t) || isPatternLiteralPlaceholderType(t)) {
                 newTypes.push(t);
-                newTexts.push(text);
-                text = texts2[i + 1];
+                newTexts.push(text2);
+                text2 = texts2[i + 1];
               } else {
                 return false;
               }
@@ -92627,8 +92627,8 @@ ${lanes.join("\n")}
           const n = +s;
           return isFinite(n) && (!roundTripOnly || "" + n === s);
         }
-        function parseBigIntLiteralType(text) {
-          return getBigIntLiteralType(parseValidBigInt(text));
+        function parseBigIntLiteralType(text2) {
+          return getBigIntLiteralType(parseValidBigInt(text2));
         }
         function isMemberOfStringMapping(source, target) {
           if (target.flags & 1) {
@@ -93986,8 +93986,8 @@ ${lanes.join("\n")}
           var _a;
           const nameType = getLiteralTypeFromPropertyName(name);
           if (!isTypeUsableAsPropertyName(nameType)) return errorType;
-          const text = getPropertyNameFromType(nameType);
-          return getTypeOfPropertyOfType(type, text) || includeUndefinedInIndexSignature((_a = getApplicableIndexInfoForName(type, text)) == null ? void 0 : _a.type) || errorType;
+          const text2 = getPropertyNameFromType(nameType);
+          return getTypeOfPropertyOfType(type, text2) || includeUndefinedInIndexSignature((_a = getApplicableIndexInfoForName(type, text2)) == null ? void 0 : _a.type) || errorType;
         }
         function getTypeOfDestructuredArrayElement(type, index) {
           return everyType(type, isTupleLikeType) && getTupleElementType(type, index) || includeUndefinedInIndexSignature(checkIteratedTypeOrElementType(
@@ -94123,8 +94123,8 @@ ${lanes.join("\n")}
           }
           const witnesses = [];
           for (const clause of switchStatement.caseBlock.clauses) {
-            const text = clause.kind === 297 ? clause.expression.text : void 0;
-            witnesses.push(text && !contains(witnesses, text) ? text : void 0);
+            const text2 = clause.kind === 297 ? clause.expression.text : void 0;
+            witnesses.push(text2 && !contains(witnesses, text2) ? text2 : void 0);
           }
           return witnesses;
         }
@@ -95516,7 +95516,7 @@ ${lanes.join("\n")}
               return filterType(type, (t) => getTypeFacts(t, notEqualFacts) === notEqualFacts);
             }
             const clauseWitnesses = witnesses.slice(clauseStart, clauseEnd);
-            return getUnionType(map(clauseWitnesses, (text) => text ? narrowTypeByTypeName(type, text) : neverType));
+            return getUnionType(map(clauseWitnesses, (text2) => text2 ? narrowTypeByTypeName(type, text2) : neverType));
           }
           function narrowTypeBySwitchOnTrue(type, { switchStatement, clauseStart, clauseEnd }) {
             const defaultIndex = findIndex(
@@ -97184,8 +97184,8 @@ ${lanes.join("\n")}
           }
           const nameType = getLiteralTypeFromPropertyName(name);
           if (isTypeUsableAsPropertyName(nameType)) {
-            const text = getPropertyNameFromType(nameType);
-            return getTypeOfPropertyOfType(parentType, text);
+            const text2 = getPropertyNameFromType(nameType);
+            return getTypeOfPropertyOfType(parentType, text2);
           }
         }
         function getContextualTypeForStaticPropertyDeclaration(declaration, contextFlags) {
@@ -101747,9 +101747,9 @@ ${lanes.join("\n")}
             } else {
               let relatedInformation;
               if (node.arguments.length === 1) {
-                const text = getSourceFileOfNode(node).text;
-                if (isLineBreak(text.charCodeAt(skipTrivia(
-                  text,
+                const text2 = getSourceFileOfNode(node).text;
+                if (isLineBreak(text2.charCodeAt(skipTrivia(
+                  text2,
                   node.expression.end,
                   /*stopAfterLineBreak*/
                   true
@@ -104582,8 +104582,8 @@ ${lanes.join("\n")}
             const name = property.name;
             const exprType = getLiteralTypeFromPropertyName(name);
             if (isTypeUsableAsPropertyName(exprType)) {
-              const text = getPropertyNameFromType(exprType);
-              const prop = getPropertyOfType(objectLiteralType, text);
+              const text2 = getPropertyNameFromType(exprType);
+              const prop = getPropertyOfType(objectLiteralType, text2);
               if (prop) {
                 markPropertyAsReferenced(prop, property, rightIsThis);
                 checkPropertyAccessibility(
@@ -111007,8 +111007,8 @@ ${lanes.join("\n")}
           } else if (isBigIntLiteral(member.name)) {
             error2(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
           } else {
-            const text = getTextOfPropertyName(member.name);
-            if (isNumericLiteralName(text) && !isInfinityOrNaNString(text)) {
+            const text2 = getTextOfPropertyName(member.name);
+            if (isNumericLiteralName(text2) && !isInfinityOrNaNString(text2)) {
               error2(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
             }
           }
@@ -114664,26 +114664,26 @@ ${lanes.join("\n")}
                 case 125:
                 case 124:
                 case 123:
-                  const text = visibilityToString(modifierToFlag(modifier.kind));
+                  const text2 = visibilityToString(modifierToFlag(modifier.kind));
                   if (flags & 7) {
                     return grammarErrorOnNode(modifier, Diagnostics.Accessibility_modifier_already_seen);
                   } else if (flags & 16) {
-                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "override");
+                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text2, "override");
                   } else if (flags & 256) {
-                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "static");
+                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text2, "static");
                   } else if (flags & 512) {
-                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "accessor");
+                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text2, "accessor");
                   } else if (flags & 8) {
-                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "readonly");
+                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text2, "readonly");
                   } else if (flags & 1024) {
-                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "async");
+                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text2, "async");
                   } else if (node.parent.kind === 269 || node.parent.kind === 308) {
-                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_or_namespace_element, text);
+                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_or_namespace_element, text2);
                   } else if (flags & 64) {
                     if (modifier.kind === 123) {
-                      return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, text, "abstract");
+                      return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, text2, "abstract");
                     } else {
-                      return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "abstract");
+                      return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text2, "abstract");
                     }
                   } else if (isPrivateIdentifierClassElementDeclaration(node)) {
                     return grammarErrorOnNode(modifier, Diagnostics.An_accessibility_modifier_cannot_be_used_with_a_private_identifier);
@@ -118315,10 +118315,10 @@ ${lanes.join("\n")}
       var sourceMapCommentRegExpDontCareLineStart = /\/\/[@#] source[M]appingURL=(.+)\r?\n?$/;
       var sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\r?\n?$/;
       var whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
-      function getLineInfo(text, lineStarts) {
+      function getLineInfo(text2, lineStarts) {
         return {
           getLineCount: () => lineStarts.length,
-          getLineText: (line) => text.substring(lineStarts[line], lineStarts[line + 1])
+          getLineText: (line) => text2.substring(lineStarts[line], lineStarts[line + 1])
         };
       }
       function tryGetSourceMappingURL(lineInfo) {
@@ -118338,9 +118338,9 @@ ${lanes.join("\n")}
       function isRawSourceMap(x) {
         return x !== null && typeof x === "object" && x.version === 3 && typeof x.file === "string" && typeof x.mappings === "string" && isArray(x.sources) && every(x.sources, isString) && (x.sourceRoot === void 0 || x.sourceRoot === null || typeof x.sourceRoot === "string") && (x.sourcesContent === void 0 || x.sourcesContent === null || isArray(x.sourcesContent) && every(x.sourcesContent, isStringOrNull)) && (x.names === void 0 || x.names === null || isArray(x.names) && every(x.names, isString));
       }
-      function tryParseRawSourceMap(text) {
+      function tryParseRawSourceMap(text2) {
         try {
-          const parsed = JSON.parse(text);
+          const parsed = JSON.parse(text2);
           if (isRawSourceMap(parsed)) {
             return parsed;
           }
@@ -118828,9 +118828,9 @@ ${lanes.join("\n")}
             }
           }
         } else if (!isGeneratedIdentifier(decl.name)) {
-          const text = idText(decl.name);
-          if (!uniqueExports.get(text)) {
-            uniqueExports.set(text, true);
+          const text2 = idText(decl.name);
+          if (!uniqueExports.get(text2)) {
+            uniqueExports.set(text2, true);
             exportedNames = append(exportedNames, decl.name);
             if (isLocalName(decl.name)) {
               multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), decl.name);
@@ -119929,15 +119929,15 @@ ${lanes.join("\n")}
         return template.templateFlags & 26656 ? factory2.createVoidZero() : factory2.createStringLiteral(template.text);
       }
       function getRawLiteral(factory2, node, currentSourceFile) {
-        let text = node.rawText;
-        if (text === void 0) {
+        let text2 = node.rawText;
+        if (text2 === void 0) {
           Debug.assertIsDefined(currentSourceFile, "Template literal node is missing 'rawText' and does not have a source file. Possibly bad transform.");
-          text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
+          text2 = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
           const isLast = node.kind === 15 || node.kind === 18;
-          text = text.substring(1, text.length - (isLast ? 1 : 2));
+          text2 = text2.substring(1, text2.length - (isLast ? 1 : 2));
         }
-        text = text.replace(/\r\n?/g, "\n");
-        return setTextRange(factory2.createStringLiteral(text), node);
+        text2 = text2.replace(/\r\n?/g, "\n");
+        return setTextRange(factory2.createStringLiteral(text2), node);
       }
       var USE_NEW_TYPE_METADATA_FORMAT = false;
       function transformTypeScript(context) {
@@ -123922,8 +123922,8 @@ ${lanes.join("\n")}
           return identifier;
         }
         function createHoistedVariableForPrivateName(name, suffix) {
-          const text = tryGetTextOfPropertyName(name);
-          return createHoistedVariableForClass((text == null ? void 0 : text.substring(1)) ?? name, name, suffix);
+          const text2 = tryGetTextOfPropertyName(name);
+          return createHoistedVariableForClass((text2 == null ? void 0 : text2.substring(1)) ?? name, name, suffix);
         }
         function accessPrivateIdentifier2(name) {
           const info = accessPrivateIdentifier(lexicalEnvironment, name);
@@ -131032,15 +131032,15 @@ ${lanes.join("\n")}
           const fixed = fixupWhitespaceAndDecodeEntities(node.text);
           return fixed === void 0 ? void 0 : factory2.createStringLiteral(fixed);
         }
-        function fixupWhitespaceAndDecodeEntities(text) {
+        function fixupWhitespaceAndDecodeEntities(text2) {
           let acc;
           let firstNonWhitespace = 0;
           let lastNonWhitespace = -1;
-          for (let i = 0; i < text.length; i++) {
-            const c = text.charCodeAt(i);
+          for (let i = 0; i < text2.length; i++) {
+            const c = text2.charCodeAt(i);
             if (isLineBreak(c)) {
               if (firstNonWhitespace !== -1 && lastNonWhitespace !== -1) {
-                acc = addLineOfJsxText(acc, text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1));
+                acc = addLineOfJsxText(acc, text2.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1));
               }
               firstNonWhitespace = -1;
             } else if (!isWhiteSpaceSingleLine(c)) {
@@ -131050,14 +131050,14 @@ ${lanes.join("\n")}
               }
             }
           }
-          return firstNonWhitespace !== -1 ? addLineOfJsxText(acc, text.substr(firstNonWhitespace)) : acc;
+          return firstNonWhitespace !== -1 ? addLineOfJsxText(acc, text2.substr(firstNonWhitespace)) : acc;
         }
         function addLineOfJsxText(acc, trimmedLine) {
           const decoded = decodeEntities(trimmedLine);
           return acc === void 0 ? decoded : acc + " " + decoded;
         }
-        function decodeEntities(text) {
-          return text.replace(/&((#((\d+)|x([\da-fA-F]+)))|(\w+));/g, (match, _all, _number, _digits, decimal, hex, word) => {
+        function decodeEntities(text2) {
+          return text2.replace(/&((#((\d+)|x([\da-fA-F]+)))|(\w+));/g, (match, _all, _number, _digits, decimal, hex, word) => {
             if (decimal) {
               return utf16EncodeAsString(parseInt(decimal, 10));
             } else if (hex) {
@@ -131068,9 +131068,9 @@ ${lanes.join("\n")}
             }
           });
         }
-        function tryDecodeEntities(text) {
-          const decoded = decodeEntities(text);
-          return decoded === text ? void 0 : decoded;
+        function tryDecodeEntities(text2) {
+          const decoded = decodeEntities(text2);
+          return decoded === text2 ? void 0 : decoded;
         }
         function getTagName(node) {
           if (node.kind === 285) {
@@ -131089,8 +131089,8 @@ ${lanes.join("\n")}
         function getAttributeName(node) {
           const name = node.name;
           if (isIdentifier(name)) {
-            const text = idText(name);
-            return /^[A-Z_]\w*$/i.test(text) ? name : factory2.createStringLiteral(text);
+            const text2 = idText(name);
+            return /^[A-Z_]\w*$/i.test(text2) ? name : factory2.createStringLiteral(text2);
           }
           return factory2.createStringLiteral(idText(name.namespace) + ":" + idText(name.name));
         }
@@ -136491,8 +136491,8 @@ ${lanes.join("\n")}
             name = variable.name;
             hoistVariableDeclaration(variable.name);
           } else {
-            const text = idText(variable.name);
-            name = declareLocal(text);
+            const text2 = idText(variable.name);
+            name = declareLocal(text2);
             if (!renamedCatchVariables) {
               renamedCatchVariables = /* @__PURE__ */ new Map();
               renamedCatchVariableDeclarations = [];
@@ -136501,7 +136501,7 @@ ${lanes.join("\n")}
                 /* Identifier */
               );
             }
-            renamedCatchVariables.set(text, true);
+            renamedCatchVariables.set(text2, true);
             renamedCatchVariableDeclarations[getOriginalNodeId(variable)] = name;
           }
           const exception = peekBlock();
@@ -139435,12 +139435,12 @@ ${lanes.join("\n")}
           for (const externalImport of externalImports) {
             const externalModuleName = getExternalModuleNameLiteral(factory2, externalImport, currentSourceFile, host, resolver, compilerOptions);
             if (externalModuleName) {
-              const text = externalModuleName.text;
-              const groupIndex = groupIndices.get(text);
+              const text2 = externalModuleName.text;
+              const groupIndex = groupIndices.get(text2);
               if (groupIndex !== void 0) {
                 dependencyGroups[groupIndex].externalImports.push(externalImport);
               } else {
-                groupIndices.set(text, dependencyGroups.length);
+                groupIndices.set(text2, dependencyGroups.length);
                 dependencyGroups.push({
                   name: externalModuleName,
                   externalImports: [externalImport]
@@ -144079,7 +144079,7 @@ ${lanes.join("\n")}
         return getOutputs();
       }
       function getOutputFileNames(commandLine, inputFileName, ignoreCase) {
-        inputFileName = normalizePath3(inputFileName);
+        inputFileName = normalizePath4(inputFileName);
         Debug.assert(contains(commandLine.fileNames, inputFileName), `Expected fileName to be present in command line`);
         const { addOutput, getOutputs } = createAddOutput();
         if (commandLine.options.outFile) {
@@ -144388,9 +144388,9 @@ ${lanes.join("\n")}
           } else {
             writer.writeLine();
           }
-          const text = writer.getText();
+          const text2 = writer.getText();
           const data = { sourceMapUrlPos, diagnostics: transform2.diagnostics };
-          writeFile2(host, emitterDiagnostics, jsFilePath, text, !!compilerOptions.emitBOM, sourceFiles, data);
+          writeFile2(host, emitterDiagnostics, jsFilePath, text2, !!compilerOptions.emitBOM, sourceFiles, data);
           writer.clear();
           return !data.skippedDtsWrite;
         }
@@ -144417,7 +144417,7 @@ ${lanes.join("\n")}
             }
             return sourceMapDir;
           }
-          return getDirectoryPath(normalizePath3(filePath));
+          return getDirectoryPath(normalizePath4(filePath));
         }
         function getSourceMappingURL(mapOptions, sourceMapGenerator, filePath, sourceMapFilePath, sourceFile) {
           if (mapOptions.inlineSourceMap) {
@@ -144435,7 +144435,7 @@ ${lanes.join("\n")}
               sourceMapDir = combinePaths(host.getCommonSourceDirectory(), sourceMapDir);
               return encodeURI(
                 getRelativePathToDirectoryOrUrl(
-                  getDirectoryPath(normalizePath3(filePath)),
+                  getDirectoryPath(normalizePath4(filePath)),
                   // get the relative sourceMapDir path based on jsFilePath
                   combinePaths(sourceMapDir, sourceMapFile),
                   // this is where user expects to see sourceMap
@@ -144679,9 +144679,9 @@ ${lanes.join("\n")}
           return ownWriter || (ownWriter = createTextWriter(newLine));
         }
         function endPrint() {
-          const text = ownWriter.getText();
+          const text2 = ownWriter.getText();
           ownWriter.clear();
-          return text;
+          return text2;
         }
         function print(hint, node, sourceFile) {
           if (sourceFile) {
@@ -145361,7 +145361,7 @@ ${lanes.join("\n")}
           );
         }
         function emitLiteral(node, jsxAttributeEscape) {
-          const text = getLiteralTextOfNode(
+          const text2 = getLiteralTextOfNode(
             node,
             /*sourceFile*/
             void 0,
@@ -145369,9 +145369,9 @@ ${lanes.join("\n")}
             jsxAttributeEscape
           );
           if ((printerOptions.sourceMap || printerOptions.inlineSourceMap) && (node.kind === 11 || isTemplateLiteralKind(node.kind))) {
-            writeLiteral(text);
+            writeLiteral(text2);
           } else {
-            writeStringLiteral(text);
+            writeStringLiteral(text2);
           }
         }
         function emitSnippetNode(hint, node, snippet) {
@@ -145879,7 +145879,7 @@ ${lanes.join("\n")}
         function mayNeedDotDotForPropertyAccess(expression) {
           expression = skipPartiallyEmittedExpressions(expression);
           if (isNumericLiteral(expression)) {
-            const text = getLiteralTextOfNode(
+            const text2 = getLiteralTextOfNode(
               expression,
               /*sourceFile*/
               void 0,
@@ -145888,13 +145888,13 @@ ${lanes.join("\n")}
               /*jsxAttributeEscape*/
               false
             );
-            return !(expression.numericLiteralFlags & 448) && !text.includes(tokenToString(
+            return !(expression.numericLiteralFlags & 448) && !text2.includes(tokenToString(
               25
               /* DotToken */
-            )) && !text.includes(String.fromCharCode(
+            )) && !text2.includes(String.fromCharCode(
               69
               /* E */
-            )) && !text.includes(String.fromCharCode(
+            )) && !text2.includes(String.fromCharCode(
               101
               /* e */
             ));
@@ -147277,9 +147277,9 @@ ${lanes.join("\n")}
         function emitJSDoc(node) {
           write("/**");
           if (node.comment) {
-            const text = getTextOfJSDocComment(node.comment);
-            if (text) {
-              const lines = text.split(/\r\n?|\n/);
+            const text2 = getTextOfJSDocComment(node.comment);
+            if (text2) {
+              const lines = text2.split(/\r\n?|\n/);
               for (const line of lines) {
                 writeLine();
                 writeSpace();
@@ -147449,10 +147449,10 @@ ${lanes.join("\n")}
           emit(tagName);
         }
         function emitJSDocComment(comment) {
-          const text = getTextOfJSDocComment(comment);
-          if (text) {
+          const text2 = getTextOfJSDocComment(comment);
+          if (text2) {
             writeSpace();
-            write(text);
+            write(text2);
           }
         }
         function emitJSDocTypeExpression(typeExpression) {
@@ -148028,8 +148028,8 @@ ${lanes.join("\n")}
             writeLine();
           }
         }
-        function writeLines(text) {
-          const lines = text.split(/\r\n?|\n/);
+        function writeLines(text2) {
+          const lines = text2.split(/\r\n?|\n/);
           const indentation = guessIndentation(lines);
           for (const lineText of lines) {
             const line = indentation ? lineText.slice(indentation) : lineText;
@@ -148263,8 +148263,8 @@ ${lanes.join("\n")}
           if (node.kind === 11 && node.textSourceNode) {
             const textSourceNode = node.textSourceNode;
             if (isIdentifier(textSourceNode) || isPrivateIdentifier(textSourceNode) || isNumericLiteral(textSourceNode) || isJsxNamespacedName(textSourceNode)) {
-              const text = isNumericLiteral(textSourceNode) ? textSourceNode.text : getTextOfNode2(textSourceNode);
-              return jsxAttributeEscape ? `"${escapeJsxAttributeString(text)}"` : neverAsciiEscape || getEmitFlags(node) & 16777216 ? `"${escapeString(text)}"` : `"${escapeNonAsciiString(text)}"`;
+              const text2 = isNumericLiteral(textSourceNode) ? textSourceNode.text : getTextOfNode2(textSourceNode);
+              return jsxAttributeEscape ? `"${escapeJsxAttributeString(text2)}"` : neverAsciiEscape || getEmitFlags(node) & 16777216 ? `"${escapeString(text2)}"` : `"${escapeNonAsciiString(text2)}"`;
             } else {
               return getLiteralTextOfNode(textSourceNode, getSourceFileOfNode(textSourceNode), neverAsciiEscape, jsxAttributeEscape);
             }
@@ -148861,9 +148861,9 @@ ${lanes.join("\n")}
           }
         }
         function writeSynthesizedComment(comment) {
-          const text = formatSynthesizedComment(comment);
-          const lineMap = comment.kind === 3 ? computeLineStarts(text) : void 0;
-          writeCommentRange(text, lineMap, writer, 0, text.length, newLine);
+          const text2 = formatSynthesizedComment(comment);
+          const lineMap = comment.kind === 3 ? computeLineStarts(text2) : void 0;
+          writeCommentRange(text2, lineMap, writer, 0, text2.length, newLine);
         }
         function formatSynthesizedComment(comment) {
           return comment.kind === 3 ? `/*${comment.text}*/` : `//${comment.text}`;
@@ -148938,9 +148938,9 @@ ${lanes.join("\n")}
             emitLeadingComment(commentPos, commentEnd, kind, hasTrailingNewLine, rangePos);
           }
         }
-        function shouldWriteComment(text, pos) {
+        function shouldWriteComment(text2, pos) {
           if (printerOptions.onlyPrintJsDocStyle) {
-            return isJSDocLikeText(text, pos) || isPinnedComment(text, pos);
+            return isJSDocLikeText(text2, pos) || isPinnedComment(text2, pos);
           }
           return true;
         }
@@ -149061,10 +149061,10 @@ ${lanes.join("\n")}
             }
           }
         }
-        function emitComment(text, lineMap, writer2, commentPos, commentEnd, newLine2) {
+        function emitComment(text2, lineMap, writer2, commentPos, commentEnd, newLine2) {
           if (!currentSourceFile || !shouldWriteComment(currentSourceFile.text, commentPos)) return;
           emitPos(commentPos);
-          writeCommentRange(text, lineMap, writer2, commentPos, commentEnd, newLine2);
+          writeCommentRange(text2, lineMap, writer2, commentPos, commentEnd, newLine2);
           emitPos(commentEnd);
         }
         function isTripleSlashComment(commentPos, commentEnd) {
@@ -149258,7 +149258,7 @@ ${lanes.join("\n")}
           return entries;
         }
         function getBaseNameOfFileName(fileName) {
-          return getBaseFileName(normalizePath3(fileName));
+          return getBaseFileName(normalizePath4(fileName));
         }
         function createCachedFileSystemEntries(rootDir, rootDirPath) {
           var _a;
@@ -149742,7 +149742,7 @@ ${lanes.join("\n")}
       function resolveTripleslashReference(moduleName, containingFile) {
         const basePath = getDirectoryPath(containingFile);
         const referencedFileName = isRootedDiskPath(moduleName) ? moduleName : combinePaths(basePath, moduleName);
-        return normalizePath3(referencedFileName);
+        return normalizePath4(referencedFileName);
       }
       function computeCommonSourceDirectoryOfFilenames(fileNames, currentDirectory, getCanonicalFileName) {
         let commonPathComponents;
@@ -149778,21 +149778,21 @@ ${lanes.join("\n")}
       function createCompilerHost(options, setParentNodes) {
         return createCompilerHostWorker(options, setParentNodes);
       }
-      function createGetSourceFile(readFile4, setParentNodes) {
+      function createGetSourceFile(readFile6, setParentNodes) {
         return (fileName, languageVersionOrOptions, onError) => {
-          let text;
+          let text2;
           try {
             mark("beforeIORead");
-            text = readFile4(fileName);
+            text2 = readFile6(fileName);
             mark("afterIORead");
             measure("I/O Read", "beforeIORead", "afterIORead");
           } catch (e) {
             if (onError) {
               onError(e.message);
             }
-            text = "";
+            text2 = "";
           }
-          return text !== void 0 ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes) : void 0;
+          return text2 !== void 0 ? createSourceFile(fileName, text2, languageVersionOrOptions, setParentNodes) : void 0;
         };
       }
       function createWriteFileMeasuringIO(actualWriteFile, createDirectory, directoryExists) {
@@ -149830,7 +149830,7 @@ ${lanes.join("\n")}
           return false;
         }
         function getDefaultLibLocation() {
-          return getDirectoryPath(normalizePath3(system.getExecutingFilePath()));
+          return getDirectoryPath(normalizePath4(system.getExecutingFilePath()));
         }
         const newLine = getNewLineCharacter(options);
         const realpath2 = system.realpath && ((path) => system.realpath(path));
@@ -150019,8 +150019,8 @@ ${lanes.join("\n")}
             return "\x1B[94m";
         }
       }
-      function formatColorAndReset(text, formatStyle) {
-        return formatStyle + text + resetEscapeSequence;
+      function formatColorAndReset(text2, formatStyle) {
+        return formatStyle + text2 + resetEscapeSequence;
       }
       function formatCodeSpan(file, start, length2, indent3, squiggleColor, host) {
         const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
@@ -150687,7 +150687,7 @@ ${lanes.join("\n")}
           getRedirectFromOutput,
           forEachResolvedProjectReference: forEachResolvedProjectReference2
         });
-        const readFile4 = host.readFile.bind(host);
+        const readFile6 = host.readFile.bind(host);
         (_e = tracing) == null ? void 0 : _e.push(tracing.Phase.Program, "shouldProgramCreateNewSourceFiles", { hasOldProgram: !!oldProgram });
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         (_f = tracing) == null ? void 0 : _f.pop();
@@ -150913,7 +150913,7 @@ ${lanes.join("\n")}
           shouldTransformImportCall,
           emitBuildInfo,
           fileExists,
-          readFile: readFile4,
+          readFile: readFile6,
           directoryExists,
           getSymlinkCache,
           realpath: (_o = host.realpath) == null ? void 0 : _o.bind(host),
@@ -151444,8 +151444,8 @@ ${lanes.join("\n")}
             getGlobalTypingsCacheLocation: program.getGlobalTypingsCacheLocation
           };
         }
-        function writeFile22(fileName, text, writeByteOrderMark, onError, sourceFiles, data) {
-          host.writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
+        function writeFile22(fileName, text2, writeByteOrderMark, onError, sourceFiles, data) {
+          host.writeFile(fileName, text2, writeByteOrderMark, onError, sourceFiles, data);
         }
         function emitBuildInfo(writeFileCallback) {
           var _a2, _b2;
@@ -152000,7 +152000,7 @@ ${lanes.join("\n")}
         }
         function processRootFile(fileName, isDefaultLib, ignoreNoDefaultLib, reason) {
           processSourceFile(
-            normalizePath3(fileName),
+            normalizePath4(fileName),
             isDefaultLib,
             ignoreNoDefaultLib,
             /*packageId*/
@@ -152014,8 +152014,8 @@ ${lanes.join("\n")}
         function moduleNameIsEqualTo(a, b) {
           return a.kind === 80 ? b.kind === 80 && a.escapedText === b.escapedText : b.kind === 11 && a.text === b.text;
         }
-        function createSyntheticImport(text, file) {
-          const externalHelpersModuleReference = factory.createStringLiteral(text);
+        function createSyntheticImport(text2, file) {
+          const externalHelpersModuleReference = factory.createStringLiteral(text2);
           const importDecl = factory.createImportDeclaration(
             /*modifiers*/
             void 0,
@@ -153488,7 +153488,7 @@ ${lanes.join("\n")}
           const symlinkCache = host.getSymlinkCache();
           const directoryPath = ensureTrailingDirectorySeparator(host.toPath(directory));
           if ((_a = symlinkCache.getSymlinkedDirectories()) == null ? void 0 : _a.has(directoryPath)) return;
-          const real = normalizePath3(originalRealpath.call(host.compilerHost, directory));
+          const real = normalizePath4(originalRealpath.call(host.compilerHost, directory));
           let realPath2;
           if (real === directory || (realPath2 = ensureTrailingDirectorySeparator(host.toPath(real))) === directoryPath) {
             symlinkCache.setSymlinkedDirectory(directoryPath, false);
@@ -153923,8 +153923,8 @@ ${lanes.join("\n")}
         const outputFiles = [];
         const { emitSkipped, diagnostics } = program.emit(sourceFile, writeFile22, cancellationToken, emitOnlyDtsFiles, customTransformers, forceDtsEmit);
         return { outputFiles, emitSkipped, diagnostics };
-        function writeFile22(fileName, text, writeByteOrderMark) {
-          outputFiles.push({ name: fileName, writeByteOrderMark, text });
+        function writeFile22(fileName, text2, writeByteOrderMark) {
+          outputFiles.push({ name: fileName, writeByteOrderMark, text: text2 });
         }
       }
       var SignatureInfo = /* @__PURE__ */ ((SignatureInfo2) => {
@@ -154142,13 +154142,13 @@ ${lanes.join("\n")}
         function computeDtsSignature(programOfThisState, sourceFile, cancellationToken, host, onNewSignature) {
           programOfThisState.emit(
             sourceFile,
-            (fileName, text, _writeByteOrderMark, _onError, sourceFiles, data) => {
+            (fileName, text2, _writeByteOrderMark, _onError, sourceFiles, data) => {
               Debug.assert(isDeclarationFileName(fileName), `File extension for signature expected to be dts: Got:: ${fileName}`);
               onNewSignature(
                 computeSignatureWithDiagnostics(
                   programOfThisState,
                   sourceFile,
-                  text,
+                  text2,
                   host,
                   data
                 ),
@@ -155221,17 +155221,17 @@ ${lanes.join("\n")}
         }
         return { host, newProgram, oldProgram, configFileParsingDiagnostics: configFileParsingDiagnostics || emptyArray };
       }
-      function getTextHandlingSourceMapForSignature(text, data) {
-        return (data == null ? void 0 : data.sourceMapUrlPos) !== void 0 ? text.substring(0, data.sourceMapUrlPos) : text;
+      function getTextHandlingSourceMapForSignature(text2, data) {
+        return (data == null ? void 0 : data.sourceMapUrlPos) !== void 0 ? text2.substring(0, data.sourceMapUrlPos) : text2;
       }
-      function computeSignatureWithDiagnostics(program, sourceFile, text, host, data) {
+      function computeSignatureWithDiagnostics(program, sourceFile, text2, host, data) {
         var _a;
-        text = getTextHandlingSourceMapForSignature(text, data);
+        text2 = getTextHandlingSourceMapForSignature(text2, data);
         let sourceFileDirectory;
         if ((_a = data == null ? void 0 : data.diagnostics) == null ? void 0 : _a.length) {
-          text += data.diagnostics.map((diagnostic) => `${locationInfo(diagnostic)}${DiagnosticCategory[diagnostic.category]}${diagnostic.code}: ${flattenDiagnosticMessageText2(diagnostic.messageText)}`).join("\n");
+          text2 += data.diagnostics.map((diagnostic) => `${locationInfo(diagnostic)}${DiagnosticCategory[diagnostic.category]}${diagnostic.code}: ${flattenDiagnosticMessageText2(diagnostic.messageText)}`).join("\n");
         }
-        return (host.createHash ?? generateDjb2Hash)(text);
+        return (host.createHash ?? generateDjb2Hash)(text2);
         function flattenDiagnosticMessageText2(diagnostic) {
           return isString(diagnostic) ? diagnostic : diagnostic === void 0 ? "" : !diagnostic.next ? diagnostic.messageText : diagnostic.messageText + diagnostic.next.map(flattenDiagnosticMessageText2).join("\n");
         }
@@ -155245,8 +155245,8 @@ ${lanes.join("\n")}
           ))}(${diagnostic.start},${diagnostic.length})`;
         }
       }
-      function computeSignature(text, host, data) {
-        return (host.createHash ?? generateDjb2Hash)(getTextHandlingSourceMapForSignature(text, data));
+      function computeSignature(text2, host, data) {
+        return (host.createHash ?? generateDjb2Hash)(getTextHandlingSourceMapForSignature(text2, data));
       }
       function createBuilderProgram(kind, { newProgram, host, oldProgram, configFileParsingDiagnostics }) {
         let oldState = oldProgram && oldProgram.state;
@@ -155423,7 +155423,7 @@ ${lanes.join("\n")}
         function getWriteFileCallback(writeFile22, customTransformers) {
           Debug.assert(isBuilderProgramStateWithDefinedProgram(state));
           if (!getEmitDeclarations(state.compilerOptions)) return writeFile22 || maybeBind(host, host.writeFile);
-          return (fileName, text, writeByteOrderMark, onError, sourceFiles, data) => {
+          return (fileName, text2, writeByteOrderMark, onError, sourceFiles, data) => {
             var _a, _b, _c;
             if (isDeclarationFileName(fileName)) {
               if (!state.compilerOptions.outFile) {
@@ -155436,7 +155436,7 @@ ${lanes.join("\n")}
                     const signature = computeSignatureWithDiagnostics(
                       state.program,
                       file,
-                      text,
+                      text2,
                       host,
                       data
                     );
@@ -155473,12 +155473,12 @@ ${lanes.join("\n")}
                 state.outSignature = newSignature;
               }
             }
-            if (writeFile22) writeFile22(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
-            else if (host.writeFile) host.writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
-            else state.program.writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
+            if (writeFile22) writeFile22(fileName, text2, writeByteOrderMark, onError, sourceFiles, data);
+            else if (host.writeFile) host.writeFile(fileName, text2, writeByteOrderMark, onError, sourceFiles, data);
+            else state.program.writeFile(fileName, text2, writeByteOrderMark, onError, sourceFiles, data);
             function handleNewSignature(oldSignatureFormat, newSignature) {
               const oldSignature = !oldSignatureFormat || isString(oldSignatureFormat) ? oldSignatureFormat : oldSignatureFormat[0];
-              newSignature ?? (newSignature = computeSignature(text, host, data));
+              newSignature ?? (newSignature = computeSignature(text2, host, data));
               if (newSignature === oldSignature) {
                 if (oldSignatureFormat === oldSignature) return void 0;
                 else if (data) data.differsOnlyInMap = true;
@@ -155949,7 +155949,7 @@ ${lanes.join("\n")}
       }
       function getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath, rootDir, rootPath, rootPathComponents, isRootWatchable, getCurrentDirectory, preferNonRecursiveWatch) {
         const failedLookupPathComponents = getPathComponents(failedLookupLocationPath);
-        failedLookupLocation = isRootedDiskPath(failedLookupLocation) ? normalizePath3(failedLookupLocation) : getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory());
+        failedLookupLocation = isRootedDiskPath(failedLookupLocation) ? normalizePath4(failedLookupLocation) : getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory());
         const failedLookupComponents = getPathComponents(failedLookupLocation);
         const perceivedOsRootLength = perceivedOsRootLengthForWatching(failedLookupPathComponents, failedLookupPathComponents.length);
         if (failedLookupPathComponents.length <= perceivedOsRootLength + 1) return void 0;
@@ -156033,7 +156033,7 @@ ${lanes.join("\n")}
         if (isRootWatchable && isInDirectoryPath(rootPathComponents, typeRootPathComponents)) {
           return rootPath;
         }
-        typeRoot = isRootedDiskPath(typeRoot) ? normalizePath3(typeRoot) : getNormalizedAbsolutePath(typeRoot, getCurrentDirectory());
+        typeRoot = isRootedDiskPath(typeRoot) ? normalizePath4(typeRoot) : getNormalizedAbsolutePath(typeRoot, getCurrentDirectory());
         const toWatch = getDirectoryToWatchFromFailedLookupLocationDirectory(
           getPathComponents(typeRoot),
           typeRootPathComponents,
@@ -157547,15 +157547,15 @@ ${lanes.join("\n")}
         };
         return compilerHost;
       }
-      function getSourceFileVersionAsHashFromText(host, text) {
-        if (text.match(sourceMapCommentRegExpDontCareLineStart)) {
-          let lineEnd = text.length;
+      function getSourceFileVersionAsHashFromText(host, text2) {
+        if (text2.match(sourceMapCommentRegExpDontCareLineStart)) {
+          let lineEnd = text2.length;
           let lineStart = lineEnd;
           for (let pos = lineEnd - 1; pos >= 0; pos--) {
-            const ch = text.charCodeAt(pos);
+            const ch = text2.charCodeAt(pos);
             switch (ch) {
               case 10:
-                if (pos && text.charCodeAt(pos - 1) === 13) {
+                if (pos && text2.charCodeAt(pos - 1) === 13) {
                   pos--;
                 }
               // falls through
@@ -157568,9 +157568,9 @@ ${lanes.join("\n")}
                 }
                 break;
             }
-            const line = text.substring(lineStart, lineEnd);
+            const line = text2.substring(lineStart, lineEnd);
             if (line.match(sourceMapCommentRegExp)) {
-              text = text.substring(0, lineStart);
+              text2 = text2.substring(0, lineStart);
               break;
             } else if (!line.match(whitespaceOrMapCommentRegExp)) {
               break;
@@ -157578,7 +157578,7 @@ ${lanes.join("\n")}
             lineEnd = lineStart;
           }
         }
-        return (host.createHash || generateDjb2Hash)(text);
+        return (host.createHash || generateDjb2Hash)(text2);
       }
       function setGetSourceFileAsHashVersioned(compilerHost) {
         const originalGetSourceFile = compilerHost.getSourceFile;
@@ -157591,7 +157591,7 @@ ${lanes.join("\n")}
         };
       }
       function createProgramHost(system, createProgram2) {
-        const getDefaultLibLocation = memoize(() => getDirectoryPath(normalizePath3(system.getExecutingFilePath())));
+        const getDefaultLibLocation = memoize(() => getDirectoryPath(normalizePath4(system.getExecutingFilePath())));
         return {
           useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
           getNewLine: () => system.newLine,
@@ -158067,8 +158067,8 @@ ${lanes.join("\n")}
           const hostSourceFile = sourceFilesCache.get(path);
           if (!hostSourceFile) return void 0;
           if (hostSourceFile.version) return hostSourceFile.version;
-          const text = readFileWithCache(path);
-          return text !== void 0 ? getSourceFileVersionAsHashFromText(compilerHost, text) : void 0;
+          const text2 = readFileWithCache(path);
+          return text2 !== void 0 ? getSourceFileVersionAsHashFromText(compilerHost, text2) : void 0;
         }
         function onReleaseOldSourceFile(oldSourceFile, _oldOptions, hasSourceFileByPath) {
           const hostSourceFileInfo = sourceFilesCache.get(oldSourceFile.resolvedPath);
@@ -159048,7 +159048,7 @@ ${lanes.join("\n")}
             state.write,
             /*reportSummary*/
             void 0,
-            (name, text, writeByteOrderMark, onError, sourceFiles, data) => {
+            (name, text2, writeByteOrderMark, onError, sourceFiles, data) => {
               var _a2;
               const path = toPath2(state, name);
               emittedOutputs.set(toPath2(state, name), name);
@@ -159072,7 +159072,7 @@ ${lanes.join("\n")}
               const modifiedTime = (data == null ? void 0 : data.differsOnlyInMap) ? getModifiedTime(state.host, name) : void 0;
               (writeFileCallback || compilerHost.writeFile)(
                 name,
-                text,
+                text2,
                 writeByteOrderMark,
                 onError,
                 sourceFiles,
@@ -159467,8 +159467,8 @@ ${lanes.join("\n")}
               if (!buildInfoVersionMap) buildInfoVersionMap = getBuildInfoFileVersionMap(incrementalBuildInfo, buildInfoPath, host);
               const resolvedInputPath = buildInfoVersionMap.roots.get(inputPath);
               version2 = buildInfoVersionMap.fileInfos.get(resolvedInputPath ?? inputPath);
-              const text = version2 ? state.readFileWithCache(resolvedInputPath ?? inputFile) : void 0;
-              currentVersion = text !== void 0 ? getSourceFileVersionAsHashFromText(host, text) : void 0;
+              const text2 = version2 ? state.readFileWithCache(resolvedInputPath ?? inputFile) : void 0;
+              currentVersion = text2 !== void 0 ? getSourceFileVersionAsHashFromText(host, text2) : void 0;
               if (version2 && version2 === currentVersion) pseudoInputUpToDate = true;
             }
             if (!version2 || version2 !== currentVersion) {
@@ -160359,7 +160359,7 @@ ${lanes.join("\n")}
       }
       function generateOptionOutput(sys2, option, rightAlignOfLeft, leftAlignOfRight) {
         var _a;
-        const text = [];
+        const text2 = [];
         const colors = createColors(sys2);
         const name = getDisplayNameTextOfOption(option);
         const valueCandidates = getValueCandidate(option);
@@ -160373,7 +160373,7 @@ ${lanes.join("\n")}
           if (option.description) {
             description3 = getDiagnosticText(option.description);
           }
-          text.push(...getPrettyOutput(
+          text2.push(...getPrettyOutput(
             name,
             description3,
             rightAlignOfLeft,
@@ -160384,7 +160384,7 @@ ${lanes.join("\n")}
           ), sys2.newLine);
           if (showAdditionalInfoOutput(valueCandidates, option)) {
             if (valueCandidates) {
-              text.push(...getPrettyOutput(
+              text2.push(...getPrettyOutput(
                 valueCandidates.valueType,
                 valueCandidates.possibleValues,
                 rightAlignOfLeft,
@@ -160395,7 +160395,7 @@ ${lanes.join("\n")}
               ), sys2.newLine);
             }
             if (defaultValueDescription) {
-              text.push(...getPrettyOutput(
+              text2.push(...getPrettyOutput(
                 getDiagnosticText(Diagnostics.default_Colon),
                 defaultValueDescription,
                 rightAlignOfLeft,
@@ -160406,28 +160406,28 @@ ${lanes.join("\n")}
               ), sys2.newLine);
             }
           }
-          text.push(sys2.newLine);
+          text2.push(sys2.newLine);
         } else {
-          text.push(colors.blue(name), sys2.newLine);
+          text2.push(colors.blue(name), sys2.newLine);
           if (option.description) {
             const description3 = getDiagnosticText(option.description);
-            text.push(description3);
+            text2.push(description3);
           }
-          text.push(sys2.newLine);
+          text2.push(sys2.newLine);
           if (showAdditionalInfoOutput(valueCandidates, option)) {
             if (valueCandidates) {
-              text.push(`${valueCandidates.valueType} ${valueCandidates.possibleValues}`);
+              text2.push(`${valueCandidates.valueType} ${valueCandidates.possibleValues}`);
             }
             if (defaultValueDescription) {
-              if (valueCandidates) text.push(sys2.newLine);
+              if (valueCandidates) text2.push(sys2.newLine);
               const diagType = getDiagnosticText(Diagnostics.default_Colon);
-              text.push(`${diagType} ${defaultValueDescription}`);
+              text2.push(`${diagType} ${defaultValueDescription}`);
             }
-            text.push(sys2.newLine);
+            text2.push(sys2.newLine);
           }
-          text.push(sys2.newLine);
+          text2.push(sys2.newLine);
         }
-        return text;
+        return text2;
         function formatDefaultValue(defaultValue, type) {
           return defaultValue !== void 0 && typeof type === "object" ? arrayFrom(type.entries()).filter(([, value]) => value === defaultValue).map(([name2]) => name2).join("/") : String(defaultValue);
         }
@@ -160731,7 +160731,7 @@ ${lanes.join("\n")}
               /* DiagnosticsPresent_OutputsSkipped */
             );
           }
-          const fileOrDirectory = normalizePath3(commandLine.options.project);
+          const fileOrDirectory = normalizePath4(commandLine.options.project);
           if (!fileOrDirectory || sys2.directoryExists(fileOrDirectory)) {
             configFileName = combinePaths(fileOrDirectory, "tsconfig.json");
             if (!sys2.fileExists(configFileName)) {
@@ -160752,12 +160752,12 @@ ${lanes.join("\n")}
             }
           }
         } else if (commandLine.fileNames.length === 0) {
-          const searchPath = normalizePath3(sys2.getCurrentDirectory());
+          const searchPath = normalizePath4(sys2.getCurrentDirectory());
           configFileName = findConfigFile(searchPath, (fileName) => sys2.fileExists(fileName));
         }
         if (commandLine.fileNames.length === 0 && !configFileName) {
           if (commandLine.options.showConfig) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, normalizePath3(sys2.getCurrentDirectory())));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, normalizePath4(sys2.getCurrentDirectory())));
           } else {
             printVersion(sys2);
             printHelp(sys2, commandLine);
@@ -161415,7 +161415,7 @@ ${lanes.join("\n")}
       }
       function writeConfigFile(sys2, reportDiagnostic, options) {
         const currentDirectory = sys2.getCurrentDirectory();
-        const file = normalizePath3(combinePaths(currentDirectory, "tsconfig.json"));
+        const file = normalizePath4(combinePaths(currentDirectory, "tsconfig.json"));
         if (sys2.fileExists(file)) {
           reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
         } else {
@@ -162788,7 +162788,7 @@ ${lanes.join("\n")}
         }
         const inferredTypings = /* @__PURE__ */ new Map();
         fileNames = mapDefined(fileNames, (fileName) => {
-          const path = normalizePath3(fileName);
+          const path = normalizePath4(fileName);
           if (hasJSFileExtension(path)) {
             return path;
           }
@@ -162878,14 +162878,14 @@ ${lanes.join("\n")}
             if (getBaseFileName(manifestPath2) !== manifestName) {
               return false;
             }
-            const pathComponents2 = getPathComponents(normalizePath3(manifestPath2));
+            const pathComponents2 = getPathComponents(normalizePath4(manifestPath2));
             const isScoped = pathComponents2[pathComponents2.length - 3][0] === "@";
             return isScoped && toFileNameLowerCase(pathComponents2[pathComponents2.length - 4]) === modulesDirName || // `node_modules/@foo/bar`
             !isScoped && toFileNameLowerCase(pathComponents2[pathComponents2.length - 3]) === modulesDirName;
           });
           if (log2) log2(`Searching for typing names in ${packagesFolderPath}; all files: ${JSON.stringify(dependencyManifestNames)}`);
           for (const manifestPath2 of dependencyManifestNames) {
-            const normalizedFileName = normalizePath3(manifestPath2);
+            const normalizedFileName = normalizePath4(manifestPath2);
             const result2 = readConfigFile(normalizedFileName, (path) => host.readFile(path));
             const manifest2 = result2.config;
             if (!manifest2.name) {
@@ -163016,8 +163016,8 @@ ${lanes.join("\n")}
       var ScriptSnapshot;
       ((ScriptSnapshot2) => {
         class StringScriptSnapshot {
-          constructor(text) {
-            this.text = text;
+          constructor(text2) {
+            this.text = text2;
           }
           getText(start, end) {
             return start === 0 && end === this.text.length ? this.text : this.text.substring(start, end);
@@ -163029,8 +163029,8 @@ ${lanes.join("\n")}
             return void 0;
           }
         }
-        function fromString(text) {
-          return new StringScriptSnapshot(text);
+        function fromString(text2) {
+          return new StringScriptSnapshot(text2);
         }
         ScriptSnapshot2.fromString = fromString;
       })(ScriptSnapshot || (ScriptSnapshot = {}));
@@ -164828,9 +164828,9 @@ ${lanes.join("\n")}
           void 0
         );
       }
-      function makeStringLiteral(text, quotePreference) {
+      function makeStringLiteral(text2, quotePreference) {
         return factory.createStringLiteral(
-          text,
+          text2,
           quotePreference === 0
           /* Single */
         );
@@ -164974,9 +164974,9 @@ ${lanes.join("\n")}
         }
         return void 0;
       }
-      function isTextWhiteSpaceLike(text, startPos, endPos) {
+      function isTextWhiteSpaceLike(text2, startPos, endPos) {
         for (let i = startPos; i < endPos; i++) {
-          if (!isWhiteSpaceLike(text.charCodeAt(i))) {
+          if (!isWhiteSpaceLike(text2.charCodeAt(i))) {
             return false;
           }
         }
@@ -164984,7 +164984,7 @@ ${lanes.join("\n")}
       }
       function getMappedLocation(location, sourceMapper, fileExists) {
         const mapsTo = sourceMapper.tryGetSourcePosition(location);
-        return mapsTo && (!fileExists || fileExists(normalizePath3(mapsTo.fileName)) ? mapsTo : void 0);
+        return mapsTo && (!fileExists || fileExists(normalizePath4(mapsTo.fileName)) ? mapsTo : void 0);
       }
       function getMappedDocumentSpan(documentSpan, sourceMapper, fileExists) {
         const { fileName, textSpan } = documentSpan;
@@ -165036,8 +165036,8 @@ ${lanes.join("\n")}
         let indent3;
         let length2;
         resetWriter();
-        const unknownWrite = (text) => writeKind(
-          text,
+        const unknownWrite = (text2) => writeKind(
+          text2,
           17
           /* text */
         );
@@ -165060,48 +165060,48 @@ ${lanes.join("\n")}
             }
             return displayParts;
           },
-          writeKeyword: (text) => writeKind(
-            text,
+          writeKeyword: (text2) => writeKind(
+            text2,
             5
             /* keyword */
           ),
-          writeOperator: (text) => writeKind(
-            text,
+          writeOperator: (text2) => writeKind(
+            text2,
             12
             /* operator */
           ),
-          writePunctuation: (text) => writeKind(
-            text,
+          writePunctuation: (text2) => writeKind(
+            text2,
             15
             /* punctuation */
           ),
-          writeTrailingSemicolon: (text) => writeKind(
-            text,
+          writeTrailingSemicolon: (text2) => writeKind(
+            text2,
             15
             /* punctuation */
           ),
-          writeSpace: (text) => writeKind(
-            text,
+          writeSpace: (text2) => writeKind(
+            text2,
             16
             /* space */
           ),
-          writeStringLiteral: (text) => writeKind(
-            text,
+          writeStringLiteral: (text2) => writeKind(
+            text2,
             8
             /* stringLiteral */
           ),
-          writeParameter: (text) => writeKind(
-            text,
+          writeParameter: (text2) => writeKind(
+            text2,
             13
             /* parameterName */
           ),
-          writeProperty: (text) => writeKind(
-            text,
+          writeProperty: (text2) => writeKind(
+            text2,
             14
             /* propertyName */
           ),
-          writeLiteral: (text) => writeKind(
-            text,
+          writeLiteral: (text2) => writeKind(
+            text2,
             8
             /* stringLiteral */
           ),
@@ -165141,17 +165141,17 @@ ${lanes.join("\n")}
             lineStart = false;
           }
         }
-        function writeKind(text, kind) {
+        function writeKind(text2, kind) {
           if (length2 > absoluteMaximumLength) return;
           writeIndent();
-          length2 += text.length;
-          displayParts.push(displayPart(text, kind));
+          length2 += text2.length;
+          displayParts.push(displayPart(text2, kind));
         }
-        function writeSymbol(text, symbol) {
+        function writeSymbol(text2, symbol) {
           if (length2 > absoluteMaximumLength) return;
           writeIndent();
-          length2 += text.length;
-          displayParts.push(symbolPart(text, symbol));
+          length2 += text2.length;
+          displayParts.push(symbolPart(text2, symbol));
         }
         function writeLine() {
           if (length2 > absoluteMaximumLength) return;
@@ -165166,8 +165166,8 @@ ${lanes.join("\n")}
           length2 = 0;
         }
       }
-      function symbolPart(text, symbol) {
-        return displayPart(text, displayPartKind(symbol));
+      function symbolPart(text2, symbol) {
+        return displayPart(text2, displayPartKind(symbol));
         function displayPartKind(symbol2) {
           const flags = symbol2.flags;
           if (flags & 3) {
@@ -165189,8 +165189,8 @@ ${lanes.join("\n")}
           return 17;
         }
       }
-      function displayPart(text, kind) {
-        return { text, kind: SymbolDisplayPartKind[kind] };
+      function displayPart(text2, kind) {
+        return { text: text2, kind: SymbolDisplayPartKind[kind] };
       }
       function spacePart() {
         return displayPart(
@@ -165220,55 +165220,55 @@ ${lanes.join("\n")}
           /* operator */
         );
       }
-      function parameterNamePart(text) {
+      function parameterNamePart(text2) {
         return displayPart(
-          text,
+          text2,
           13
           /* parameterName */
         );
       }
-      function propertyNamePart(text) {
+      function propertyNamePart(text2) {
         return displayPart(
-          text,
+          text2,
           14
           /* propertyName */
         );
       }
-      function textOrKeywordPart(text) {
-        const kind = stringToToken(text);
-        return kind === void 0 ? textPart(text) : keywordPart(kind);
+      function textOrKeywordPart(text2) {
+        const kind = stringToToken(text2);
+        return kind === void 0 ? textPart(text2) : keywordPart(kind);
       }
-      function textPart(text) {
+      function textPart(text2) {
         return displayPart(
-          text,
+          text2,
           17
           /* text */
         );
       }
-      function typeAliasNamePart(text) {
+      function typeAliasNamePart(text2) {
         return displayPart(
-          text,
+          text2,
           0
           /* aliasName */
         );
       }
-      function typeParameterNamePart(text) {
+      function typeParameterNamePart(text2) {
         return displayPart(
-          text,
+          text2,
           18
           /* typeParameterName */
         );
       }
-      function linkTextPart(text) {
+      function linkTextPart(text2) {
         return displayPart(
-          text,
+          text2,
           24
           /* linkText */
         );
       }
-      function linkNamePart(text, target) {
+      function linkNamePart(text2, target) {
         return {
-          text,
+          text: text2,
           kind: SymbolDisplayPartKind[
             23
             /* linkName */
@@ -165279,9 +165279,9 @@ ${lanes.join("\n")}
           }
         };
       }
-      function linkPart(text) {
+      function linkPart(text2) {
         return displayPart(
-          text,
+          text2,
           22
           /* link */
         );
@@ -165299,40 +165299,40 @@ ${lanes.join("\n")}
           const targetSymbol = symbol && checker ? getSymbolTarget(symbol, checker) : void 0;
           const suffix = findLinkNameEnd(link.text);
           const name = getTextOfNode(link.name) + link.text.slice(0, suffix);
-          const text = skipSeparatorFromLinkText(link.text.slice(suffix));
+          const text2 = skipSeparatorFromLinkText(link.text.slice(suffix));
           const decl = (targetSymbol == null ? void 0 : targetSymbol.valueDeclaration) || ((_a = targetSymbol == null ? void 0 : targetSymbol.declarations) == null ? void 0 : _a[0]);
           if (decl) {
             parts.push(linkNamePart(name, decl));
-            if (text) parts.push(linkTextPart(text));
+            if (text2) parts.push(linkTextPart(text2));
           } else {
             const separator = suffix === 0 || link.text.charCodeAt(suffix) === 124 && name.charCodeAt(name.length - 1) !== 32 ? " " : "";
-            parts.push(linkTextPart(name + separator + text));
+            parts.push(linkTextPart(name + separator + text2));
           }
         }
         parts.push(linkPart("}"));
         return parts;
       }
-      function skipSeparatorFromLinkText(text) {
+      function skipSeparatorFromLinkText(text2) {
         let pos = 0;
-        if (text.charCodeAt(pos++) === 124) {
-          while (pos < text.length && text.charCodeAt(pos) === 32) pos++;
-          return text.slice(pos);
+        if (text2.charCodeAt(pos++) === 124) {
+          while (pos < text2.length && text2.charCodeAt(pos) === 32) pos++;
+          return text2.slice(pos);
         }
-        return text;
+        return text2;
       }
-      function findLinkNameEnd(text) {
-        let pos = text.indexOf("://");
+      function findLinkNameEnd(text2) {
+        let pos = text2.indexOf("://");
         if (pos === 0) {
-          while (pos < text.length && text.charCodeAt(pos) !== 124) pos++;
+          while (pos < text2.length && text2.charCodeAt(pos) !== 124) pos++;
           return pos;
         }
-        if (text.indexOf("()") === 0) return 2;
-        if (text.charAt(0) === "<") {
+        if (text2.indexOf("()") === 0) return 2;
+        if (text2.charAt(0) === "<") {
           let brackets2 = 0;
           let i = 0;
-          while (i < text.length) {
-            if (text[i] === "<") brackets2++;
-            if (text[i] === ">") brackets2--;
+          while (i < text2.length) {
+            if (text2[i] === "<") brackets2++;
+            if (text2[i] === ">") brackets2--;
             i++;
             if (!brackets2) return i;
           }
@@ -165409,33 +165409,33 @@ ${lanes.join("\n")}
       function getUniqueSymbolId(symbol, checker) {
         return getSymbolId(skipAlias(symbol, checker));
       }
-      function getFirstNonSpaceCharacterPosition(text, position) {
-        while (isWhiteSpaceLike(text.charCodeAt(position))) {
+      function getFirstNonSpaceCharacterPosition(text2, position) {
+        while (isWhiteSpaceLike(text2.charCodeAt(position))) {
           position += 1;
         }
         return position;
       }
-      function getPrecedingNonSpaceCharacterPosition(text, position) {
-        while (position > -1 && isWhiteSpaceSingleLine(text.charCodeAt(position))) {
+      function getPrecedingNonSpaceCharacterPosition(text2, position) {
+        while (position > -1 && isWhiteSpaceSingleLine(text2.charCodeAt(position))) {
           position -= 1;
         }
         return position + 1;
       }
       function copyComments(sourceNode, targetNode) {
         const sourceFile = sourceNode.getSourceFile();
-        const text = sourceFile.text;
-        if (hasLeadingLineBreak(sourceNode, text)) {
+        const text2 = sourceFile.text;
+        if (hasLeadingLineBreak(sourceNode, text2)) {
           copyLeadingComments(sourceNode, targetNode, sourceFile);
         } else {
           copyTrailingAsLeadingComments(sourceNode, targetNode, sourceFile);
         }
         copyTrailingComments(sourceNode, targetNode, sourceFile);
       }
-      function hasLeadingLineBreak(node, text) {
+      function hasLeadingLineBreak(node, text2) {
         const start = node.getFullStart();
         const end = node.getStart();
         for (let i = start; i < end; i++) {
-          if (text.charCodeAt(i) === 10) return true;
+          if (text2.charCodeAt(i) === 10) return true;
         }
         return false;
       }
@@ -165512,9 +165512,9 @@ ${lanes.join("\n")}
             return checker.getContextualType(node, contextFlags);
         }
       }
-      function quote(sourceFile, preferences, text) {
+      function quote(sourceFile, preferences, text2) {
         const quotePreference = getQuotePreference(sourceFile, preferences);
-        const quoted = JSON.stringify(text);
+        const quoted = JSON.stringify(text2);
         return quotePreference === 0 ? `'${stripQuotes(quoted).replace(/'/g, () => "\\'").replace(/\\"/g, '"')}'` : quoted;
       }
       function isEqualityOperatorKind(kind) {
@@ -165897,7 +165897,7 @@ ${lanes.join("\n")}
         }
       }
       function consumesNodeCoreModules(sourceFile) {
-        return some(sourceFile.imports, ({ text }) => nodeCoreModules.has(text));
+        return some(sourceFile.imports, ({ text: text2 }) => nodeCoreModules.has(text2));
       }
       function isInsideNodeModules(fileOrDirectory) {
         return contains(getPathComponents(fileOrDirectory), "node_modules");
@@ -166683,15 +166683,15 @@ ${lanes.join("\n")}
           /*skipTrivia*/
           false
         );
-        function getClassificationsForLine(text, lexState, syntacticClassifierAbsent) {
-          return convertClassificationsToResult(getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent), text);
+        function getClassificationsForLine(text2, lexState, syntacticClassifierAbsent) {
+          return convertClassificationsToResult(getEncodedLexicalClassifications(text2, lexState, syntacticClassifierAbsent), text2);
         }
-        function getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent) {
+        function getEncodedLexicalClassifications(text2, lexState, syntacticClassifierAbsent) {
           let token = 0;
           let lastNonTriviaToken = 0;
           const templateStack = [];
           const { prefix, pushTemplate } = getPrefixFromLexState(lexState);
-          text = prefix + text;
+          text2 = prefix + text2;
           const offset = prefix.length;
           if (pushTemplate) {
             templateStack.push(
@@ -166699,7 +166699,7 @@ ${lanes.join("\n")}
               /* TemplateHead */
             );
           }
-          scanner2.setText(text);
+          scanner2.setText(text2);
           let endOfLineState = 0;
           const spans = [];
           let angleBracketStack = 0;
@@ -166711,7 +166711,7 @@ ${lanes.join("\n")}
             }
             const end = scanner2.getTokenEnd();
             pushEncodedClassification(scanner2.getTokenStart(), end, offset, classFromKind(token), spans);
-            if (end >= text.length) {
+            if (end >= text2.length) {
               const end2 = getNewEndOfLineState(scanner2, token, lastOrUndefined(templateStack));
               if (end2 !== void 0) {
                 endOfLineState = end2;
@@ -166851,7 +166851,7 @@ ${lanes.join("\n")}
           result.push(start - offset, length2, classification);
         }
       }
-      function convertClassificationsToResult(classifications, text) {
+      function convertClassificationsToResult(classifications, text2) {
         const entries = [];
         const dense = classifications.spans;
         let lastEnd = 0;
@@ -166872,7 +166872,7 @@ ${lanes.join("\n")}
           entries.push({ length: length2, classification: convertClassification(type) });
           lastEnd = start + length2;
         }
-        const whitespaceLength = text.length - lastEnd;
+        const whitespaceLength = text2.length - lastEnd;
         if (whitespaceLength > 0) {
           entries.push({
             length: whitespaceLength,
@@ -167236,8 +167236,8 @@ ${lanes.join("\n")}
                 triviaScanner.resetTokenState(end);
                 continue;
               case 7:
-                const text = sourceFile.text;
-                const ch = text.charCodeAt(start);
+                const text2 = sourceFile.text;
+                const ch = text2.charCodeAt(start);
                 if (ch === 60 || ch === 62) {
                   pushClassification(
                     start,
@@ -167251,7 +167251,7 @@ ${lanes.join("\n")}
                   ch === 124 || ch === 61
                   /* equals */
                 );
-                classifyDisabledMergeCode(text, start, end);
+                classifyDisabledMergeCode(text2, start, end);
                 break;
               case 6:
                 break;
@@ -167396,8 +167396,8 @@ ${lanes.join("\n")}
         function tryClassifyTripleSlashComment(start, width) {
           const tripleSlashXMLCommentRegEx = /^(\/\/\/\s*)(<)(?:(\S+)((?:[^/]|\/[^>])*)(\/>)?)?/m;
           const attributeRegex = /(\s)(\S+)(\s*)(=)(\s*)('[^']+'|"[^"]+")/g;
-          const text = sourceFile.text.substr(start, width);
-          const match = tripleSlashXMLCommentRegEx.exec(text);
+          const text2 = sourceFile.text.substr(start, width);
+          const match = tripleSlashXMLCommentRegEx.exec(text2);
           if (!match) {
             return false;
           }
@@ -167487,10 +167487,10 @@ ${lanes.join("\n")}
             processElement(child);
           }
         }
-        function classifyDisabledMergeCode(text, start, end) {
+        function classifyDisabledMergeCode(text2, start, end) {
           let i;
           for (i = start; i < end; i++) {
-            if (isLineBreak(text.charCodeAt(i))) {
+            if (isLineBreak(text2.charCodeAt(i))) {
               break;
             }
           }
@@ -168467,7 +168467,7 @@ ${lanes.join("\n")}
         }
       }
       function combineNormal(pathA, pathB) {
-        return normalizePath3(combinePaths(pathA, pathB));
+        return normalizePath4(combinePaths(pathA, pathB));
       }
       function combinePathsSafe(pathA, pathB) {
         return ensurePathIsNonModuleName(combineNormal(pathA, pathB));
@@ -168716,10 +168716,10 @@ ${lanes.join("\n")}
           currentCandidate++;
         }
       }
-      function createSegment(text) {
+      function createSegment(text2) {
         return {
-          totalTextChunk: createTextChunk(text),
-          subWordTextChunks: breakPatternIntoTextChunks(text)
+          totalTextChunk: createTextChunk(text2),
+          subWordTextChunks: breakPatternIntoTextChunks(text2)
         };
       }
       function isUpperCaseLetter(ch) {
@@ -168797,13 +168797,13 @@ ${lanes.join("\n")}
         }
         return result;
       }
-      function createTextChunk(text) {
-        const textLowerCase = text.toLowerCase();
+      function createTextChunk(text2) {
+        const textLowerCase = text2.toLowerCase();
         return {
-          text,
+          text: text2,
           textLowerCase,
-          isLowerCase: text === textLowerCase,
-          characterSpans: breakIntoCharacterSpans(text)
+          isLowerCase: text2 === textLowerCase,
+          characterSpans: breakIntoCharacterSpans(text2)
         };
       }
       function breakIntoCharacterSpans(identifier) {
@@ -169300,8 +169300,8 @@ ${lanes.join("\n")}
             sourceFileLike.set(path, false);
             return void 0;
           }
-          const text = host.readFile(fileName);
-          const file = text ? createSourceFileLike(text) : false;
+          const text2 = host.readFile(fileName);
+          const file = text2 ? createSourceFileLike(text2) : false;
           sourceFileLike.set(path, file);
           return file ? file : void 0;
         }
@@ -169355,9 +169355,9 @@ ${lanes.join("\n")}
         if (map2.sourcesContent && map2.sourcesContent.some(isString)) return void 0;
         return createDocumentPositionMapper(host, map2, mapFileName);
       }
-      function createSourceFileLike(text, lineMap) {
+      function createSourceFileLike(text2, lineMap) {
         return {
-          text,
+          text: text2,
           lineMap,
           getLineAndCharacterOfPosition(pos) {
             return computeLineAndCharacterOfPosition(getLineStarts(this), pos);
@@ -169654,14 +169654,14 @@ interface Symbol {
         }
         const newLine = getNewLineCharacter(options);
         const compilerHost = {
-          getSourceFile: (fileName) => fileName === normalizePath3(inputFileName) ? sourceFile : fileName === normalizePath3(barebonesLibName) ? barebonesLibSourceFile : void 0,
-          writeFile: (name, text) => {
+          getSourceFile: (fileName) => fileName === normalizePath4(inputFileName) ? sourceFile : fileName === normalizePath4(barebonesLibName) ? barebonesLibSourceFile : void 0,
+          writeFile: (name, text2) => {
             if (fileExtensionIs(name, ".map")) {
               Debug.assertEqual(sourceMapText, void 0, "Unexpected multiple source map outputs, file:", name);
-              sourceMapText = text;
+              sourceMapText = text2;
             } else {
               Debug.assertEqual(outputText, void 0, "Unexpected multiple outputs, file:", name);
-              outputText = text;
+              outputText = text2;
             }
           },
           getDefaultLibFileName: () => barebonesLibName,
@@ -170447,15 +170447,15 @@ interface Symbol {
           return cleanText(getModuleName(node));
         }
         if (name) {
-          const text = isIdentifier(name) ? name.text : isElementAccessExpression(name) ? `[${nodeText(name.argumentExpression)}]` : nodeText(name);
-          if (text.length > 0) {
-            return cleanText(text);
+          const text2 = isIdentifier(name) ? name.text : isElementAccessExpression(name) ? `[${nodeText(name.argumentExpression)}]` : nodeText(name);
+          if (text2.length > 0) {
+            return cleanText(text2);
           }
         }
         switch (node.kind) {
           case 308:
             const sourceFile = node;
-            return isExternalModule(sourceFile) ? `"${escapeString(getBaseFileName(removeFileExtension(normalizePath3(sourceFile.fileName))))}"` : "<global>";
+            return isExternalModule(sourceFile) ? `"${escapeString(getBaseFileName(removeFileExtension(normalizePath4(sourceFile.fileName))))}"` : "<global>";
           case 278:
             return isExportAssignment(node) && node.isExportEquals ? "export=" : "default";
           case 220:
@@ -170651,9 +170651,9 @@ interface Symbol {
             return false;
         }
       }
-      function cleanText(text) {
-        text = text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
-        return text.replace(/\\?(?:\r?\n|[\r\u2028\u2029])/g, "");
+      function cleanText(text2) {
+        text2 = text2.length > maxLength ? text2.substring(0, maxLength) + "..." : text2;
+        return text2.replace(/\\?(?:\r?\n|[\r\u2028\u2029])/g, "");
       }
       var ts_refactor_exports = {};
       __export(ts_refactor_exports, {
@@ -171662,7 +171662,7 @@ interface Symbol {
       function addNewFileToTsconfig(program, changes, oldFileName, newFileNameWithExtension, getCanonicalFileName) {
         const cfg = program.getCompilerOptions().configFile;
         if (!cfg) return;
-        const newFileAbsolutePath = normalizePath3(combinePaths(oldFileName, "..", newFileNameWithExtension));
+        const newFileAbsolutePath = normalizePath4(combinePaths(oldFileName, "..", newFileNameWithExtension));
         const newFilePath = getRelativePathFromFile(cfg.fileName, newFileAbsolutePath, getCanonicalFileName);
         const cfgObject = cfg.statements[0] && tryCast(cfg.statements[0].expression, isObjectLiteralExpression);
         const filesProp = cfgObject && find(cfgObject.properties, (prop) => isPropertyAssignment(prop) && isStringLiteral(prop.name) && prop.name.text === "files");
@@ -173908,23 +173908,23 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
       }
       function concatConsecutiveString(index, nodes) {
         const indexes = [];
-        let text = "", rawText = "";
+        let text2 = "", rawText = "";
         while (index < nodes.length) {
           const node = nodes[index];
           if (isStringLiteralLike(node)) {
-            text += node.text;
+            text2 += node.text;
             rawText += escapeRawStringForTemplate(getTextOfNode(node).slice(1, -1));
             indexes.push(index);
             index++;
           } else if (isTemplateExpression(node)) {
-            text += node.head.text;
+            text2 += node.head.text;
             rawText += getRawTextOfTemplate(node.head);
             break;
           } else {
             break;
           }
         }
-        return [index, text, rawText, indexes];
+        return [index, text2, rawText, indexes];
       }
       function nodesToTemplate({ nodes, operators }, file) {
         const copyOperatorComments = copyTrailingOperatorComments(operators, file);
@@ -173948,11 +173948,11 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
             const spans = map(currentNode.templateSpans, (span, index) => {
               copyExpressionComments(span);
               const isLastSpan = index === currentNode.templateSpans.length - 1;
-              const text = span.literal.text + (isLastSpan ? subsequentText : "");
+              const text2 = span.literal.text + (isLastSpan ? subsequentText : "");
               const rawText = getRawTextOfTemplate(span.literal) + (isLastSpan ? rawSubsequentText : "");
               return factory.createTemplateSpan(
                 span.expression,
-                isLast && isLastSpan ? factory.createTemplateTail(text, rawText) : factory.createTemplateMiddle(text, rawText)
+                isLast && isLastSpan ? factory.createTemplateTail(text2, rawText) : factory.createTemplateMiddle(text2, rawText)
               );
             });
             templateSpans.push(...spans);
@@ -177051,9 +177051,9 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
         }
       };
       var SourceMapSourceObject = class {
-        constructor(fileName, text, skipTrivia2) {
+        constructor(fileName, text2, skipTrivia2) {
           this.fileName = fileName;
-          this.text = text;
+          this.text = text2;
           this.skipTrivia = skipTrivia2 || ((pos) => pos);
         }
         getLineAndCharacterOfPosition(pos) {
@@ -177892,8 +177892,8 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
           return ts_FindAllReferences_exports.getImplementationsAtPosition(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
         }
         function getDocumentHighlights(fileName, position, filesToSearch) {
-          const normalizedFileName = normalizePath3(fileName);
-          Debug.assert(filesToSearch.some((f) => normalizePath3(f) === normalizedFileName));
+          const normalizedFileName = normalizePath4(fileName);
+          Debug.assert(filesToSearch.some((f) => normalizePath4(f) === normalizedFileName));
           synchronizeHostData();
           const sourceFilesToSearch = mapDefined(filesToSearch, (fileName2) => program.getSourceFile(fileName2));
           const sourceFile = getValidSourceFile(fileName);
@@ -178272,7 +178272,7 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
           var _a2;
           const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
           const textChanges2 = [];
-          const { text } = sourceFile;
+          const { text: text2 } = sourceFile;
           let hasComment = false;
           let isCommenting = insertComment || false;
           const positions = [];
@@ -178283,7 +178283,7 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
           const openMultilineRegex = isJsx ? "\\{\\/\\*" : "\\/\\*";
           const closeMultilineRegex = isJsx ? "\\*\\/\\}" : "\\*\\/";
           while (pos <= textRange.end) {
-            const offset = text.substr(pos, openMultiline.length) === openMultiline ? openMultiline.length : 0;
+            const offset = text2.substr(pos, openMultiline.length) === openMultiline ? openMultiline.length : 0;
             const commentRange = isInComment(sourceFile, pos + offset);
             if (commentRange) {
               if (isJsx) {
@@ -178297,8 +178297,8 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
               hasComment = true;
               pos = commentRange.end + 1;
             } else {
-              const newPos = text.substring(pos, textRange.end).search(`(${openMultilineRegex})|(${closeMultilineRegex})`);
-              isCommenting = insertComment !== void 0 ? insertComment : isCommenting || !isTextWhiteSpaceLike(text, pos, newPos === -1 ? textRange.end : pos + newPos);
+              const newPos = text2.substring(pos, textRange.end).search(`(${openMultilineRegex})|(${closeMultilineRegex})`);
+              isCommenting = insertComment !== void 0 ? insertComment : isCommenting || !isTextWhiteSpaceLike(text2, pos, newPos === -1 ? textRange.end : pos + newPos);
               pos = newPos === -1 ? textRange.end + 1 : pos + newPos + closeMultiline.length;
             }
           }
@@ -178308,7 +178308,7 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
             }
             insertSorted(positions, textRange.end, compareValues);
             const firstPos = positions[0];
-            if (text.substr(firstPos, openMultiline.length) !== openMultiline) {
+            if (text2.substr(firstPos, openMultiline.length) !== openMultiline) {
               textChanges2.push({
                 newText: openMultiline,
                 span: {
@@ -178318,7 +178318,7 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
               });
             }
             for (let i = 1; i < positions.length - 1; i++) {
-              if (text.substr(positions[i] - closeMultiline.length, closeMultiline.length) !== closeMultiline) {
+              if (text2.substr(positions[i] - closeMultiline.length, closeMultiline.length) !== closeMultiline) {
                 textChanges2.push({
                   newText: closeMultiline,
                   span: {
@@ -178327,7 +178327,7 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
                   }
                 });
               }
-              if (text.substr(positions[i], openMultiline.length) !== openMultiline) {
+              if (text2.substr(positions[i], openMultiline.length) !== openMultiline) {
                 textChanges2.push({
                   newText: openMultiline,
                   span: {
@@ -178349,7 +178349,7 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
           } else {
             for (const pos2 of positions) {
               const from = pos2 - closeMultiline.length > 0 ? pos2 - closeMultiline.length : 0;
-              const offset = text.substr(from, closeMultiline.length) === closeMultiline ? closeMultiline.length : 0;
+              const offset = text2.substr(from, closeMultiline.length) === closeMultiline ? closeMultiline.length : 0;
               textChanges2.push({
                 newText: "",
                 span: {
@@ -178677,11 +178677,11 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
         const nameTable = sourceFile.nameTable = /* @__PURE__ */ new Map();
         sourceFile.forEachChild(function walk3(node) {
           if (isIdentifier(node) && !isTagName(node) && node.escapedText || isStringOrNumericLiteralLike(node) && literalIsName(node)) {
-            const text = getEscapedTextOfIdentifierOrLiteral(node);
-            nameTable.set(text, nameTable.get(text) === void 0 ? node.pos : -1);
+            const text2 = getEscapedTextOfIdentifierOrLiteral(node);
+            nameTable.set(text2, nameTable.get(text2) === void 0 ? node.pos : -1);
           } else if (isPrivateIdentifier(node)) {
-            const text = node.escapedText;
-            nameTable.set(text, nameTable.get(text) === void 0 ? node.pos : -1);
+            const text2 = node.escapedText;
+            nameTable.set(text2, nameTable.get(text2) === void 0 ? node.pos : -1);
           }
           forEachChild(node, walk3);
           if (hasJSDocNodes(node)) {
@@ -178753,7 +178753,7 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
       }
       function getDefaultLibFilePath(options) {
         if (sys) {
-          return combinePaths(getDirectoryPath(normalizePath3(sys.getExecutingFilePath())), getDefaultLibFileName(options));
+          return combinePaths(getDirectoryPath(normalizePath4(sys.getExecutingFilePath())), getDefaultLibFileName(options));
         }
         throw new Error("getDefaultLibFilePath is only supported when consumed as a node module. ");
       }
@@ -179338,19 +179338,19 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
           return { text: `${prefix}static {}`, pos, end };
         }
         const declName = isAssignedExpression(node) ? node.parent.name : Debug.checkDefined(getNameOfDeclaration(node), "Expected call hierarchy item to have a name");
-        let text = isIdentifier(declName) ? idText(declName) : isStringOrNumericLiteralLike(declName) ? declName.text : isComputedPropertyName(declName) ? isStringOrNumericLiteralLike(declName.expression) ? declName.expression.text : void 0 : void 0;
-        if (text === void 0) {
+        let text2 = isIdentifier(declName) ? idText(declName) : isStringOrNumericLiteralLike(declName) ? declName.text : isComputedPropertyName(declName) ? isStringOrNumericLiteralLike(declName.expression) ? declName.expression.text : void 0 : void 0;
+        if (text2 === void 0) {
           const typeChecker = program.getTypeChecker();
           const symbol = typeChecker.getSymbolAtLocation(declName);
           if (symbol) {
-            text = typeChecker.symbolToString(symbol, node);
+            text2 = typeChecker.symbolToString(symbol, node);
           }
         }
-        if (text === void 0) {
+        if (text2 === void 0) {
           const printer = createPrinterWithRemoveCommentsOmitTrailingSemicolon();
-          text = usingSingleLineStringWriter((writer) => printer.writeNode(4, node, node.getSourceFile(), writer));
+          text2 = usingSingleLineStringWriter((writer) => printer.writeNode(4, node, node.getSourceFile(), writer));
         }
-        return { text, pos: declName.getStart(), end: declName.getEnd() };
+        return { text: text2, pos: declName.getStart(), end: declName.getEnd() };
       }
       function getCallHierarchItemContainerName(node) {
         var _a, _b, _c, _d;
@@ -180725,22 +180725,22 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
           if (isJSDocIndexSignature(node)) {
             return transformJSDocIndexSignature(node);
           }
-          let text = node.typeName.text;
+          let text2 = node.typeName.text;
           switch (node.typeName.text) {
             case "String":
             case "Boolean":
             case "Object":
             case "Number":
-              text = text.toLowerCase();
+              text2 = text2.toLowerCase();
               break;
             case "array":
             case "date":
             case "promise":
-              text = text[0].toUpperCase() + text.slice(1);
+              text2 = text2[0].toUpperCase() + text2.slice(1);
               break;
           }
-          name = factory.createIdentifier(text);
-          if ((text === "Array" || text === "Promise") && !node.typeArguments) {
+          name = factory.createIdentifier(text2);
+          if ((text2 === "Array" || text2 === "Promise") && !node.typeArguments) {
             args = factory.createNodeArray([factory.createTypeReferenceNode("any", emptyArray)]);
           } else {
             args = visitNodes2(node.typeArguments, transformJSDocType, isTypeNode);
@@ -181870,15 +181870,15 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
       function collectExportRenames(sourceFile, checker, identifiers) {
         const res = /* @__PURE__ */ new Map();
         forEachExportReference(sourceFile, (node) => {
-          const { text } = node.name;
-          if (!res.has(text) && (isIdentifierANonContextualKeyword(node.name) || checker.resolveName(
-            text,
+          const { text: text2 } = node.name;
+          if (!res.has(text2) && (isIdentifierANonContextualKeyword(node.name) || checker.resolveName(
+            text2,
             node,
             111551,
             /*excludeGlobals*/
             true
           ))) {
-            res.set(text, makeUniqueName(`_${text}`, identifiers));
+            res.set(text2, makeUniqueName(`_${text2}`, identifiers));
           }
         });
         return res;
@@ -181888,8 +181888,8 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
           if (isAssignmentLhs) {
             return;
           }
-          const { text } = node.name;
-          changes.replaceNode(sourceFile, node, factory.createIdentifier(exports2.get(text) || text));
+          const { text: text2 } = node.name;
+          changes.replaceNode(sourceFile, node, factory.createIdentifier(exports2.get(text2) || text2));
         });
       }
       function forEachExportReference(sourceFile, cb) {
@@ -182055,8 +182055,8 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
         return statements && [statements, false];
       }
       function convertNamedExport(sourceFile, assignment, changes, exports2) {
-        const { text } = assignment.left.name;
-        const rename = exports2.get(text);
+        const { text: text2 } = assignment.left.name;
+        const rename = exports2.get(text2);
         if (rename !== void 0) {
           const newNodes = [
             makeConst(
@@ -182069,7 +182069,7 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
               /*isTypeOnly*/
               false,
               rename,
-              text
+              text2
             )])
           ];
           changes.replaceNodeWithNodes(sourceFile, assignment.parent, newNodes);
@@ -186813,9 +186813,9 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
             28
             /* CommaToken */
           ));
-          const text = sourceFile.text;
+          const text2 = sourceFile.text;
           let end = implementsToken.end;
-          while (end < text.length && isWhiteSpaceSingleLine(text.charCodeAt(end))) {
+          while (end < text2.length && isWhiteSpaceSingleLine(text2.charCodeAt(end))) {
             end++;
           }
           changes.deleteRange(sourceFile, { pos: implementsToken.getStart(), end });
@@ -190517,7 +190517,7 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
       function createStubbedMethodBody(quotePreference) {
         return createStubbedBody(Diagnostics.Method_not_implemented.message, quotePreference);
       }
-      function createStubbedBody(text, quotePreference) {
+      function createStubbedBody(text2, quotePreference) {
         return factory.createBlock(
           [factory.createThrowStatement(
             factory.createNewExpression(
@@ -190526,7 +190526,7 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
               void 0,
               // TODO Handle auto quote preference.
               [factory.createStringLiteral(
-                text,
+                text2,
                 /*isSingleQuote*/
                 quotePreference === 0
                 /* Single */
@@ -192827,12 +192827,12 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
           ...includeSymbol ? { symbol } : void 0
         };
       }
-      function generateIdentifierForArbitraryString(text, languageVersion) {
+      function generateIdentifierForArbitraryString(text2, languageVersion) {
         let needsUnderscore = false;
         let identifier = "";
         let ch;
-        for (let i = 0; i < text.length; i += ch !== void 0 && ch >= 65536 ? 2 : 1) {
-          ch = text.codePointAt(i);
+        for (let i = 0; i < text2.length; i += ch !== void 0 && ch >= 65536 ? 2 : 1) {
+          ch = text2.codePointAt(i);
           if (ch !== void 0 && (i === 0 ? isIdentifierStart(ch, languageVersion) : isIdentifierPart(ch, languageVersion))) {
             if (needsUnderscore) identifier += "_";
             identifier += String.fromCodePoint(ch);
@@ -195174,8 +195174,8 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
         }
         function isDotOfNumericLiteral(contextToken2) {
           if (contextToken2.kind === 9) {
-            const text = contextToken2.getFullText();
-            return text.charAt(text.length - 1) === ".";
+            const text2 = contextToken2.getFullText();
+            return text2.charAt(text2.length - 1) === ".";
           }
           return false;
         }
@@ -196312,9 +196312,9 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
           void 0
         );
       }
-      function addReplacementSpans(text, textStart, names) {
-        const span = getDirectoryFragmentTextSpan(text, textStart);
-        const wholeSpan = text.length === 0 ? void 0 : createTextSpan(textStart, text.length);
+      function addReplacementSpans(text2, textStart, names) {
+        const span = getDirectoryFragmentTextSpan(text2, textStart);
+        const wholeSpan = text2.length === 0 ? void 0 : createTextSpan(textStart, text2.length);
         return names.map(({ name, kind, extension }) => name.includes(directorySeparator) || name.includes(altDirectorySeparator) ? { name, kind, extension, span: wholeSpan } : { name, kind, extension, span });
       }
       function getStringLiteralCompletionsFromModuleNames(sourceFile, node, program, host, preferences) {
@@ -196378,7 +196378,7 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
         return moduleResolutionUsesNodeModules(moduleResolution) ? getSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, extensions) : extensions;
       }
       function getBaseDirectoriesFromRootDirs(rootDirs, basePath, scriptDirectory, ignoreCase) {
-        rootDirs = rootDirs.map((rootDirectory) => ensureTrailingDirectorySeparator(normalizePath3(isRootedDiskPath(rootDirectory) ? rootDirectory : combinePaths(basePath, rootDirectory))));
+        rootDirs = rootDirs.map((rootDirectory) => ensureTrailingDirectorySeparator(normalizePath4(isRootedDiskPath(rootDirectory) ? rootDirectory : combinePaths(basePath, rootDirectory))));
         const relativeDirectory = firstDefined(rootDirs, (rootDirectory) => containsPath(rootDirectory, scriptDirectory, basePath, ignoreCase) ? scriptDirectory.substr(rootDirectory.length) : void 0);
         return deduplicate(
           [...rootDirs.map((rootDirectory) => combinePaths(rootDirectory, relativeDirectory)), scriptDirectory].map((baseDir) => removeTrailingDirectorySeparator(baseDir)),
@@ -196451,7 +196451,7 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
         );
         if (files) {
           for (let filePath of files) {
-            filePath = normalizePath3(filePath);
+            filePath = normalizePath4(filePath);
             if (exclude && comparePaths(filePath, exclude, scriptDirectory, ignoreCase) === 0) {
               continue;
             }
@@ -196468,7 +196468,7 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
         const directories = tryGetDirectories(host, baseDirectory);
         if (directories) {
           for (const directory of directories) {
-            const directoryName = getBaseFileName(normalizePath3(directory));
+            const directoryName = getBaseFileName(normalizePath4(directory));
             if (directoryName !== "@types") {
               result.add(directoryResult(directoryName));
             }
@@ -196576,7 +196576,7 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
         const result = createNameAndKindSet();
         const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
         if (baseUrl) {
-          const absolute = normalizePath3(combinePaths(host.getCurrentDirectory(), baseUrl));
+          const absolute = normalizePath4(combinePaths(host.getCurrentDirectory(), baseUrl));
           getCompletionEntriesForDirectoryFragment(
             fragment,
             absolute,
@@ -196794,10 +196794,10 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
         const outDir = program.getCompilerOptions().outDir;
         const declarationDir = program.getCompilerOptions().declarationDir;
         const expandedPrefixDirectory = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + fragmentDirectory) : normalizedPrefixDirectory;
-        const baseDirectory = normalizePath3(combinePaths(packageDirectory, expandedPrefixDirectory));
+        const baseDirectory = normalizePath4(combinePaths(packageDirectory, expandedPrefixDirectory));
         const possibleInputBaseDirectoryForOutDir = isImports && outDir && getPossibleOriginalInputPathWithoutChangingExt(baseDirectory, ignoreCase, outDir, getCommonSourceDirectory2);
         const possibleInputBaseDirectoryForDeclarationDir = isImports && declarationDir && getPossibleOriginalInputPathWithoutChangingExt(baseDirectory, ignoreCase, declarationDir, getCommonSourceDirectory2);
-        const normalizedSuffix = normalizePath3(parsed.suffix);
+        const normalizedSuffix = normalizePath4(parsed.suffix);
         const declarationExtension = normalizedSuffix && getDeclarationEmitExtensionForPath("_" + normalizedSuffix);
         const inputExtension = normalizedSuffix ? getPossibleOriginalInputExtensionForExtension("_" + normalizedSuffix) : void 0;
         const matchingSuffixes = [
@@ -196849,7 +196849,7 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
         }
         function trimPrefixAndSuffix(path, prefix) {
           return firstDefined(matchingSuffixes, (suffix) => {
-            const inner = withoutStartAndEnd(normalizePath3(path), prefix, suffix);
+            const inner = withoutStartAndEnd(normalizePath4(path), prefix, suffix);
             return inner === void 0 ? void 0 : removeLeadingDirectorySeparator(inner);
           });
         }
@@ -196877,8 +196877,8 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
         if (!range) {
           return void 0;
         }
-        const text = sourceFile.text.slice(range.pos, position);
-        const match = tripleSlashDirectiveFragmentRegex.exec(text);
+        const text2 = sourceFile.text.slice(range.pos, position);
+        const match = tripleSlashDirectiveFragmentRegex.exec(text2);
         if (!match) {
           return void 0;
         }
@@ -196963,12 +196963,12 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
         }
         return result;
       }
-      function getDirectoryFragmentTextSpan(text, textStart) {
-        const index = Math.max(text.lastIndexOf(directorySeparator), text.lastIndexOf(altDirectorySeparator));
+      function getDirectoryFragmentTextSpan(text2, textStart) {
+        const index = Math.max(text2.lastIndexOf(directorySeparator), text2.lastIndexOf(altDirectorySeparator));
         const offset = index !== -1 ? index + 1 : 0;
-        const length2 = text.length - offset;
+        const length2 = text2.length - offset;
         return length2 === 0 || isIdentifierText(
-          text.substr(offset, length2),
+          text2.substr(offset, length2),
           99
           /* ESNext */
         ) ? void 0 : createTextSpan(textStart + offset, length2);
@@ -198501,12 +198501,12 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
           /** @param allSearchSymbols set of additional symbols for use by `includes`. */
           createSearch(location, symbol, comingFrom, searchOptions = {}) {
             const {
-              text = stripQuotes(symbolName(getLocalSymbolForExportDefault(symbol) || getNonModuleSymbolOfMergedModuleSymbol(symbol) || symbol)),
+              text: text2 = stripQuotes(symbolName(getLocalSymbolForExportDefault(symbol) || getNonModuleSymbolOfMergedModuleSymbol(symbol) || symbol)),
               allSearchSymbols = [symbol]
             } = searchOptions;
-            const escapedText = escapeLeadingUnderscores(text);
+            const escapedText = escapeLeadingUnderscores(text2);
             const parents = this.options.implementations && location ? getParentSymbolsOfPropertyAccess(location, symbol, this.checker) : void 0;
-            return { symbol, comingFrom, text, escapedText, parents, allSearchSymbols, includes: (sym) => contains(allSearchSymbols, sym) };
+            return { symbol, comingFrom, text: text2, escapedText, parents, allSearchSymbols, includes: (sym) => contains(allSearchSymbols, sym) };
           }
           /**
            * Callback to add references for a particular searched symbol.
@@ -198751,25 +198751,25 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
           if (!symbolName2 || !symbolName2.length) {
             return positions;
           }
-          const text = sourceFile.text;
-          const sourceLength = text.length;
+          const text2 = sourceFile.text;
+          const sourceLength = text2.length;
           const symbolNameLength = symbolName2.length;
-          let position = text.indexOf(symbolName2, container.pos);
+          let position = text2.indexOf(symbolName2, container.pos);
           while (position >= 0) {
             if (position > container.end) break;
             const endPosition = position + symbolNameLength;
             if ((position === 0 || !isIdentifierPart(
-              text.charCodeAt(position - 1),
+              text2.charCodeAt(position - 1),
               99
               /* Latest */
             )) && (endPosition === sourceLength || !isIdentifierPart(
-              text.charCodeAt(endPosition),
+              text2.charCodeAt(endPosition),
               99
               /* Latest */
             ))) {
               positions.push(position);
             }
-            position = text.indexOf(symbolName2, position + symbolNameLength + 1);
+            position = text2.indexOf(symbolName2, position + symbolNameLength + 1);
           }
           return positions;
         }
@@ -200212,8 +200212,8 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
         function isSignatureSupportingReturnAnnotation(node) {
           return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node) || isGetAccessorDeclaration(node);
         }
-        function addParameterHints(text, parameter, position, isFirstVariadicArgument) {
-          let hintText = `${isFirstVariadicArgument ? "..." : ""}${text}`;
+        function addParameterHints(text2, parameter, position, isFirstVariadicArgument) {
+          let hintText = `${isFirstVariadicArgument ? "..." : ""}${text2}`;
           let displayParts;
           if (shouldUseInteractiveInlayHints(preferences)) {
             displayParts = [getNodeDisplayPart(hintText, parameter), { text: ":" }];
@@ -200238,9 +200238,9 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
             whitespaceBefore: true
           });
         }
-        function addEnumMemberValueHints(text, position) {
+        function addEnumMemberValueHints(text2, position) {
           result.push({
-            text: `= ${text}`,
+            text: `= ${text2}`,
             position,
             kind: "Enum",
             whitespaceBefore: true
@@ -200937,10 +200937,10 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
           }
           return true;
         }
-        function getNodeDisplayPart(text, node) {
+        function getNodeDisplayPart(text2, node) {
           const sourceFile = node.getSourceFile();
           return {
-            text,
+            text: text2,
             span: createTextSpanFromNode(node, sourceFile),
             file: sourceFile.fileName
           };
@@ -201301,11 +201301,11 @@ ${newComment.split("\n").map((c) => ` * ${c}`).join("\n")}
         return { newText: openComment + closeComment, caretOffset: 3 };
       }
       function getIndentationStringAtPosition(sourceFile, position) {
-        const { text } = sourceFile;
+        const { text: text2 } = sourceFile;
         const lineStart = getLineStartPositionForPosition(position, sourceFile);
         let pos = lineStart;
-        for (; pos <= position && isWhiteSpaceSingleLine(text.charCodeAt(pos)); pos++) ;
-        return text.slice(lineStart, pos);
+        for (; pos <= position && isWhiteSpaceSingleLine(text2.charCodeAt(pos)); pos++) ;
+        return text2.slice(lineStart, pos);
       }
       function parameterDocComments(parameters, isJavaScriptFile, indentationStr, newLine) {
         return parameters.map(({ name, dotDotDotToken }, i) => {
@@ -204611,9 +204611,9 @@ ${content}
         TrailingTriviaOption2[TrailingTriviaOption2["Include"] = 2] = "Include";
         return TrailingTriviaOption2;
       })(TrailingTriviaOption || {});
-      function skipWhitespacesAndLineBreaks(text, start) {
+      function skipWhitespacesAndLineBreaks(text2, start) {
         return skipTrivia(
-          text,
+          text2,
           start,
           /*stopAfterLineBreak*/
           false,
@@ -204621,10 +204621,10 @@ ${content}
           true
         );
       }
-      function hasCommentsBeforeLineBreak(text, start) {
+      function hasCommentsBeforeLineBreak(text2, start) {
         let i = start;
-        while (i < text.length) {
-          const ch = text.charCodeAt(i);
+        while (i < text2.length) {
+          const ch = text2.charCodeAt(i);
           if (isWhiteSpaceSingleLine(ch)) {
             i++;
             continue;
@@ -204837,8 +204837,8 @@ ${content}
         replaceNodeWithNodes(sourceFile, oldNode, newNodes, options = useNonAdjustedPositions) {
           this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, options), newNodes, options);
         }
-        replaceNodeWithText(sourceFile, oldNode, text) {
-          this.replaceRangeWithText(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, useNonAdjustedPositions), text);
+        replaceNodeWithText(sourceFile, oldNode, text2) {
+          this.replaceRangeWithText(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, useNonAdjustedPositions), text2);
         }
         replaceNodeRangeWithNodes(sourceFile, startNode2, endNode2, newNodes, options = useNonAdjustedPositions) {
           this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode2, endNode2, options), newNodes, options);
@@ -204921,8 +204921,8 @@ ${content}
           const insertAtLineStart = isValidLocationToAddComment(sourceFile, startPosition);
           const token = getTouchingToken(sourceFile, insertAtLineStart ? startPosition : position);
           const indent3 = sourceFile.text.slice(lineStartPosition, startPosition);
-          const text = `${insertAtLineStart ? "" : this.newLineCharacter}//${commentText}${this.newLineCharacter}${indent3}`;
-          this.insertText(sourceFile, token.getStart(sourceFile), text);
+          const text2 = `${insertAtLineStart ? "" : this.newLineCharacter}//${commentText}${this.newLineCharacter}${indent3}`;
+          this.insertText(sourceFile, token.getStart(sourceFile), text2);
         }
         insertJsdocCommentBefore(sourceFile, node, tag) {
           const fnStart = node.getStart(sourceFile);
@@ -204965,11 +204965,11 @@ ${content}
         filterJSDocTags(sourceFile, parent2, predicate) {
           this.replaceJSDocComment(sourceFile, parent2, filter(flatMapToMutable(parent2.jsDoc, (j) => j.tags), predicate));
         }
-        replaceRangeWithText(sourceFile, range, text) {
-          this.changes.push({ kind: 3, sourceFile, range, text });
+        replaceRangeWithText(sourceFile, range, text2) {
+          this.changes.push({ kind: 3, sourceFile, range, text: text2 });
         }
-        insertText(sourceFile, pos, text) {
-          this.replaceRangeWithText(sourceFile, createRange(pos), text);
+        insertText(sourceFile, pos, text2) {
+          this.replaceRangeWithText(sourceFile, createRange(pos), text2);
         }
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
         tryInsertTypeAnnotation(sourceFile, node, type) {
@@ -205441,8 +205441,8 @@ ${options.prefix}` : "\n" : options.prefix
         }
         changesToText2.getTextChangesFromChanges = getTextChangesFromChanges;
         function newFileChanges(fileName, insertions, newLineCharacter, formatContext) {
-          const text = newFileChangesWorker(getScriptKindFromFileName(fileName), insertions, newLineCharacter, formatContext);
-          return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
+          const text2 = newFileChangesWorker(getScriptKindFromFileName(fileName), insertions, newLineCharacter, formatContext);
+          return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text2)], isNewFile: true };
         }
         changesToText2.newFileChanges = newFileChanges;
         function newFileChangesWorker(scriptKind, insertions, newLineCharacter, formatContext) {
@@ -205473,26 +205473,26 @@ ${options.prefix}` : "\n" : options.prefix
           }
           const { options = {}, range: { pos } } = change;
           const format = (n) => getFormattedTextOfNode(n, targetSourceFile, sourceFile, pos, options, newLineCharacter, formatContext, validate);
-          const text = change.kind === 2 ? change.nodes.map((n) => removeSuffix(format(n), newLineCharacter)).join(((_a = change.options) == null ? void 0 : _a.joiner) || newLineCharacter) : format(change.node);
-          const noIndent = options.indentation !== void 0 || getLineStartPositionForPosition(pos, targetSourceFile) === pos ? text : text.replace(/^\s+/, "");
+          const text2 = change.kind === 2 ? change.nodes.map((n) => removeSuffix(format(n), newLineCharacter)).join(((_a = change.options) == null ? void 0 : _a.joiner) || newLineCharacter) : format(change.node);
+          const noIndent = options.indentation !== void 0 || getLineStartPositionForPosition(pos, targetSourceFile) === pos ? text2 : text2.replace(/^\s+/, "");
           return (options.prefix || "") + noIndent + (!options.suffix || endsWith(noIndent, options.suffix) ? "" : options.suffix);
         }
         function getFormattedTextOfNode(nodeIn, targetSourceFile, sourceFile, pos, { indentation, prefix, delta }, newLineCharacter, formatContext, validate) {
-          const { node, text } = getNonformattedText(nodeIn, targetSourceFile, newLineCharacter);
-          if (validate) validate(node, text);
+          const { node, text: text2 } = getNonformattedText(nodeIn, targetSourceFile, newLineCharacter);
+          if (validate) validate(node, text2);
           const formatOptions = getFormatCodeSettingsForWriting(formatContext, targetSourceFile);
           const initialIndentation = indentation !== void 0 ? indentation : ts_formatting_exports.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, targetSourceFile) === pos);
           if (delta === void 0) {
             delta = ts_formatting_exports.SmartIndenter.shouldIndentChildNode(formatOptions, nodeIn) ? formatOptions.indentSize || 0 : 0;
           }
           const file = {
-            text,
+            text: text2,
             getLineAndCharacterOfPosition(pos2) {
               return getLineAndCharacterOfPosition(this, pos2);
             }
           };
           const changes = ts_formatting_exports.formatNodeGivenIndentation(node, file, targetSourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
-          return applyChanges(text, changes);
+          return applyChanges(text2, changes);
         }
         function getNonformattedText(node, sourceFile, newLineCharacter) {
           const writer = createWriter(newLineCharacter);
@@ -205507,12 +205507,12 @@ ${options.prefix}` : "\n" : options.prefix
         }
         changesToText2.getNonformattedText = getNonformattedText;
       })(changesToText || (changesToText = {}));
-      function applyChanges(text, changes) {
+      function applyChanges(text2, changes) {
         for (let i = changes.length - 1; i >= 0; i--) {
           const { span, newText } = changes[i];
-          text = `${text.substring(0, span.start)}${newText}${text.substring(textSpanEnd(span))}`;
+          text2 = `${text2.substring(0, span.start)}${newText}${text2.substring(textSpanEnd(span))}`;
         }
-        return text;
+        return text2;
       }
       function isTrivia2(s) {
         return skipTrivia(s, 0) === s.length;
@@ -205757,28 +205757,28 @@ ${options.prefix}` : "\n" : options.prefix
           }
         }
         let position = 0;
-        const text = sourceFile.text;
+        const text2 = sourceFile.text;
         if (lastPrologue) {
           position = lastPrologue.end;
           advancePastLineBreak();
           return position;
         }
-        const shebang = getShebang(text);
+        const shebang = getShebang(text2);
         if (shebang !== void 0) {
           position = shebang.length;
           advancePastLineBreak();
         }
-        const ranges = getLeadingCommentRanges(text, position);
+        const ranges = getLeadingCommentRanges(text2, position);
         if (!ranges) return position;
         let lastComment;
         let firstNodeLine;
         for (const range of ranges) {
           if (range.kind === 3) {
-            if (isPinnedComment(text, range.pos)) {
+            if (isPinnedComment(text2, range.pos)) {
               lastComment = { range, pinnedOrTripleSlash: true };
               continue;
             }
-          } else if (isRecognizedTripleSlashComment(text, range.pos, range.end)) {
+          } else if (isRecognizedTripleSlashComment(text2, range.pos, range.end)) {
             lastComment = { range, pinnedOrTripleSlash: true };
             continue;
           }
@@ -205801,11 +205801,11 @@ ${options.prefix}` : "\n" : options.prefix
         }
         return position;
         function advancePastLineBreak() {
-          if (position < text.length) {
-            const charCode = text.charCodeAt(position);
+          if (position < text2.length) {
+            const charCode = text2.charCodeAt(position);
             if (isLineBreak(charCode)) {
               position++;
-              if (position < text.length && charCode === 13 && text.charCodeAt(position) === 10) {
+              if (position < text2.length && charCode === 13 && text2.charCodeAt(position) === 10) {
                 position++;
               }
             }
@@ -206095,9 +206095,9 @@ ${options.prefix}` : "\n" : options.prefix
         1
         /* JSX */
       );
-      function getFormattingScanner(text, languageVariant, startPos, endPos, cb) {
+      function getFormattingScanner(text2, languageVariant, startPos, endPos, cb) {
         const scanner2 = languageVariant === 1 ? jsxScanner : standardScanner;
-        scanner2.setText(text);
+        scanner2.setText(text2);
         scanner2.resetTokenState(startPos);
         let wasNewLine = true;
         let leadingTrivia;
@@ -209185,9 +209185,9 @@ ${options.prefix}` : "\n" : options.prefix
             edits.push(createTextChangeFromStartLength(start, len, newText));
           }
         }
-        function recordInsert(start, text) {
-          if (text) {
-            edits.push(createTextChangeFromStartLength(start, 0, text));
+        function recordInsert(start, text2) {
+          if (text2) {
+            edits.push(createTextChangeFromStartLength(start, 0, text2));
           }
         }
         function applyRuleEdits(rule2, previousRange2, previousStartLine, currentRange, currentStartLine) {
@@ -211899,7 +211899,7 @@ ${options.prefix}` : "\n" : options.prefix
         nodeStartsNewLexicalEnvironment: () => nodeStartsNewLexicalEnvironment,
         noop: () => noop,
         noopFileWatcher: () => noopFileWatcher,
-        normalizePath: () => normalizePath3,
+        normalizePath: () => normalizePath4,
         normalizeSlashes: () => normalizeSlashes,
         normalizeSpans: () => normalizeSpans,
         not: () => not,
@@ -212935,7 +212935,7 @@ ${options.prefix}` : "\n" : options.prefix
         Errors2.ThrowProjectDoesNotContainDocument = ThrowProjectDoesNotContainDocument;
       })(Errors || (Errors = {}));
       function toNormalizedPath(fileName) {
-        return normalizePath3(fileName);
+        return normalizePath4(fileName);
       }
       function normalizedPathToPath(normalizedPath, currentDirectory, getCanonicalFileName) {
         const f = isRootedDiskPath(normalizedPath) ? normalizedPath : getNormalizedAbsolutePath(normalizedPath, currentDirectory);
@@ -213406,9 +213406,9 @@ ${options.prefix}` : "\n" : options.prefix
           return { line: line + 1, offset: character + 1 };
         }
         getFileTextAndSize(tempFileName) {
-          let text;
+          let text2;
           const fileName = tempFileName || this.info.fileName;
-          const getText = () => text === void 0 ? text = this.host.readFile(fileName) || "" : text;
+          const getText = () => text2 === void 0 ? text2 = this.host.readFile(fileName) || "" : text2;
           if (!hasTSFileExtension(this.info.fileName)) {
             const fileSize = this.host.getFileSize ? this.host.getFileSize(fileName) : getText().length;
             if (fileSize > maxFileSize) {
@@ -214104,7 +214104,7 @@ ${options.prefix}` : "\n" : options.prefix
           return this.currentDirectory;
         }
         getDefaultLibFileName() {
-          const nodeModuleBinDir = getDirectoryPath(normalizePath3(this.projectService.getExecutingFilePath()));
+          const nodeModuleBinDir = getDirectoryPath(normalizePath4(this.projectService.getExecutingFilePath()));
           return combinePaths(nodeModuleBinDir, getDefaultLibFileName(this.compilerOptions));
         }
         useCaseSensitiveFileNames() {
@@ -220361,13 +220361,13 @@ Dynamic files must always be opened with service's current directory or service 
       function formatDiagnosticToProtocol(diag2, includeFileName) {
         const start = diag2.file && convertToLocation(getLineAndCharacterOfPosition(diag2.file, diag2.start));
         const end = diag2.file && convertToLocation(getLineAndCharacterOfPosition(diag2.file, diag2.start + diag2.length));
-        const text = flattenDiagnosticMessageText(diag2.messageText, "\n");
+        const text2 = flattenDiagnosticMessageText(diag2.messageText, "\n");
         const { code, source } = diag2;
         const category = diagnosticCategoryName(diag2);
         const common = {
           start,
           end,
-          text,
+          text: text2,
           code,
           category,
           reportsUnnecessary: diag2.reportsUnnecessary,
@@ -222020,10 +222020,10 @@ ${json}${newLine}`;
                 const { file, project } = this.getFileAndProject(fileRequest);
                 const scriptInfo = project.getScriptInfoForNormalizedPath(file);
                 if (scriptInfo) {
-                  const text = getSnapshotText(scriptInfo.getSnapshot());
+                  const text2 = getSnapshotText(scriptInfo.getSnapshot());
                   msg += `
 
-File text of ${fileRequest.file}:${indent2(text)}
+File text of ${fileRequest.file}:${indent2(text2)}
 `;
                 }
               } catch {
@@ -222753,12 +222753,12 @@ Project '${project.projectName}' (${ProjectKind[project.projectKind]}) ${counter
             return {
               ...hint,
               position: scriptInfo.positionToLineOffset(position),
-              displayParts: displayParts == null ? void 0 : displayParts.map(({ text, span, file: file2 }) => {
+              displayParts: displayParts == null ? void 0 : displayParts.map(({ text: text2, span, file: file2 }) => {
                 if (span) {
                   Debug.assertIsDefined(file2, "Target file should be defined together with its span.");
                   const scriptInfo2 = this.projectService.getScriptInfo(file2);
                   return {
-                    text,
+                    text: text2,
                     span: {
                       start: scriptInfo2.positionToLineOffset(span.start),
                       end: scriptInfo2.positionToLineOffset(span.start + span.length),
@@ -222766,7 +222766,7 @@ Project '${project.projectName}' (${ProjectKind[project.projectKind]}) ${counter
                     }
                   };
                 } else {
-                  return { text };
+                  return { text: text2 };
                 }
               })
             };
@@ -223395,7 +223395,7 @@ Project '${project.projectName}' (${ProjectKind[project.projectKind]}) ${counter
           if (!fileName) {
             return;
           }
-          const file = normalizePath3(fileName);
+          const file = normalizePath4(fileName);
           this.projectService.closeClientFile(file);
         }
         mapLocationNavigationBarItems(items, scriptInfo) {
@@ -223929,7 +223929,7 @@ Additional information: BADCLIENT: Bad error code, ${badCode} not found in range
         }
         getCanonicalFileName(fileName) {
           const name = this.host.useCaseSensitiveFileNames ? fileName : toFileNameLowerCase(fileName);
-          return normalizePath3(name);
+          return normalizePath4(name);
         }
         exit() {
         }
@@ -224168,17 +224168,17 @@ Additional information: BADCLIENT: Bad error code, ${badCode} not found in range
         const { line, character } = computeLineAndCharacterOfPosition(computeLineStarts(newText), renameLocation);
         return { line: line + 1, offset: character + 1 };
       }
-      function applyEdits(text, textFilename, edits) {
+      function applyEdits(text2, textFilename, edits) {
         for (const { fileName, textChanges: textChanges2 } of edits) {
           if (fileName !== textFilename) {
             continue;
           }
           for (let i = textChanges2.length - 1; i >= 0; i--) {
             const { newText, span: { start, length: length2 } } = textChanges2[i];
-            text = text.slice(0, start) + newText + text.slice(start + length2);
+            text2 = text2.slice(0, start) + newText + text2.slice(start + length2);
           }
         }
-        return text;
+        return text2;
       }
       function referenceEntryToReferencesResponseItem(projectService, { fileName, textSpan, contextSpan, isWriteAccess: isWriteAccess2, isDefinition }, { disableLineTextInReferences }) {
         const scriptInfo = Debug.checkDefined(projectService.getScriptInfo(fileName));
@@ -224634,17 +224634,17 @@ Additional information: BADCLIENT: Bad error code, ${badCode} not found in range
           }
           return this.buildTreeFromBottom(interiorNodes);
         }
-        static linesFromText(text) {
-          const lineMap = computeLineStarts(text);
+        static linesFromText(text2) {
+          const lineMap = computeLineStarts(text2);
           if (lineMap.length === 0) {
             return { lines: [], lineMap };
           }
           const lines = new Array(lineMap.length);
           const lc = lineMap.length - 1;
           for (let lmi = 0; lmi < lc; lmi++) {
-            lines[lmi] = text.substring(lineMap[lmi], lineMap[lmi + 1]);
+            lines[lmi] = text2.substring(lineMap[lmi], lineMap[lmi + 1]);
           }
-          const endText = text.substring(lineMap[lc]);
+          const endText = text2.substring(lineMap[lc]);
           if (endText.length > 0) {
             lines[lc] = endText;
           } else {
@@ -224916,8 +224916,8 @@ Additional information: BADCLIENT: Bad error code, ${badCode} not found in range
         }
       };
       var LineLeaf = class {
-        constructor(text) {
-          this.text = text;
+        constructor(text2) {
+          this.text = text2;
         }
         isLeaf() {
           return true;
@@ -225246,7 +225246,7 @@ Additional information: BADCLIENT: Bad error code, ${badCode} not found in range
 
 // node_modules/@adversarylabs/sdk/dist/index.js
 var import__2 = __toESM(require__(), 1);
-import { mkdir, readFile as readFile3, readdir as readdir3, writeFile } from "node:fs/promises";
+import { mkdir, readFile as readFile5, readdir as readdir3, writeFile } from "node:fs/promises";
 import { dirname, isAbsolute as isAbsolute2, relative as relative2, resolve as resolve2 } from "node:path";
 
 // node_modules/@adversarylabs/sdk/dist/model.js
@@ -225262,6 +225262,9 @@ var MAX_PROMPT_BYTES = 256 << 10;
 var MAX_INPUT_BYTES = 4 << 20;
 var MAX_SCHEMA_BYTES = 512 << 10;
 var MAX_RESPONSE_BYTES = 4 << 20;
+var DEFAULT_BROKER_MAXIMUM_ATTEMPTS = 3;
+var DEFAULT_BROKER_RETRY_DELAY_MS = 250;
+var MAX_BROKER_RETRY_DELAY_MS = 5e3;
 var ModelUnavailableError = class extends Error {
   constructor(message = "Model review is unavailable for this adversary execution.") {
     super(message);
@@ -225296,7 +225299,10 @@ function unavailableModel() {
 var BrokerReviewModel = class {
   endpoint;
   #token;
-  constructor(endpoint, token) {
+  #maximumAttempts;
+  #initialRetryDelayMs;
+  #random;
+  constructor(endpoint, token, options = {}) {
     const parsed = new URL(endpoint);
     if (parsed.protocol !== "http:" || parsed.hostname !== "127.0.0.1" && parsed.hostname !== "::1" && parsed.hostname !== "[::1]" && parsed.hostname !== "localhost") {
       throw new ModelReviewError("The model broker endpoint must use HTTP on the local loopback interface.", { code: "invalid_broker_endpoint" });
@@ -225308,6 +225314,13 @@ var BrokerReviewModel = class {
     }
     this.endpoint = parsed.toString();
     this.#token = token;
+    const maximumAttempts = options.maximumAttempts ?? DEFAULT_BROKER_MAXIMUM_ATTEMPTS;
+    const initialRetryDelayMs = options.initialRetryDelayMs ?? DEFAULT_BROKER_RETRY_DELAY_MS;
+    requireIntegerRange(maximumAttempts, "maximumAttempts", 1, 5);
+    requireIntegerRange(initialRetryDelayMs, "initialRetryDelayMs", 0, MAX_BROKER_RETRY_DELAY_MS);
+    this.#maximumAttempts = maximumAttempts;
+    this.#initialRetryDelayMs = initialRetryDelayMs;
+    this.#random = options.random ?? Math.random;
   }
   async review(request) {
     if (request.tools?.repository !== void 0) {
@@ -225317,68 +225330,102 @@ var BrokerReviewModel = class {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), normalized.budget.timeoutMs);
     try {
-      let response;
-      try {
-        response = await fetch(this.endpoint, {
-          method: "POST",
-          headers: {
-            accept: "application/json",
-            authorization: `Bearer ${this.#token}`,
-            "content-type": "application/json",
-            "x-adversary-model-protocol": String(ADVERSARY_MODEL_PROTOCOL_VERSION)
-          },
-          body: JSON.stringify({
-            protocolVersion: ADVERSARY_MODEL_PROTOCOL_VERSION,
-            prompt: normalized.prompt,
-            input: normalized.input,
-            schema: normalized.schema,
-            budget: normalized.budget
-          }),
-          signal: controller.signal
-        });
-      } catch (error) {
-        if (controller.signal.aborted) {
-          throw modelTimeoutError(normalized.budget.timeoutMs);
+      for (let attempt = 1; attempt <= this.#maximumAttempts; attempt += 1) {
+        try {
+          return await this.#reviewOnce(normalized, controller.signal);
+        } catch (error) {
+          if (!(error instanceof ModelReviewError) || !error.retryable || controller.signal.aborted || attempt === this.#maximumAttempts) {
+            throw error;
+          }
+          const exponential = Math.min(MAX_BROKER_RETRY_DELAY_MS, this.#initialRetryDelayMs * 2 ** (attempt - 1));
+          const jittered = Math.round(exponential * (0.75 + 0.5 * this.#random()));
+          await waitForRetry(jittered, controller.signal, normalized.budget.timeoutMs);
         }
-        throw new ModelReviewError(`Model broker request failed: ${error instanceof Error ? error.message : String(error)}`, { code: "broker_unavailable", retryable: true });
       }
-      let body;
-      try {
-        body = await readBoundedResponse(response);
-      } catch (error) {
-        if (controller.signal.aborted) {
-          throw modelTimeoutError(normalized.budget.timeoutMs);
-        }
-        throw error;
-      }
-      let decoded;
-      try {
-        decoded = JSON.parse(body);
-      } catch {
-        throw new ModelReviewError("Model broker returned malformed JSON.", {
-          code: "invalid_broker_response"
-        });
-      }
-      if (!response.ok) {
-        const failure = decoded;
-        throw new ModelReviewError(failure.error?.message ?? `Model broker returned HTTP ${response.status}.`, {
-          code: failure.error?.code ?? "model_review_failed",
-          retryable: failure.error?.retryable ?? response.status >= 500
-        });
-      }
-      const envelope = requireBrokerResponse(decoded);
-      validateModelOutput(normalized.schema, envelope.output);
-      return {
-        output: envelope.output,
-        provider: envelope.provider,
-        model: envelope.model,
-        ...envelope.usage === void 0 ? {} : { usage: envelope.usage }
-      };
+      throw new ModelReviewError("Model broker retry loop exhausted unexpectedly.", {
+        code: "broker_unavailable",
+        retryable: true
+      });
     } finally {
       clearTimeout(timeout);
     }
   }
+  async #reviewOnce(normalized, signal) {
+    let response;
+    try {
+      response = await fetch(this.endpoint, {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          authorization: `Bearer ${this.#token}`,
+          "content-type": "application/json",
+          "x-adversary-model-protocol": String(ADVERSARY_MODEL_PROTOCOL_VERSION)
+        },
+        body: JSON.stringify({
+          protocolVersion: ADVERSARY_MODEL_PROTOCOL_VERSION,
+          prompt: normalized.prompt,
+          input: normalized.input,
+          schema: normalized.schema,
+          budget: normalized.budget
+        }),
+        signal
+      });
+    } catch (error) {
+      if (signal.aborted) {
+        throw modelTimeoutError(normalized.budget.timeoutMs);
+      }
+      throw new ModelReviewError(`Model broker request failed: ${error instanceof Error ? error.message : String(error)}`, { code: "broker_unavailable", retryable: true });
+    }
+    let body;
+    try {
+      body = await readBoundedResponse(response);
+    } catch (error) {
+      if (signal.aborted) {
+        throw modelTimeoutError(normalized.budget.timeoutMs);
+      }
+      throw error;
+    }
+    let decoded;
+    try {
+      decoded = JSON.parse(body);
+    } catch {
+      throw new ModelReviewError("Model broker returned malformed JSON.", {
+        code: "invalid_broker_response"
+      });
+    }
+    if (!response.ok) {
+      const failure = decoded;
+      throw new ModelReviewError(failure.error?.message ?? `Model broker returned HTTP ${response.status}.`, {
+        code: failure.error?.code ?? "model_review_failed",
+        retryable: failure.error?.retryable ?? response.status >= 500
+      });
+    }
+    const envelope = requireBrokerResponse(decoded);
+    validateModelOutput(normalized.schema, envelope.output);
+    return {
+      output: envelope.output,
+      provider: envelope.provider,
+      model: envelope.model,
+      ...envelope.usage === void 0 ? {} : { usage: envelope.usage }
+    };
+  }
 };
+async function waitForRetry(delayMs, signal, timeoutMs) {
+  if (signal.aborted) {
+    throw modelTimeoutError(timeoutMs);
+  }
+  await new Promise((resolve3, reject) => {
+    const onAbort = () => {
+      clearTimeout(timer);
+      reject(modelTimeoutError(timeoutMs));
+    };
+    const timer = setTimeout(() => {
+      signal.removeEventListener("abort", onAbort);
+      resolve3();
+    }, delayMs);
+    signal.addEventListener("abort", onAbort, { once: true });
+  });
+}
 function modelTimeoutError(timeoutMs) {
   return new ModelReviewError(`Model review exceeded its ${timeoutMs}ms timeout.`, {
     code: "model_timeout",
@@ -225541,9 +225588,381 @@ function validateModelOutput(schema, output) {
   }
 }
 
-// node_modules/@adversarylabs/sdk/dist/repo-index.js
-import { open, readFile } from "node:fs/promises";
+// node_modules/@adversarylabs/sdk/dist/outcome-context.js
+import { readFile } from "node:fs/promises";
+var ADVERSARY_OUTCOME_CONTEXT_ENV = "ADVERSARY_OUTCOME_CONTEXT";
+var OUTCOME_CONTEXT_SCHEMA_VERSION = "adversary.outcome-context.v1";
+var OUTCOME_CONTEXT_MAX_SOURCE_CHARACTERS = 32 << 10;
+var OUTCOME_CONTEXT_MAX_FILE_BYTES = 384 << 10;
+var MAX_PROVIDER_CHARACTERS = 100;
+var MAX_REPOSITORY_CHARACTERS = 500;
+var MAX_INTENT_TEXT_CHARACTERS = 500;
+async function openOutcomeContext(path) {
+  const raw = await readFile(path, "utf8");
+  if (Buffer.byteLength(raw) > OUTCOME_CONTEXT_MAX_FILE_BYTES) {
+    throw new Error(`Invalid outcome context at ${path}: file is too large.`);
+  }
+  return parseOutcomeContext(JSON.parse(raw), path);
+}
+async function outcomeContextFromEnvironment(env = process.env) {
+  const path = env[ADVERSARY_OUTCOME_CONTEXT_ENV]?.trim();
+  return path ? openOutcomeContext(path) : null;
+}
+function parseOutcomeContext(value, source = "value") {
+  if (!isRecord(value) || value.schema_version !== OUTCOME_CONTEXT_SCHEMA_VERSION) {
+    throw new Error(`Invalid outcome context at ${source}: schema_version must be ${OUTCOME_CONTEXT_SCHEMA_VERSION}.`);
+  }
+  assertKeys(value, ["schema_version", "subject", "sources", "intent"], source);
+  if (!isRecord(value.subject)) {
+    throw new Error(`Invalid outcome context at ${source}: subject must be an object.`);
+  }
+  assertKeys(value.subject, ["provider", "repository", "pull_request"], `${source}.subject`);
+  if (value.subject.provider !== void 0 && (typeof value.subject.provider !== "string" || characterLength(value.subject.provider) > MAX_PROVIDER_CHARACTERS)) {
+    throw new Error(`Invalid outcome context at ${source}: subject.provider must be a string.`);
+  }
+  if (value.subject.repository !== void 0 && (typeof value.subject.repository !== "string" || characterLength(value.subject.repository) > MAX_REPOSITORY_CHARACTERS)) {
+    throw new Error(`Invalid outcome context at ${source}: subject.repository must be a string.`);
+  }
+  if (!Array.isArray(value.sources) || value.sources.length === 0 || value.sources.length > 2) {
+    throw new Error(`Invalid outcome context at ${source}: sources must contain one or two items.`);
+  }
+  const sources = [];
+  const kinds = /* @__PURE__ */ new Set();
+  for (const item of value.sources) {
+    if (!isRecord(item) || !isSourceKind(item.kind) || typeof item.text !== "string") {
+      throw new Error(`Invalid outcome context at ${source}: each source requires kind and text.`);
+    }
+    assertKeys(item, ["kind", "text"], `${source}.sources`);
+    if (item.text.trim() === "") {
+      throw new Error(`Invalid outcome context at ${source}: source text must not be empty.`);
+    }
+    if (characterLength(item.text) > OUTCOME_CONTEXT_MAX_SOURCE_CHARACTERS) {
+      throw new Error(`Invalid outcome context at ${source}: source text is too long.`);
+    }
+    if (kinds.has(item.kind)) {
+      throw new Error(`Invalid outcome context at ${source}: source kinds must be unique.`);
+    }
+    kinds.add(item.kind);
+    sources.push(Object.freeze({ kind: item.kind, text: item.text }));
+  }
+  const intent = parseIntent(value.intent, source);
+  const pullRequest = value.subject.pull_request;
+  if (pullRequest !== void 0 && (!Number.isInteger(pullRequest) || pullRequest < 1)) {
+    throw new Error(`Invalid outcome context at ${source}: subject.pull_request must be positive.`);
+  }
+  return Object.freeze({
+    schemaVersion: OUTCOME_CONTEXT_SCHEMA_VERSION,
+    subject: Object.freeze({
+      ...typeof value.subject.provider === "string" ? { provider: value.subject.provider } : {},
+      ...typeof value.subject.repository === "string" ? { repository: value.subject.repository } : {},
+      ...typeof pullRequest === "number" ? { pullRequest } : {}
+    }),
+    sources: Object.freeze(sources),
+    intent
+  });
+}
+function parseIntent(value, source) {
+  if (!isRecord(value)) {
+    throw new Error(`Invalid outcome context at ${source}: intent must be an object.`);
+  }
+  assertKeys(value, [
+    "objective",
+    "confidence",
+    "expected_effects",
+    "must_preserve",
+    "affected_boundaries",
+    "ambiguities"
+  ], `${source}.intent`);
+  if (typeof value.objective !== "string" || value.objective.trim() === "" || characterLength(value.objective) > MAX_INTENT_TEXT_CHARACTERS) {
+    throw new Error(`Invalid outcome context at ${source}: intent.objective must not be empty.`);
+  }
+  if (!isConfidence(value.confidence)) {
+    throw new Error(`Invalid outcome context at ${source}: intent.confidence is invalid.`);
+  }
+  return Object.freeze({
+    objective: value.objective,
+    confidence: value.confidence,
+    expectedEffects: parseStringList(value.expected_effects, source, "expected_effects"),
+    mustPreserve: parseStringList(value.must_preserve, source, "must_preserve"),
+    affectedBoundaries: parseStringList(value.affected_boundaries, source, "affected_boundaries"),
+    ambiguities: parseStringList(value.ambiguities, source, "ambiguities")
+  });
+}
+function parseStringList(value, source, field) {
+  if (!Array.isArray(value) || value.length > 12 || value.some((item) => typeof item !== "string" || item.trim() === "" || characterLength(item) > MAX_INTENT_TEXT_CHARACTERS)) {
+    throw new Error(`Invalid outcome context at ${source}: intent.${field} must be a bounded string array.`);
+  }
+  return Object.freeze([...value]);
+}
+function characterLength(value) {
+  return [...value].length;
+}
+function isConfidence(value) {
+  return value === "low" || value === "medium" || value === "high";
+}
+function isSourceKind(value) {
+  return value === "pull_request_title" || value === "pull_request_body";
+}
+function isRecord(value) {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+function assertKeys(value, allowed, source) {
+  const allowedKeys = new Set(allowed);
+  const unknown = Object.keys(value).find((key) => !allowedKeys.has(key));
+  if (unknown !== void 0) {
+    throw new Error(`Invalid outcome context at ${source}: unknown property ${unknown}.`);
+  }
+}
+
+// node_modules/@adversarylabs/sdk/dist/repo-graph.js
+import { readFile as readFile2 } from "node:fs/promises";
 import { join } from "node:path";
+import { DatabaseSync } from "node:sqlite";
+var ADVERSARY_REPO_GRAPH_ENV = "ADVERSARY_REPO_GRAPH";
+var REPO_GRAPH_SCHEMA_VERSION = "v2";
+var REPO_GRAPH_ADAPTER_REVISION = "go-ast-v1+ts-syntax-v1";
+var RepoGraphUnavailableError = class extends Error {
+  code = "repo_graph_unavailable";
+  constructor(message) {
+    super(message);
+    this.name = "RepoGraphUnavailableError";
+  }
+};
+async function openRepoGraph(dir) {
+  const raw = await readFile2(join(dir, "meta.json"), "utf8");
+  const meta = JSON.parse(raw);
+  if (meta.schemaVersion !== REPO_GRAPH_SCHEMA_VERSION || meta.adapterRevision !== REPO_GRAPH_ADAPTER_REVISION) {
+    throw new RepoGraphUnavailableError(`unsupported repo-graph schema ${meta.schemaVersion}/${meta.adapterRevision}`);
+  }
+  const database = new DatabaseSync(join(dir, "graph.sqlite"), { readOnly: true });
+  return new SQLiteRepoGraph(dir, meta, database);
+}
+async function repoGraphFromEnvironment(env = process.env) {
+  const dir = env[ADVERSARY_REPO_GRAPH_ENV]?.trim();
+  if (!dir)
+    return null;
+  try {
+    return await openRepoGraph(dir);
+  } catch {
+    return null;
+  }
+}
+var SQLiteRepoGraph = class {
+  dir;
+  meta;
+  database;
+  constructor(dir, meta, database) {
+    this.dir = dir;
+    this.meta = meta;
+    this.database = database;
+  }
+  files(query = {}) {
+    const { limit, cursor } = bounds(query.limit, query.cursor);
+    const glob = query.glob === void 0 ? "" : globToLike(query.glob);
+    const rows = this.database.prepare(`SELECT id,path,language,size,hash,module FROM files
+      WHERE id > ? AND (? = '' OR language = ?) AND (? = '' OR path LIKE ? ESCAPE '\\')
+      ORDER BY id LIMIT ?`).all(cursor, query.language ?? "", query.language ?? "", glob, glob, limit + 1);
+    return page(rows.map(fileRow), limit, (item) => item.id);
+  }
+  symbolAt(path, line, column = 0) {
+    validPath(path);
+    if (!Number.isInteger(line) || line < 1 || !Number.isInteger(column) || column < 0) {
+      throw new Error("line must be positive and column non-negative");
+    }
+    const row = this.database.prepare(`${symbolSelect}
+      WHERE f.path=? AND (s.start_line < ? OR (s.start_line=? AND s.start_col<=?))
+      AND (s.end_line > ? OR (s.end_line=? AND s.end_col>=?))
+      ORDER BY (s.end_line-s.start_line) ASC, s.id ASC LIMIT 1`).get(normalizePath(path), line, line, column, line, line, column);
+    return row === void 0 ? void 0 : symbolRow(row);
+  }
+  symbols(query = {}) {
+    if (query.path !== void 0)
+      validPath(query.path);
+    const { limit, cursor } = bounds(query.limit, query.cursor);
+    const rows = this.database.prepare(`${symbolSelect}
+      WHERE s.id>? AND (?='' OR f.path=?) AND (?='' OR s.name=?) AND (?='' OR s.kind=?)
+      ORDER BY s.id LIMIT ?`).all(cursor, query.path ?? "", normalizePath(query.path ?? ""), query.name ?? "", query.name ?? "", query.kind ?? "", query.kind ?? "", limit + 1);
+    return page(rows.map(symbolRow), limit, (item) => item.id);
+  }
+  definitions(query) {
+    return this.symbols(query);
+  }
+  references(query) {
+    return this.relations(query, "references", false);
+  }
+  callers(query) {
+    return this.relations(query, "calls", false);
+  }
+  callees(query) {
+    return this.relations(query, "calls", true);
+  }
+  implementations(query) {
+    return this.relations(query, "implements", false);
+  }
+  importsOf(path, cursor, limit) {
+    return this.fileRelations(path, cursor, limit, true);
+  }
+  importersOf(path, cursor, limit) {
+    return this.fileRelations(path, cursor, limit, false);
+  }
+  relatedTests(options) {
+    if (options.path !== void 0)
+      validPath(options.path);
+    const symbolId = options.symbolId ?? 0;
+    if (!Number.isInteger(symbolId) || symbolId < 0)
+      throw new Error("symbolId must be non-negative");
+    const { limit, cursor } = bounds(options.limit, options.cursor);
+    const rows = this.database.prepare(`SELECT tl.id,sf.path AS source_path,
+      tl.source_symbol_id,tf.path AS test_path,tl.test_symbol_id,tl.confidence,tl.reason
+      FROM test_links tl JOIN files sf ON sf.id=tl.source_file_id
+      JOIN files tf ON tf.id=tl.test_file_id
+      WHERE tl.id>? AND (?='' OR sf.path=?)
+      AND (?=0 OR tl.source_symbol_id=? OR sf.id=(SELECT file_id FROM symbols WHERE id=?))
+      ORDER BY tl.id LIMIT ?`).all(cursor, options.path ?? "", normalizePath(options.path ?? ""), symbolId, symbolId, symbolId, limit + 1);
+    return testLinkPage(rows.map(testLinkRow), limit);
+  }
+  close() {
+    this.database.close();
+  }
+  relations(query, kind, outgoing) {
+    if (!Number.isInteger(query.symbolId) || query.symbolId < 1) {
+      throw new Error("symbolId must be positive");
+    }
+    const { limit, cursor } = bounds(query.limit, query.cursor);
+    const column = outgoing ? "from_symbol_id" : "to_symbol_id";
+    const rows = this.database.prepare(`${edgeSelect}
+      WHERE e.id>? AND e.kind=? AND e.${column}=? ORDER BY e.id LIMIT ?`).all(cursor, kind, query.symbolId, limit + 1);
+    return page(rows.map(edgeRow), limit, (item) => item.id);
+  }
+  fileRelations(path, cursorValue, limitValue, outgoing) {
+    validPath(path);
+    const { limit, cursor } = bounds(limitValue, cursorValue);
+    const condition = outgoing ? "ff.path=?" : "tf.module=(SELECT module FROM files WHERE path=?)";
+    const rows = this.database.prepare(`${edgeSelect}
+      WHERE e.id>? AND e.kind='imports' AND ${condition} ORDER BY e.id LIMIT ?`).all(cursor, normalizePath(path), limit + 1);
+    return page(rows.map(edgeRow), limit, (item) => item.id);
+  }
+};
+var symbolSelect = `SELECT s.id,s.name,s.kind,f.path,s.start_line,s.start_col,
+  s.end_line,s.end_col,s.container_id,s.exported,f.language,s.adapter_data
+  FROM symbols s JOIN files f ON f.id=s.file_id`;
+var edgeSelect = `SELECT e.id,ff.path AS from_path,e.from_symbol_id,
+  COALESCE(tf.path,'') AS to_path,e.to_symbol_id,
+  COALESCE(e.unresolved_target,'') AS unresolved_target,e.kind,e.line,e.column,
+  e.confidence,e.adapter FROM edges e JOIN files ff ON ff.id=e.from_file_id
+  LEFT JOIN files tf ON tf.id=e.to_file_id`;
+function fileRow(row) {
+  return {
+    id: number(row.id),
+    path: text(row.path),
+    language: text(row.language),
+    size: number(row.size),
+    hash: text(row.hash),
+    ...text(row.module) === "" ? {} : { module: text(row.module) }
+  };
+}
+function symbolRow(row) {
+  return {
+    id: number(row.id),
+    name: text(row.name),
+    kind: text(row.kind),
+    path: text(row.path),
+    startLine: number(row.start_line),
+    startColumn: number(row.start_col),
+    endLine: number(row.end_line),
+    endColumn: number(row.end_col),
+    ...row.container_id === null ? {} : { containerId: number(row.container_id) },
+    exported: number(row.exported) !== 0,
+    language: text(row.language),
+    ...text(row.adapter_data) === "" ? {} : { metadata: text(row.adapter_data) }
+  };
+}
+function edgeRow(row) {
+  return {
+    id: number(row.id),
+    fromPath: text(row.from_path),
+    ...row.from_symbol_id === null ? {} : { fromSymbolId: number(row.from_symbol_id) },
+    ...text(row.to_path) === "" ? {} : { toPath: text(row.to_path) },
+    ...row.to_symbol_id === null ? {} : { toSymbolId: number(row.to_symbol_id) },
+    ...text(row.unresolved_target) === "" ? {} : { unresolvedTarget: text(row.unresolved_target) },
+    kind: text(row.kind),
+    line: number(row.line),
+    column: number(row.column),
+    confidence: number(row.confidence),
+    adapter: text(row.adapter)
+  };
+}
+function testLinkRow(row) {
+  return {
+    id: number(row.id),
+    sourcePath: text(row.source_path),
+    ...row.source_symbol_id === null ? {} : { sourceSymbolId: number(row.source_symbol_id) },
+    testPath: text(row.test_path),
+    ...row.test_symbol_id === null ? {} : { testSymbolId: number(row.test_symbol_id) },
+    confidence: number(row.confidence),
+    reason: text(row.reason)
+  };
+}
+function page(items, limit, id) {
+  const hasMore = items.length > limit;
+  const bounded = hasMore ? items.slice(0, limit) : items;
+  const nextCursor = hasMore ? String(id(bounded[bounded.length - 1])) : void 0;
+  return {
+    items: bounded,
+    ...nextCursor === void 0 ? {} : { nextCursor }
+  };
+}
+function testLinkPage(items, limit) {
+  const bounded = page(items, limit, (item) => item.id);
+  return {
+    items: bounded.items.map(({ id: _id, ...item }) => item),
+    ...bounded.nextCursor === void 0 ? {} : { nextCursor: bounded.nextCursor }
+  };
+}
+function bounds(limitValue, cursorValue) {
+  const limit = limitValue ?? 100;
+  if (!Number.isInteger(limit) || limit < 1 || limit > 500) {
+    throw new Error("limit must be an integer from 1 through 500");
+  }
+  const cursor = cursorValue === void 0 || cursorValue === "" ? 0 : Number(cursorValue);
+  if (!Number.isSafeInteger(cursor) || cursor < 0) {
+    throw new Error("cursor must be a non-negative integer");
+  }
+  return { limit, cursor };
+}
+function validPath(path) {
+  const normalized = normalizePath(path);
+  if (normalized === "" || normalized.startsWith("/") || normalized === ".." || normalized.startsWith("../") || normalized.includes("/../") || normalized.includes("\0") || normalized.includes("//")) {
+    throw new Error("path must be normalized and repository-relative");
+  }
+}
+function normalizePath(path) {
+  return path.replaceAll("\\", "/").replace(/^\.\//, "");
+}
+function globToLike(glob) {
+  if (glob.includes("..") || glob.startsWith("/") || glob.includes("\0")) {
+    throw new Error("glob must be repository-relative");
+  }
+  return normalizePath(glob).replaceAll("\\", "\\\\").replaceAll("%", "\\%").replaceAll("_", "\\_").replaceAll("*", "%").replaceAll("?", "_");
+}
+function text(value) {
+  if (typeof value === "string")
+    return value;
+  if (value === null || value === void 0)
+    return "";
+  throw new Error("repo graph returned a non-string value");
+}
+function number(value) {
+  if (typeof value === "number")
+    return value;
+  if (typeof value === "bigint")
+    return Number(value);
+  throw new Error("repo graph returned a non-number value");
+}
+
+// node_modules/@adversarylabs/sdk/dist/repo-index.js
+import { open, readFile as readFile3 } from "node:fs/promises";
+import { join as join2 } from "node:path";
 import { createInterface } from "node:readline";
 var ADVERSARY_REPO_INDEX_ENV = "ADVERSARY_REPO_INDEX";
 var REPO_INDEX_SCHEMA_VERSION = "v1";
@@ -225555,13 +225974,13 @@ var RepoIndexUnavailableError = class extends Error {
   }
 };
 async function openRepoIndex(dir) {
-  const metaRaw = await readFile(join(dir, "meta.json"), "utf8");
+  const metaRaw = await readFile3(join2(dir, "meta.json"), "utf8");
   const meta = JSON.parse(metaRaw);
   if (meta.schemaVersion !== REPO_INDEX_SCHEMA_VERSION) {
     throw new RepoIndexUnavailableError(`unsupported repo-index schema ${meta.schemaVersion} (want ${REPO_INDEX_SCHEMA_VERSION})`);
   }
-  const files = await readJsonl(join(dir, "files.jsonl"));
-  const edges = await readJsonl(join(dir, "edges.jsonl"));
+  const files = await readJsonl(join2(dir, "files.jsonl"));
+  const edges = await readJsonl(join2(dir, "edges.jsonl"));
   return new MemoryRepoIndex(dir, meta, files, edges);
 }
 async function repoIndexFromEnvironment(env = process.env) {
@@ -225602,15 +226021,15 @@ var MemoryRepoIndex = class {
     return out;
   }
   async file(path) {
-    const normalized = normalizePath(path);
+    const normalized = normalizePath2(path);
     return this.files.find((file) => file.path === normalized);
   }
   async importsOf(path) {
-    const normalized = normalizePath(path);
+    const normalized = normalizePath2(path);
     return this.edges.filter((edge) => edge.from === normalized && edge.kind === "import");
   }
   async importersOf(path) {
-    const normalized = normalizePath(path);
+    const normalized = normalizePath2(path);
     const dir = dirOf(normalized);
     return this.edges.filter((edge) => {
       if (edge.kind !== "import") {
@@ -225620,7 +226039,7 @@ var MemoryRepoIndex = class {
     });
   }
 };
-function normalizePath(path) {
+function normalizePath2(path) {
   return path.replaceAll("\\", "/").replace(/^\.\//, "");
 }
 function dirOf(path) {
@@ -225652,10 +226071,12 @@ async function readJsonl(path) {
 }
 
 // node_modules/@adversarylabs/sdk/dist/repository-model.js
+import { execFile } from "node:child_process";
 import { createReadStream } from "node:fs";
 import { lstat, readdir, realpath } from "node:fs/promises";
 import { isAbsolute, relative, resolve, sep } from "node:path";
 import { createInterface as createInterface2 } from "node:readline";
+import { promisify } from "node:util";
 var DEFAULT_MAX_ROUNDS = 6;
 var MAX_MAX_ROUNDS = 12;
 var DEFAULT_MAX_TOOL_CALLS = 24;
@@ -225674,6 +226095,7 @@ var MAX_OPERATION_PATH_LENGTH = 4096;
 var MAX_OPERATIONS_PER_ROUND = 8;
 var PLANNING_OUTPUT_TOKENS = 1500;
 var DEFAULT_PLANNING_TIMEOUT_MS = 12e4;
+var execFileAsync = promisify(execFile);
 var defaultExcludedSegments = /* @__PURE__ */ new Set([
   ".git",
   ".hg",
@@ -225704,7 +226126,7 @@ var repositoryPlanSchema = {
         additionalProperties: false,
         required: ["tool", "path", "cursor", "startLine", "endLine"],
         properties: {
-          tool: { type: "string", enum: ["list_directory", "read_file"] },
+          tool: { type: "string", enum: ["list_directory", "read_file", "read_change"] },
           path: { type: "string" },
           cursor: {
             type: "integer",
@@ -225723,7 +226145,7 @@ var repositoryPlanSchema = {
     }
   }
 };
-async function reviewWithRepositoryTools(model, repositoryRoot, request) {
+async function reviewWithRepositoryTools(model, repositoryRoot, request, change) {
   if (repositoryRoot === void 0 || repositoryRoot.trim() === "") {
     throw new ModelReviewError("Repository model tools require a rule-context repository root.", {
       code: "invalid_model_request"
@@ -225747,6 +226169,17 @@ async function reviewWithRepositoryTools(model, repositoryRoot, request) {
   let exhausted = false;
   let ready = false;
   let usage = {};
+  if (change !== void 0 && change !== null) {
+    const summary = {
+      tool: "change_summary",
+      ...change.baseRef === void 0 ? {} : { baseRef: change.baseRef },
+      ...change.headRef === void 0 ? {} : { headRef: change.headRef },
+      changedFiles: change.changedFiles.slice(0, 500),
+      worktree: change.worktree
+    };
+    toolResults.push(summary);
+    totalBytes += encodedBytes(summary);
+  }
   const initial = fitDirectoryResult(await executeListDirectory(root, ".", 0, budget.directoryPageSize, include, exclude), budget.maxTotalBytes);
   toolResults.push(initial);
   totalBytes += encodedBytes(initial);
@@ -225798,7 +226231,7 @@ async function reviewWithRepositoryTools(model, repositoryRoot, request) {
         if (operation.tool === "list_directory") {
           result = await executeListDirectory(root, operation.path, operation.cursor, budget.directoryPageSize, include, exclude);
           directoriesListed += 1;
-        } else {
+        } else if (operation.tool === "read_file") {
           result = await executeReadFile(root, operation, budget, include, exclude, `repo:read:${citations.length + 1}`);
           pendingCitation = {
             citationId: result.citationId,
@@ -225807,6 +226240,8 @@ async function reviewWithRepositoryTools(model, repositoryRoot, request) {
             endLine: result.endLine,
             content: result.content
           };
+        } else {
+          result = await executeReadChange(root, operation, budget, include, exclude, change);
         }
       } catch (error) {
         result = {
@@ -225884,6 +226319,7 @@ ${prompt}
 RETRIEVAL RULES:
 - list_directory reveals one deterministic, paginated directory page. Use cursor=0 initially and nextCursor from a prior result for another page. Set startLine=0 and endLine=0.
 - read_file retrieves an inclusive 1-based line range and creates an immutable citation. Set cursor=0.
+- read_change retrieves the patch for one path in change_summary. Set cursor=0, startLine=0, and endLine=0. Use it before judging changed behavior. It is navigation evidence, not a source citation; cite exact lines from a subsequent read_file.
 - Inspect implementation and relevant tests before setting ready=true.
 - Traverse only directories relevant to the requested review; do not inventory the entire repository.
 - Prefer focused line ranges around important behavior over whole files.
@@ -225972,14 +226408,14 @@ async function executeListDirectory(root, requestedPath, cursor, pageSize, inclu
     }
   }
   visible.sort((left, right) => left.type.localeCompare(right.type) || left.path.localeCompare(right.path));
-  const page = visible.slice(cursor, cursor + pageSize);
-  const nextCursor = cursor + page.length < visible.length ? cursor + page.length : -1;
+  const page2 = visible.slice(cursor, cursor + pageSize);
+  const nextCursor = cursor + page2.length < visible.length ? cursor + page2.length : -1;
   return {
     tool: "list_directory",
     path: relativePath,
     cursor,
     nextCursor,
-    entries: page
+    entries: page2
   };
 }
 function fitDirectoryResult(result, maximumBytes) {
@@ -226046,6 +226482,44 @@ async function executeReadFile(root, operation, budget, include, exclude, citati
     truncated
   };
 }
+async function executeReadChange(root, operation, budget, include, exclude, change) {
+  if (change === void 0 || change === null || change.baseRef === void 0) {
+    throw new Error("read_change requires a runner-provided change context");
+  }
+  const { relativePath } = await secureRepositoryPath(root, operation.path, "file");
+  if (!change.changedFiles.includes(relativePath)) {
+    throw new Error("read_change path is not in the runner-provided change set");
+  }
+  if (!isIncluded(relativePath, include) || isExcluded(relativePath, exclude)) {
+    throw new Error("read_change path is outside the configured repository file set");
+  }
+  const baseRef = validRevision(change.baseRef);
+  const headRef = change.worktree ? "WORKTREE" : validRevision(change.headRef ?? "");
+  const revisions = change.worktree ? [baseRef] : [baseRef, headRef];
+  const { stdout } = await execFileAsync("git", [
+    "-C",
+    root,
+    "--no-pager",
+    "diff",
+    "--no-ext-diff",
+    "--unified=40",
+    "--find-renames",
+    ...revisions,
+    "--",
+    relativePath
+  ], { encoding: "utf8", maxBuffer: Math.max(budget.maxBytesPerRead * 4, 1 << 20) });
+  const encoded = Buffer.from(stdout, "utf8");
+  const truncated = encoded.byteLength > budget.maxBytesPerRead;
+  const content = truncated ? new TextDecoder().decode(encoded.subarray(0, budget.maxBytesPerRead)) : stdout;
+  return { tool: "read_change", path: relativePath, baseRef, headRef, content, truncated };
+}
+function validRevision(value) {
+  const revision = value.trim();
+  if (revision === "" || revision.length > 512 || revision.startsWith("-") || revision.includes("\0") || revision.includes("\n") || revision.includes("\r")) {
+    throw new Error("change revision is invalid");
+  }
+  return revision;
+}
 async function secureRepositoryPath(root, requestedPath, kind) {
   const normalized = requestedPath.trim().replaceAll("\\", "/").replace(/^\.\/+/u, "") || ".";
   if (normalized.length > MAX_OPERATION_PATH_LENGTH || normalized.includes("\0") || isAbsolute(normalized) || normalized.split("/").includes("..")) {
@@ -226094,7 +226568,7 @@ function requireRepositoryPlan(value) {
   return plan;
 }
 function operationKey(operation) {
-  return operation.tool === "list_directory" ? `${operation.tool}:${operation.path}:${operation.cursor}` : `${operation.tool}:${operation.path}:${operation.startLine}:${operation.endLine}`;
+  return operation.tool === "list_directory" ? `${operation.tool}:${operation.path}:${operation.cursor}` : operation.tool === "read_change" ? `${operation.tool}:${operation.path}` : `${operation.tool}:${operation.path}:${operation.startLine}:${operation.endLine}`;
 }
 function encodedBytes(value) {
   return Buffer.byteLength(JSON.stringify(value), "utf8");
@@ -226109,8 +226583,8 @@ function addUsage(total, next) {
 }
 
 // node_modules/@adversarylabs/sdk/dist/sources.js
-import { readFile as readFile2, readdir as readdir2 } from "node:fs/promises";
-import { join as join2 } from "node:path";
+import { readFile as readFile4, readdir as readdir2 } from "node:fs/promises";
+import { join as join3 } from "node:path";
 var DEFAULT_IGNORE_DIRECTORIES = Object.freeze([
   ".git",
   ".next",
@@ -226128,7 +226602,7 @@ async function listInScopePaths(repoPath, change, options = {}) {
   const ignore = new Set(options.ignoreDirectories ?? DEFAULT_IGNORE_DIRECTORIES);
   let candidates;
   if (change !== null && change.scanMode === "changed") {
-    candidates = change.changedFiles.map(normalizePath2);
+    candidates = change.changedFiles.map(normalizePath3);
   } else {
     candidates = await walkRelative(repoPath, ignore);
   }
@@ -226156,10 +226630,10 @@ async function loadInScopeSources(repoPath, change, options = {}) {
     ignoreDirectories: options.ignoreDirectories
   });
   const wholeTarget = change === null || change.scanMode === "all";
-  const changedSet = new Set((change?.changedFiles ?? []).map(normalizePath2));
+  const changedSet = new Set((change?.changedFiles ?? []).map(normalizePath3));
   const sources = [];
   for (const path of paths) {
-    const content = await safeReadText(join2(repoPath, path), maxBytes);
+    const content = await safeReadText(join3(repoPath, path), maxBytes);
     if (content === void 0)
       continue;
     sources.push({
@@ -226170,13 +226644,13 @@ async function loadInScopeSources(repoPath, change, options = {}) {
   }
   return sources;
 }
-function normalizePath2(path) {
+function normalizePath3(path) {
   return path.replaceAll("\\", "/").replace(/^\.\//, "");
 }
 async function walkRelative(repoPath, ignore) {
   const out = [];
   async function visit(relativeDir) {
-    const abs = relativeDir === "" ? repoPath : join2(repoPath, relativeDir);
+    const abs = relativeDir === "" ? repoPath : join3(repoPath, relativeDir);
     let entries;
     try {
       entries = await readdir2(abs, { withFileTypes: true });
@@ -226202,7 +226676,7 @@ async function walkRelative(repoPath, ignore) {
 }
 async function safeReadText(absPath, maxBytes) {
   try {
-    const buffer = await readFile2(absPath);
+    const buffer = await readFile4(absPath);
     if (buffer.byteLength > maxBytes)
       return void 0;
     if (buffer.includes(0))
@@ -226377,7 +226851,9 @@ var Adversary = class {
     const registry = this.ruleDefinitions.snapshot();
     const change = normalizeChangeContext(options.input.change);
     const repoIndex = options.repoIndex !== void 0 ? options.repoIndex : await repoIndexFromEnvironment();
-    const context = createRuleContext(repoPath, change, summary, cache, collector, registry, options.model ?? unavailableModel(), repoIndex);
+    const repoGraph = options.repoGraph !== void 0 ? options.repoGraph : await repoGraphFromEnvironment();
+    const outcomeContext = options.outcomeContext !== void 0 ? options.outcomeContext : await outcomeContextFromEnvironment();
+    const context = createRuleContext(repoPath, change, summary, cache, collector, registry, options.model ?? unavailableModel(), repoIndex, repoGraph, outcomeContext);
     const includeSuppressed = options.includeSuppressed;
     for (const rule of this.rules) {
       log.debug(`running rule ${rule.id}`);
@@ -226403,6 +226879,7 @@ var Adversary = class {
     const result = await this.run({
       input: { ...input, source: { ...input.source, path: repository } },
       model: options.model ?? createModelFromEnvironment(),
+      outcomeContext: options.outcomeContext,
       review: options.review,
       includeSuppressed: options.includeSuppressed ?? parseBooleanEnv(process.env.ADVERSARY_INCLUDE_SUPPRESSED),
       includeRawObservations: options.includeRawObservations,
@@ -226471,37 +226948,50 @@ function toWireEvidence(evidence) {
   });
 }
 async function parseInput(path = DEFAULT_INPUT_PATH) {
-  const raw = await readFile3(path, "utf8");
+  const raw = await readFile5(path, "utf8");
   const parsed = JSON.parse(raw);
-  if (!isRecord(parsed)) {
+  if (!isRecord2(parsed)) {
     throw new Error(`Invalid input at ${path}: expected an object.`);
   }
-  if (!isRecord(parsed.source)) {
+  if (!isRecord2(parsed.source)) {
     throw new Error(`Invalid input at ${path}: source must be an object.`);
   }
   if (typeof parsed.source.path !== "string" || parsed.source.path.length === 0) {
     throw new Error(`Invalid input at ${path}: source.path must be a non-empty string.`);
   }
   if (parsed.change !== void 0 && parsed.change !== null) {
-    if (!isRecord(parsed.change)) {
+    if (!isRecord2(parsed.change)) {
       throw new Error(`Invalid input at ${path}: change must be an object or null.`);
     }
-    for (const field of ["type", "base_ref", "head_ref", "scan_mode"]) {
-      const value = parsed.change[field];
-      if (value !== void 0 && typeof value !== "string") {
-        throw new Error(`Invalid input at ${path}: change.${field} must be a string.`);
-      }
-    }
-    const scanMode = parsed.change.scan_mode;
-    if (scanMode !== void 0 && scanMode !== "changed" && scanMode !== "all") {
-      throw new Error(`Invalid input at ${path}: change.scan_mode must be "changed" or "all".`);
-    }
-    const changedFiles = parsed.change.changed_files;
-    if (changedFiles !== void 0 && (!Array.isArray(changedFiles) || changedFiles.some((item) => typeof item !== "string"))) {
-      throw new Error(`Invalid input at ${path}: change.changed_files must be an array of strings.`);
-    }
+    validateRuntimeChange(parsed.change, path);
   }
   return parsed;
+}
+function validateRuntimeChange(change, inputPath) {
+  for (const field of ["type", "base_ref", "head_ref", "scan_mode"]) {
+    const value = change[field];
+    if (value !== void 0 && typeof value !== "string") {
+      throw new Error(`Invalid input at ${inputPath}: change.${field} must be a string.`);
+    }
+  }
+  const scanMode = change.scan_mode;
+  if (scanMode !== void 0 && scanMode !== "changed" && scanMode !== "all") {
+    throw new Error(`Invalid input at ${inputPath}: change.scan_mode must be "changed" or "all".`);
+  }
+  const changedFiles = change.changed_files;
+  if (changedFiles !== void 0 && (!Array.isArray(changedFiles) || changedFiles.some((item) => typeof item !== "string"))) {
+    throw new Error(`Invalid input at ${inputPath}: change.changed_files must be an array of strings.`);
+  }
+  const changedRanges = change.changed_ranges;
+  if (changedRanges !== void 0 && (!Array.isArray(changedRanges) || !changedRanges.every(isValidChangedRange))) {
+    throw new Error(`Invalid input at ${inputPath}: change.changed_ranges must contain valid path/startLine/endLine ranges.`);
+  }
+}
+function isValidChangedRange(value) {
+  if (!isRecord2(value))
+    return false;
+  const { path, startLine, endLine } = value;
+  return typeof path === "string" && path.length > 0 && typeof startLine === "number" && Number.isInteger(startLine) && startLine >= 1 && typeof endLine === "number" && Number.isInteger(endLine) && endLine >= startLine;
 }
 async function writeOutput(output, path = DEFAULT_OUTPUT_PATH) {
   await validateRunEnvelope(output);
@@ -226512,7 +227002,7 @@ async function writeOutput(output, path = DEFAULT_OUTPUT_PATH) {
 async function validateRunEnvelope(output) {
   let validator = envelopeValidator;
   if (validator === void 0) {
-    const schema = JSON.parse(await readFile3(new URL("../schemas/adversary.review.v1.schema.json", import.meta.url), "utf8"));
+    const schema = JSON.parse(await readFile5(new URL("../schemas/adversary.review.v1.schema.json", import.meta.url), "utf8"));
     validator = new import__2.Ajv2020({ allErrors: true, strict: true }).compile(schema);
     envelopeValidator = validator;
   }
@@ -226521,7 +227011,7 @@ async function validateRunEnvelope(output) {
   }
 }
 function normalizeConfidence(confidence, thresholds = DEFAULT_CONFIDENCE_THRESHOLDS) {
-  if (isConfidence(confidence)) {
+  if (isConfidence2(confidence)) {
     return confidence;
   }
   if (typeof confidence !== "number" || Number.isNaN(confidence) || confidence < 0 || confidence > 1) {
@@ -226566,18 +227056,24 @@ function normalizeChangeContext(change) {
     ...change.head_ref === void 0 ? {} : { headRef: change.head_ref },
     scanMode,
     changedFiles: Object.freeze([...change.changed_files ?? []]),
+    changedRanges: freezeChangedRanges(change.changed_ranges),
     worktree: change.head_ref === WORKTREE_HEAD_REF
   });
 }
-function createRuleContext(repoPath, change, summary, cache, collector, registry, model, repoIndex) {
+function freezeChangedRanges(ranges) {
+  return Object.freeze((ranges ?? []).map((range) => Object.freeze({ ...range })));
+}
+function createRuleContext(repoPath, change, summary, cache, collector, registry, model, repoIndex, repoGraph, outcomeContext) {
   const absoluteRepoPath = resolve2(repoPath);
   return {
     repoPath: absoluteRepoPath,
     change,
+    outcomeContext,
     repoIndex,
+    repoGraph,
     summary,
     cache,
-    model: enhanceReviewModel(model, absoluteRepoPath),
+    model: enhanceReviewModel(model, absoluteRepoPath, change),
     relpath(path) {
       return relative2(absoluteRepoPath, isAbsolute2(path) ? path : resolve2(absoluteRepoPath, path));
     },
@@ -227022,15 +227518,15 @@ async function rewriteOpinionConcern(model, request) {
       code: "invalid_model_request"
     });
   }
-  const text = request.text.trim();
-  if (text === "") {
+  const text2 = request.text.trim();
+  if (text2 === "") {
     throw new ModelReviewError("Model concern text must be a non-empty string.", {
       code: "invalid_model_request"
     });
   }
-  if (isOpinionConcernPhrase(text)) {
+  if (isOpinionConcernPhrase(text2)) {
     return {
-      concern: requireOpinionConcern(text),
+      concern: requireOpinionConcern(text2),
       rewritten: false,
       provider: "local",
       model: "passthrough"
@@ -227050,7 +227546,7 @@ Return only a pure noun phrase that passes validation.`;
     const result = await model.review({
       prompt,
       input: {
-        text,
+        text: text2,
         ...lastError === void 0 ? {} : { previousError: lastError }
       },
       schema: OPINION_CONCERN_REWRITE_SCHEMA,
@@ -227071,9 +227567,9 @@ Return only a pure noun phrase that passes validation.`;
   }
   throw new ModelReviewError(`Model failed to produce a valid opinion concern after ${maxAttempts} attempts${lastError === void 0 ? "" : `: ${lastError}`}.`, { code: "invalid_opinion_concern" });
 }
-function enhanceReviewModel(model, repositoryRoot) {
+function enhanceReviewModel(model, repositoryRoot, change) {
   return {
-    review: (request) => request.tools?.repository === void 0 ? model.review(request) : reviewWithRepositoryTools(model, repositoryRoot, request),
+    review: (request) => request.tools?.repository === void 0 ? model.review(request) : reviewWithRepositoryTools(model, repositoryRoot, request, change),
     concern: (request) => rewriteOpinionConcern(model, request)
   };
 }
@@ -227237,9 +227733,9 @@ function scoreToReviewNote(score) {
   };
 }
 function observationToEvidence(observation) {
-  const data = isRecord(observation.evidence) ? observation.evidence : observation.evidence === void 0 ? void 0 : { evidence: observation.evidence };
-  const message = isRecord(observation.evidence) ? structuredEvidenceMessage(observation.evidence) : stringFromUnknown(observation.evidence);
-  const snippet = isRecord(observation.evidence) ? stringFromUnknown(observation.evidence.snippet) ?? stringFromUnknown(observation.evidence.instruction) : observation.location?.snippet;
+  const data = isRecord2(observation.evidence) ? observation.evidence : observation.evidence === void 0 ? void 0 : { evidence: observation.evidence };
+  const message = isRecord2(observation.evidence) ? structuredEvidenceMessage(observation.evidence) : stringFromUnknown(observation.evidence);
+  const snippet = isRecord2(observation.evidence) ? stringFromUnknown(observation.evidence.snippet) ?? stringFromUnknown(observation.evidence.instruction) : observation.location?.snippet;
   return omitUndefined({
     location: normalizeEvidence(observation.location ?? {}).location,
     label: observation.location?.label ?? message,
@@ -227338,7 +227834,7 @@ function observationTemplateValues(group) {
 function observationValue(observation, field) {
   if (field.includes(".")) {
     return field.split(".").reduce((value, part) => {
-      return isRecord(value) ? value[part] : void 0;
+      return isRecord2(value) ? value[part] : void 0;
     }, observation);
   }
   return observation[field];
@@ -227504,7 +228000,7 @@ function stableStringify(value) {
   if (Array.isArray(value)) {
     return `[${value.map(stableStringify).join(",")}]`;
   }
-  if (isRecord(value)) {
+  if (isRecord2(value)) {
     return `{${Object.keys(value).sort(compareStrings).map((key) => `${JSON.stringify(key)}:${stableStringify(value[key])}`).join(",")}}`;
   }
   return JSON.stringify(value);
@@ -227610,7 +228106,7 @@ function assertRuleDefinition(rule) {
   }
 }
 function assertReviewPolicy(policy, source) {
-  if (policy.minimumConfidence !== void 0 && !isConfidence(policy.minimumConfidence)) {
+  if (policy.minimumConfidence !== void 0 && !isConfidence2(policy.minimumConfidence)) {
     throw new Error(`${source}.minimumConfidence must be one of low, medium, high.`);
   }
   if (policy.maximumFindings !== void 0 && (!Number.isInteger(policy.maximumFindings) || policy.maximumFindings < 0)) {
@@ -227631,7 +228127,7 @@ function assertReviewPolicy(policy, source) {
 function optionalRemediation(value, field) {
   if (value === void 0)
     return;
-  if (!isRecord(value))
+  if (!isRecord2(value))
     throw new Error(`${field} must be an object.`);
   if (value.complexity !== void 0 && (typeof value.complexity !== "string" || !["trivial", "small", "medium", "large", "architectural"].includes(value.complexity))) {
     throw new Error(`${field}.complexity is invalid.`);
@@ -227642,7 +228138,7 @@ function requireObservationTitle(value, field) {
     requireString(value, field);
     return;
   }
-  if (!isRecord(value)) {
+  if (!isRecord2(value)) {
     throw new Error(`${field} must be a string or { singular, plural }.`);
   }
   requireString(value.singular, `${field}.singular`);
@@ -227656,7 +228152,7 @@ function optionalObservationSummary(value, field) {
     optionalString(value, field);
     return;
   }
-  if (!isRecord(value)) {
+  if (!isRecord2(value)) {
     throw new Error(`${field} must be a string or { singular, grouped }.`);
   }
   optionalString(value.singular, `${field}.singular`);
@@ -227666,7 +228162,7 @@ function optionalEvidence(value, field) {
   if (value === void 0) {
     return;
   }
-  if (!isRecord(value)) {
+  if (!isRecord2(value)) {
     throw new Error(`${field} must be an object.`);
   }
   const input = value;
@@ -227677,7 +228173,7 @@ function optionalEvidence(value, field) {
   optionalString(value.snippet, `${field}.snippet`);
   optionalString(value.label, `${field}.label`);
   if (value.location !== void 0) {
-    if (!isRecord(value.location)) {
+    if (!isRecord2(value.location)) {
       throw new Error(`${field}.location must be an object.`);
     }
     optionalString(value.location.file, `${field}.location.file`);
@@ -227692,10 +228188,10 @@ function optionalEvidence(value, field) {
   if (endLine !== void 0 && line !== void 0 && endLine < line) {
     throw new Error(`${field}.endLine must not precede line.`);
   }
-  if (value.data !== void 0 && !isRecord(value.data)) {
+  if (value.data !== void 0 && !isRecord2(value.data)) {
     throw new Error(`${field}.data must be an object.`);
   }
-  if (input.metadata !== void 0 && !isRecord(input.metadata)) {
+  if (input.metadata !== void 0 && !isRecord2(input.metadata)) {
     throw new Error(`${field}.metadata must be an object.`);
   }
 }
@@ -227744,7 +228240,7 @@ function optionalPositiveInteger(value, field) {
     throw new Error(`${field} must be a positive integer.`);
   }
 }
-function isConfidence(value) {
+function isConfidence2(value) {
   return value === Confidence.Low || value === Confidence.Medium || value === Confidence.High;
 }
 function isSeverity(value) {
@@ -227753,7 +228249,7 @@ function isSeverity(value) {
 function isNonEmptyString(value) {
   return typeof value === "string" && value.length > 0;
 }
-function isRecord(value) {
+function isRecord2(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 function stringFromUnknown(value) {
@@ -227798,10 +228294,10 @@ function omitUndefined(value) {
 
 // src/analyze.ts
 var import_typescript = __toESM(require_typescript(), 1);
-import { execFile } from "node:child_process";
+import { execFile as execFile2 } from "node:child_process";
 import { readdir as readdir4 } from "node:fs/promises";
-import { join as join3, sep as sep2 } from "node:path";
-import { promisify } from "node:util";
+import { join as join4, sep as sep2 } from "node:path";
+import { promisify as promisify2 } from "node:util";
 
 // src/spec.ts
 var CONFIG_FILES = [
@@ -228009,7 +228505,7 @@ function observationFor(detection) {
 // src/analyze.ts
 var SKIPPED = /* @__PURE__ */ new Set([".adversary", ".git", ".hg", ".next", ".svn", "coverage", "dist", "node_modules", "target", "vendor"]);
 var MAX_FILES = 5e3;
-var execute = promisify(execFile);
+var execute = promisify2(execFile2);
 async function analyzeRepository(ctx) {
   const allPaths = await walk2(ctx.repoPath);
   const scoped = await ctx.loadInScopeSources({
@@ -228253,11 +228749,11 @@ async function walk2(root) {
   const files = [];
   async function visit(relative3) {
     if (files.length >= MAX_FILES) return;
-    const entries = await readdir4(join3(root, relative3), { withFileTypes: true });
+    const entries = await readdir4(join4(root, relative3), { withFileTypes: true });
     entries.sort((a, b) => a.name.localeCompare(b.name));
     for (const entry of entries) {
       if (files.length >= MAX_FILES) return;
-      const path = relative3 ? join3(relative3, entry.name) : entry.name;
+      const path = relative3 ? join4(relative3, entry.name) : entry.name;
       if (entry.isDirectory() && !SKIPPED.has(entry.name)) await visit(path);
       else if (entry.isFile()) files.push(path.split(sep2).join("/"));
     }
